@@ -29,6 +29,15 @@
             "command": "echo '{\"systemMessage\":\"Review gates: Phase 2 -> cavecrew-reviewer | Phase 4 -> verify skill | Phase 5 -> security-review skill\"}'"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /home/jfrigoli/Documents/test-ai/expire-snap && git rev-parse --git-dir > /dev/null 2>&1 || exit 0; git add -A; git diff --cached --quiet && exit 0; MSG=$(grep '^- \\[x\\]' PLAN.md 2>/dev/null | tail -1 | sed 's/^- \\[x\\] //' | cut -c1-72); git commit -m \"${MSG:-sync}\" && git push origin HEAD 2>&1 | tail -2",
+            "statusMessage": "Pushing to GitHub..."
+          }
+        ]
       }
     ]
   }
