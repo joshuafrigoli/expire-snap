@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-primary-fixed": "#002113",
+                "on-tertiary-fixed-variant": "#5516be",
+                "surface-container-low": "#cbffe8",
+                "background": "#e7fff3",
+                "on-tertiary-container": "#4600a7",
+                "outline": "#6c7a71",
+                "inverse-primary": "#4edea3",
+                "primary-container": "#10b981",
+                "secondary-fixed": "#ffdf9f",
+                "on-secondary-fixed-variant": "#5c4300",
+                "surface": "#e7fff3",
+                "surface-dim": "#a8e7cd",
+                "tertiary-fixed-dim": "#d0bcff",
+                "on-background": "#002117",
+                "on-error": "#ffffff",
+                "on-tertiary-fixed": "#23005c",
+                "on-primary-container": "#00422b",
+                "on-primary-fixed-variant": "#005236",
+                "error": "#ba1a1a",
+                "secondary-fixed-dim": "#f9bd22",
+                "primary-fixed-dim": "#4edea3",
+                "tertiary-container": "#b090ff",
+                "surface-container-lowest": "#ffffff",
+                "error-container": "#ffdad6",
+                "on-tertiary": "#ffffff",
+                "inverse-on-surface": "#befee3",
+                "surface-container-highest": "#b0f0d6",
+                "secondary": "#795900",
+                "surface-container-high": "#b6f6db",
+                "on-surface-variant": "#3c4a42",
+                "on-secondary-container": "#6f5100",
+                "primary-fixed": "#6ffbbe",
+                "surface-variant": "#b0f0d6",
+                "primary": "#006c49",
+                "surface-tint": "#006c49",
+                "inverse-surface": "#003829",
+                "on-primary": "#ffffff",
+                "on-error-container": "#93000a",
+                "surface-container": "#bbfbe1",
+                "surface-bright": "#e7fff3",
+                "on-surface": "#002117",
+                "tertiary-fixed": "#e9ddff",
+                "tertiary": "#6d3bd7",
+                "secondary-container": "#ffc329",
+                "on-secondary-fixed": "#261a00",
+                "on-secondary": "#ffffff",
+                "outline-variant": "#bbcabf"
+            },
+            "borderRadius": {
+                "DEFAULT": "1rem",
+                "lg": "2rem",
+                "xl": "3rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "margin-mobile": "16px",
+                "gutter": "24px",
+                "container-max": "1200px",
+                "base_unit": "8px",
+                "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                "label-sm": ["Quicksand"],
+                "body-md": ["Quicksand"],
+                "headline-lg-mobile": ["Quicksand"],
+                "body-lg": ["Quicksand"],
+                "headline-xl": ["Quicksand"],
+                "headline-md": ["Quicksand"],
+                "headline-lg": ["Quicksand"],
+                "label-lg": ["Quicksand"]
+            },
+            "fontSize": {
+                "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "500"}],
+                "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                "label-lg": ["14px", {"lineHeight": "1.2", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .skeleton-shimmer {
+            background: linear-gradient(90deg, #bbfbe1 25%, #e7fff3 50%, #bbfbe1 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .scanning-line {
+            height: 6px;
+            background: #10b981;
+            box-shadow: 0 4px 0px 0px #002117;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+            animation: scan 3s ease-in-out infinite;
+            border-radius: 9999px;
+        }
+        @keyframes scan {
+            0%, 100% { top: 0%; }
+            50% { top: 100%; }
+        }
+        .cartoony-shadow {
+            box-shadow: 4px 4px 0px 0px #002117;
+        }
+        .cartoony-shadow-sm {
+            box-shadow: 2px 2px 0px 0px #002117;
+        }
+        .drop-zone-active {
+            border-color: #10b981 !important;
+            background-color: #cbffe8 !important;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 px-margin-mobile pt-4 w-full z-50 flex justify-between items-center h-20 bg-background border-b-4 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,33,23,1)]">
+<div class="flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:translate-x-[4px] active:translate-y-[4px] active:shadow-none duration-100">
+<span class="material-symbols-outlined text-primary" style="font-size: 32px;">bubble_chart</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">EcoMunch</h1>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-on-surface bg-secondary-container flex items-center justify-center overflow-hidden hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-on-secondary-container">person</span>
+</div>
+</header>
+<main class="pt-28 px-margin-mobile max-w-md mx-auto">
+<!-- Header Text -->
+<section class="mb-8">
+<h2 class="font-headline-xl text-headline-lg-mobile text-on-surface mb-2">Scan Receipt</h2>
+<p class="font-body-lg text-on-surface-variant">Upload a photo of your groceries and let our AI extract the items for you!</p>
+</section>
+<!-- Initial Upload State -->
+<section class="relative" id="upload-container">
+<div class="border-4 border-dashed border-primary rounded-3xl p-8 flex flex-col items-center justify-center text-center bg-surface-container-lowest transition-all duration-300 cursor-pointer group cartoony-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none" id="drop-zone" onclick="simulateProcessing()">
+<div class="w-20 h-20 bg-primary-container rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform border-4 border-on-surface">
+<span class="material-symbols-outlined text-on-primary-container" style="font-size: 40px;">receipt_long</span>
+</div>
+<p class="font-headline-md text-on-surface mb-1">Tap to upload</p>
+<p class="font-body-md text-on-surface-variant">or drag it here!</p>
+<input class="hidden" id="file-input" type="file"/>
+</div>
+<div class="mt-8 flex gap-4">
+<button class="flex-1 bg-primary text-on-primary py-4 rounded-full font-headline-md flex items-center justify-center gap-2 transition-all duration-100 border-4 border-on-surface cartoony-shadow active:translate-x-[4px] active:translate-y-[4px] active:shadow-none" onclick="simulateProcessing()">
+<span class="material-symbols-outlined">camera_alt</span>
+                    Capture
+                </button>
+<button class="flex-1 bg-surface-container-high text-primary py-4 rounded-full font-headline-md flex items-center justify-center gap-2 border-4 border-on-surface transition-all duration-100 cartoony-shadow active:translate-x-[4px] active:translate-y-[4px] active:shadow-none">
+<span class="material-symbols-outlined">image</span>
+                    Gallery
+                </button>
+</div>
+</section>
+<!-- Processing State -->
+<section class="hidden animate-in fade-in zoom-in-95 duration-500" id="processing-container">
+<div class="relative w-full aspect-[4/5] rounded-3xl overflow-hidden border-4 border-on-surface cartoony-shadow bg-white">
+<div class="scanning-line"></div>
+<img alt="Grocery Receipt" class="w-full h-full object-cover grayscale opacity-40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfCj0nFFT7hMN4SmFz33SqhQTYy0D_er4zuSIYSkMBE3WUsqQ71574gzJHpt6xIJiLilreTAt1cWIiR0e2jXrPOsejndSFZgJMZsSxRv00TV8pLzYGkgSwMgakLDMSaNtDwlWdeULg7mmLGqK51_sNkVPSFtTTP_TMPu-KLNN2FWEuTI924pYOIP13q_n9Z6_3CgMBDiT3EJ6sSZLNhmoqCs9fyyh-4LJhRAnas9cBMZ7f_r2YyJmbMjrbXtRkgInT0shrECOFqOyH"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent flex flex-col justify-end p-6 text-white">
+<div class="flex items-center gap-3 mb-2">
+<div class="animate-spin h-6 w-6 border-4 border-white/30 border-t-white rounded-full"></div>
+<span class="font-headline-md">Reading...</span>
+</div>
+</div>
+</div>
+<!-- Extraction Progress -->
+<div class="mt-8 space-y-4">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-lg uppercase text-primary">Scanning...</span>
+<span class="font-headline-md text-on-surface" id="progress-text">42%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-6 border-4 border-on-surface overflow-hidden cartoony-shadow-sm">
+<div class="bg-primary h-full rounded-full transition-all duration-500 ease-out" id="progress-bar" style="width: 42%;"></div>
+</div>
+<!-- Skeleton List -->
+<div class="space-y-4 mt-8">
+<div class="flex items-center gap-4 p-4 bg-white rounded-2xl border-4 border-on-surface cartoony-shadow-sm">
+<div class="w-12 h-12 rounded-full border-2 border-on-surface skeleton-shimmer"></div>
+<div class="flex-1 space-y-2">
+<div class="h-4 w-3/4 rounded-full skeleton-shimmer"></div>
+<div class="h-3 w-1/2 rounded-full skeleton-shimmer"></div>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 bg-white/50 rounded-2xl border-4 border-on-surface border-dashed opacity-60">
+<div class="w-12 h-12 rounded-full skeleton-shimmer"></div>
+<div class="flex-1 space-y-2">
+<div class="h-4 w-2/3 rounded-full skeleton-shimmer"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-24 px-4 pb-safe bg-surface-container-lowest border-t-4 border-on-surface shadow-[0px_-4px_0px_0px_rgba(0,33,23,1)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:scale-110 transition-transform active:scale-95 duration-75" href="#">
+<span class="material-symbols-outlined text-[28px]">restaurant</span>
+<span class="font-label-sm">Kitchen</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-6 py-2 border-2 border-on-surface shadow-[2px_2px_0px_0px_rgba(0,33,23,1)] hover:scale-110 transition-transform active:scale-95 duration-75" href="#">
+<span class="material-symbols-outlined text-[28px]">receipt_long</span>
+<span class="font-label-sm font-bold">Log</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:scale-110 transition-transform active:scale-95 duration-75" href="#">
+<span class="material-symbols-outlined text-[28px]">eco</span>
+<span class="font-label-sm">Impact</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:scale-110 transition-transform active:scale-95 duration-75" href="#">
+<span class="material-symbols-outlined text-[28px]">person</span>
+<span class="font-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        function simulateProcessing() {
+            const upload = document.getElementById('upload-container');
+            const processing = document.getElementById('processing-container');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+
+            upload.classList.add('hidden');
+            processing.classList.remove('hidden');
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 15) + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        alert("Great news! We've found your items. 🍏");
+                    }, 500);
+                }
+                progressBar.style.width = progress + '%';
+                progressText.innerText = progress + '%';
+            }, 600);
+        }
+
+        const dropZone = document.getElementById('drop-zone');
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drop-zone-active');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drop-zone-active');
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            simulateProcessing();
+        }, false);
+    </script>
+</body></html>

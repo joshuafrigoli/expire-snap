@@ -1,0 +1,256 @@
+# Development Plan: ExpireSnap (Smart Receipt Scanner)
+
+A React Native + Expo mobile application that allows users to photograph a grocery receipt, extract food items using AI, estimate their expiration dates, and receive push notifications to reduce food waste.
+
+---
+
+## 1. Architecture & Tech Stack
+
+- **Framework:** React Native + Expo (SDK 51+); `npx create-expo-app` scaffold.
+- **Styling:** NativeWind v4 (Tailwind for React Native) with CSS custom properties mapped via `tailwind.config.js`. Design system: **Bubbly Neo-Brutalism** — hard 2D shadows, pill shapes, thick 2px borders, extreme roundedness. Font: **Poppins** exclusively (via `expo-font`, weights 500-700). Reference mockups: `to-be/<page>/code.html` (visual reference only — HTML structure does not transfer) + `to-be/<page>/DESIGN.md` (tokens & rules). Palette: original spec is Emerald Green — **override primary to Blue** (see Section 1a).
+- **Hard Shadows:** `react-native-shadow-2` library — provides CSS-like offset box-shadow on both iOS and Android. Native `elevation`/`shadowOffset` alone cannot replicate hard 2D shadows.
+- **State Management:** React Context API (inventory items, scan state, filters).
+- **Navigation:** React Navigation v6 — `@react-navigation/native` + `@react-navigation/bottom-tabs` + `@react-navigation/stack`.
+- **AI Integration:** API calls to OpenAI (GPT-4o), Google Gemini Flash, or Anthropic Claude (`claude-sonnet-4-6`) using Structured Outputs (JSON). Image passed as base64.
+- **Storage:** `@react-native-async-storage/async-storage` — replaces `localStorage`. Same key strategy.
+- **Settings:** User preferences stored under `expiresnap_settings` AsyncStorage key.
+- **Notifications:** `expo-notifications` — local scheduled notifications; no server required. OS handles background delivery.
+- **Camera / Image Picker:** `expo-image-picker` — `launchCameraAsync` (camera) + `launchImageLibraryAsync` (gallery).
+- **Image Compression (mandatory):** `expo-image-manipulator` — compress and resize every image before AI submission. Target: max 1200px wide (maintain aspect ratio), JPEG quality 80%. Reduces file size from ~5-10MB to ~150-200KB and token usage to ~200-300 tokens per scan. Applied to all 3 AI providers.
+- **i18n:** `react-i18next` + `i18next` (works with React Native unchanged).
+- **Distribution:** Expo Go for development; EAS Build for production APK/IPA.
+
+---
+
+## 1a. Design System & Palette Override
+
+Source of truth for **visual design**: `to-be/<page>/code.html` + `to-be/<page>/DESIGN.md`. HTML structure is reference only — all components use React Native primitives (`View`, `Text`, `Pressable`, etc.).
+
+### Palette Override — Blue Primary
+
+The `to-be/` spec uses Emerald Green as primary. Replace all green-tinted tokens with blue equivalents:
+
+| Token | Original (Green) | Override (Blue) |
+|---|---|---|
+| `--primary` | `#006c49` | `#005bc4` |
+| `--primary-container` | `#10b981` | `#3b82f6` |
+| `--inverse-primary` | `#4edea3` | `#93c5fd` |
+| `--surface` | `#e7fff3` | `#eff6ff` |
+| `--surface-container` | `#bbfbe1` | `#bfdbfe` |
+| `--on-surface` | `#002117` | `#001a3d` |
+| `--surface-tint` | `#006c49` | `#005bc4` |
+| `--background` | `#e7fff3` | `#eff6ff` |
+
+> Note: `--surface` and `--background` share the same value intentionally.
+
+All other tokens (secondary Amber, tertiary Violet, error, typography, spacing, shadows) remain as specified in `to-be/DESIGN.md`.
+
+### Key Design Rules (from DESIGN.md)
+
+- **Shadows:** hard 2D via `react-native-shadow-2` — **2px offset (small/buttons)** / **4px offset (large cards)**, deep navy color, 0 blur.
+- **Borders:** 2px solid, same color as shadow.
+- **Radius:** `sm` 0.5rem / default 1rem / `md` 1.5rem / `lg` 2rem / `xl` 3rem / `full` 9999px — mapped in NativeWind config.
+- **Spacing:** 8px base unit; screen padding 16px; gutter 24px.
+- **Button press state:** `Pressable` with `onPressIn` shifting +4px X/Y (mechanical click feel).
+- **Progress bars:** 16px+ height, hard-shadow track, vibrant fill.
+- **Font:** Poppins only — loaded via `expo-font` / `useFonts`.
+
+---
+
+## 2. Application Flow & User Journey
+
+0. **Onboarding / Profile Setup:** Shown on first launch only (no profile in AsyncStorage). User enters name and picks an avatar emoji. Saved to AsyncStorage; never shown again unless profile is reset.
+1. **Dashboard / Home:** Main view showing quick stats (Expired, Expiring Soon, Safe items) with color-coded urgency (Red, Amber, Green) and a prominent "Scan Receipt" primary action button. Thresholds (active items only): **Expired** = expiry date < today; **Expiring Soon** = expiry date within 0–3 days (inclusive); **Safe** = expiry date > 3 days out.
+2. **Upload & Processing State:** Camera capture or gallery picker interface. Displays skeleton loader or animated spinner while AI processes the receipt.
+3. **Review & Validation Screen:** List of AI-extracted products with estimated expiration dates. User can edit names, adjust dates via native date picker, or delete rows before saving.
+4. **Virtual Fridge (Inventory):** Active inventory tracker with search, category filters, and quick actions to mark items as "Consumed" or "Wasted".
+5. **History:** Archive of consumed/wasted items with date and status badge. Accessible only from Profile page.
+6. **Profile Page:** Displays user name + avatar (editable). App stats (total scanned, saved from waste). Export Data + Import Data. Link to History.
+7. **Settings Screen:** AI provider selector, API key input, auto-delete period, language selector.
+
+### Navigation Structure
+
+- **TopAppBar:** page title (left) + optional back button (left) + profile avatar button (right, navigates to Profile). No hamburger.
+- **BottomNav:** `@react-navigation/bottom-tabs` — Home / Scan / Fridge / Settings.
+- **History:** accessible only from Profile page — not in BottomNav.
+
+---
+
+## 3. Technical Specifications & AI JSON Schema
+
+Image sent as base64 string along with current date (injected at runtime). AI must respond with structured JSON:
+
+```json
+{
+  "transaction_date": "YYYY-MM-DD",
+  "items": [
+    {
+      "id": "uuid-v4",
+      "name": "Clean Product Name (e.g., Fresh Whole Milk)",
+      "category": "Dairy | Meat & Fish | Fruits & Veggies | Frozen | Pantry",
+      "estimated_expiry_date": "YYYY-MM-DD",
+      "confidence_days": 2
+    }
+  ]
+}
+```
+
+> `confidence_days` = AI's uncertainty margin in days. Displayed as "± N days" on Review screen.
+
+### AI Estimation Logic Guidelines (Prompt Rules):
+
+- Fresh Milk: +6 days
+- Yogurt: +20 days
+- Fresh Meat: +3 days
+- Fresh Fish: +2 days
+- Cold cuts / Hard cheese: +15 days
+- Pantry goods (pasta, rice, canned food): +180 days or more.
+
+---
+
+## 4. Implementation Roadmap (Tasks for Claude Code)
+
+### Phase 0: Project Setup & State Architecture
+
+- [ ] Scaffold with `npx create-expo-app expire-snap --template blank`.
+- [ ] Install and configure NativeWind v4 (babel plugin + `tailwind.config.js` + `global.css`).
+- [ ] Define design tokens in `tailwind.config.js` `theme.extend` using Blue palette from Section 1a plus secondary/tertiary/error from `to-be/DESIGN.md`. Includes colors, radius, spacing, font sizes.
+- [ ] Install and configure `expo-font`; load Poppins (500, 600, 700) in `_layout.tsx` or `App.js`.
+- [ ] Install `react-native-shadow-2` for hard offset shadows.
+- [ ] Install `react-native-reanimated` (Expo SDK 51 compatible) — provides `withTiming`, `withSpring`, `FadeIn`, `FadeOut`, `SlideInDown`, `SlideInUp`, `SlideOutDown`, `FadeInRight`, `FadeOutLeft` for all component-level transitions. Add `'react-native-reanimated/babel-plugin'` as the **last** entry in `babel.config.js` plugins array.
+- [ ] Set path aliases (`@/components`, `@/context`, etc.) in `babel.config.js` + `tsconfig.json`.
+- [ ] Create folder structure: `components/`, `context/`, `hooks/`, `utils/`, `locales/`.
+- [ ] Install and configure `react-i18next` + `i18next`.
+- [ ] Create baseline English translation file (`locales/en.json`) with all UI strings.
+- [ ] Install `@react-native-async-storage/async-storage`.
+- [ ] Install `expo-sharing` (used by `exportData()` in `utils/dataTransfer.js`).
+- [ ] Install `expo-document-picker` (used by Import Data flow in Phase 5).
+- [ ] Define item data schema (JSDoc shape or TypeScript interface).
+- [ ] Create `utils/dataTransfer.js` — `exportData()` serializes full app state to JSON and triggers share sheet (`expo-sharing`). `importData(jsonString)` receives a raw JSON string (caller handles file reading), validates schema (`inventory` and `settings` fields required), merges into AsyncStorage. Throws on invalid JSON or missing fields.
+- [ ] Define settings schema: `{ aiProvider, apiKey, autoDeleteDays: 7|14|30|60|never, language, profile: { name, avatarEmoji } }`.
+- [ ] Create `SettingsContext` with get/set operations; persist to `expiresnap_settings` AsyncStorage key.
+- [ ] Create `InventoryContext` with CRUD operations (add, update, delete, markConsumed, markWasted).
+- [ ] Add AsyncStorage sync to `InventoryContext` (load on init, persist on change).
+- [ ] Add auto-delete logic to `InventoryContext`: on app load, purge consumed/wasted items where `updatedAt` is older than `autoDeleteDays` (skip if `never`).
+
+### Phase 1: Base UI Component Kit
+
+Build all reusable primitives **before any screen**. Every screen imports from here. Use `to-be/*/code.html` as visual reference only — implement with React Native primitives.
+
+- [ ] Create `components/ui/Button.jsx` — variants: primary, secondary, ghost; sizes: sm, md, lg; pill shape (`borderRadius: 9999`), 2px border, hard shadow via `react-native-shadow-2`, press-shift via `Pressable` `onPressIn`/`onPressOut`; `useAnimatedStyle` + `withSpring({ damping: 10, stiffness: 200 })` scale to 0.96 on press for tactile spring-back.
+- [ ] Create `components/ui/Card.jsx` — white background, `borderRadius: 16`, hard 4px shadow, 2px border.
+- [ ] Create `components/ui/Badge.jsx` — pill shape, color variants: danger, warning, safe, neutral.
+- [ ] Create `components/ui/ProgressBar.jsx` — 16px height, hard-shadow track `View`, vibrant fill `Animated.View`; fill width animates via `withTiming(400, { easing: Easing.out(Easing.quad) })` on every value change; color driven by prop.
+- [ ] Create `components/ui/Input.jsx` — variants: text, date, password; `TextInput` base; thick 2px border, focus swaps border to primary + hard shadow.
+- [ ] Create `components/ui/Select.jsx` — custom modal-based selector (avoid native `Picker` — inconsistent cross-platform); same border/radius/shadow as Input.
+- [ ] Create `components/ui/DatePicker.jsx` — wraps `@react-native-community/datetimepicker`; modal presentation on iOS, inline on Android.
+- [ ] Create `components/ui/TopAppBar.jsx` — `View` row: page title (left) + optional back `Pressable` (left) + profile Avatar `Pressable` (right). No hamburger.
+- [ ] Create `components/ui/BottomNav.jsx` — custom tab bar component for React Navigation `tabBar` prop; icon + label; active tab uses primary color. Tabs: Home / Scan / Fridge / Settings.
+- [ ] Create `components/ui/FloatingActionButton.jsx` — circular `Pressable`, primary color, hard 8px shadow, used on Fridge screen.
+- [ ] Create `components/ui/FilterTabs.jsx` — horizontal `ScrollView` with pill tab `Pressable` items for category filtering; active pill indicator slides between tabs via `useSharedValue` + `withSpring` on `translateX`; inactive labels fade via `withTiming` on opacity.
+- [ ] Create `components/ui/Spinner.jsx` — `ActivityIndicator` wrapped with branded styling.
+- [ ] Create `components/ui/Modal.jsx` — RN `Modal` component + centered `Card`; backdrop `Animated.View` with `entering={FadeIn.duration(200)}` / `exiting={FadeOut.duration(150)}`; card `Animated.View` with `entering={SlideInUp.springify().damping(18)}` / `exiting={SlideOutDown.duration(200)}`; used for scan processing state.
+- [ ] Install `expo-linear-gradient` (used by `SkeletonBlock` shimmer animation).
+- [ ] Create `components/ui/SkeletonBlock.jsx` — animated `View` placeholder using `Animated` API or `expo-linear-gradient`.
+- [ ] Create `components/ui/Avatar.jsx` — displays emoji or initials in circular `View`; size variants sm/md/lg.
+- [ ] Create `components/ui/Snackbar.jsx` — bottom toast conditionally rendered `Animated.View`; variants: info, success, error; auto-dismiss after 3s; pill shape + hard shadow; positioned with absolute layout; `entering={SlideInDown.springify().damping(14)}` on mount, `exiting={FadeOut.duration(200)}` on dismiss. Must use conditional render (`{visible && ...}`) — not opacity-based — so RNTL `queryByText` returns null when not visible.
+- [ ] Create `components/ui/index.js` — barrel export for all primitives.
+- [ ] Visually verify all components in Expo Go before proceeding to Phase 2.
+
+### Phase 2: Screen Development
+
+- [ ] Set up React Navigation: `NavigationContainer` + `BottomTabNavigator` (Home / Scan / Fridge / Settings) + `StackNavigator` for Profile, Onboarding, Review, History (nested above tabs). Stack screens use default slide-from-right transition; tab switches use a `tabBarStyle` fade crossfade (configure via `screenOptions: { animation: 'fade' }` on the tab navigator).
+- [ ] Add navigation guard: if `expiresnap_settings.profile.name` missing in AsyncStorage → redirect to Onboarding before any other screen.
+- [ ] Build `Onboarding` screen — `TextInput` for name + emoji grid picker; "Let's Go" button saves profile to `SettingsContext` and navigates to Home. Include "Import Backup" option — triggers `importData()`; skips onboarding if import succeeds.
+- [ ] Build `Profile` screen — show avatar + name (editable inline); app stats (total scanned, saved from waste); Export Data button; Import Data button; link to History screen.
+- [ ] Wrap all UI strings with `t()` from `react-i18next`.
+- [ ] Create `Layout` wrapper (`SafeAreaView` + screen padding + `TopAppBar` slot).
+- [ ] Create `StatCard` component (label, count, color variant: red/amber/green); count animates from 0 to actual value on mount using `withTiming(600, { easing: Easing.out(Easing.cubic) })` on a `useSharedValue`.
+- [ ] Compute Expired / Expiring Soon / Safe counts from context; wire to Dashboard.
+- [ ] Create `InventoryItem` card component (name, category badge, countdown days).
+- [ ] Add freshness `ProgressBar` to `InventoryItem` (green → amber → red based on days remaining).
+- [ ] Create `InventoryList` with `TextInput` search and `FilterTabs` category filter; use `FlatList`; wrap each row in `Animated.View` with `entering={FadeInRight.duration(250)}` and `exiting={FadeOutLeft.duration(200)}` so items animate in/out on add, delete, and filter changes.
+- [ ] Build `History` screen — `FlatList` of consumed/wasted items, status `Badge`, date; accessible from Profile only.
+
+### Phase 3: Camera & Mock API Setup
+
+- [ ] Install `expo-image-picker` and `expo-image-manipulator`; request `CAMERA` and `MEDIA_LIBRARY` permissions.
+- [ ] Build Scan screen — primary "Take Photo" button + secondary "Choose from Gallery" button.
+- [ ] Add file validation (type: image only, size: max 10 MB).
+- [ ] Create `utils/validateImage.js` — throws on non-image MIME type or file size > 10 MB; called in Scan screen before compress step.
+- [ ] Create `utils/compressImage.js` — takes raw image URI from `expo-image-picker`, uses `expo-image-manipulator` to resize to max 1200px wide (maintain aspect ratio) + convert to JPEG quality 80. Returns compressed URI + base64. **Mandatory step before any AI call.**
+- [ ] Wire `compressImage` into Scan flow: pick/shoot → compress → base64 → AI.
+- [ ] Create mock data fixture matching the AI JSON schema.
+- [ ] Create `mockScanReceipt(imageBase64)` utility — returns mock fixture after 2-second delay.
+- [ ] Show `Modal` with `Spinner` + `SkeletonBlock` list while processing.
+- [ ] Disable "Take Photo" and "Choose from Gallery" buttons immediately on scan start; re-enable only after response (success or error). Prevents duplicate requests from accidental multi-tap.
+
+### Phase 4: Review Screen (Validation UI)
+
+- [ ] Create `ReviewItem` component: editable name `TextInput`, `DatePicker` for expiry, delete `Pressable`.
+- [ ] Display `confidence_days` as "± N days" label next to expiry date on each `ReviewItem`.
+- [ ] Map AI response `items` into `ReviewItem` list using `FlatList`.
+- [ ] Validate all rows before commit (no empty names, no past expiry dates).
+- [ ] Implement "Confirm & Add to Fridge" — dispatch items to `InventoryContext`, navigate to Fridge.
+
+### Phase 5: Real API Integration, Notifications & Polish
+
+- [ ] Create provider-agnostic `scanReceipt(imageBase64, provider, apiKey)` service module.
+- [ ] Implement OpenAI (GPT-4o) provider — send image as base64 in vision message.
+- [ ] Implement Google Gemini Flash provider.
+- [ ] Implement Anthropic Claude (`claude-sonnet-4-6`) provider.
+- [ ] Add error handling and fallback for malformed AI responses.
+- [ ] Handle HTTP 429 (rate limit) explicitly in `scanReceipt`: catch the error and throw a typed `RateLimitError`. In the UI, show a `Snackbar` with message "Too many requests — wait a few seconds and try again" instead of crashing.
+- [ ] Update `ScanScreen` to call `scanReceipt` (from `utils/scanReceipt`) using provider and API key from `SettingsContext`; remove `mockScanReceipt` import. Update `__tests__/screens/ScanScreen.test.js` mock target from `@/utils/mockScanReceipt` to `@/utils/scanReceipt`.
+- [ ] Wire Export Data button to `exportData()` — shares JSON via `expo-sharing`.
+- [ ] Wire Import Data button — use `expo-document-picker` to select JSON file; read file content as string; pass to `importData(jsonString)`; show `Snackbar` on success/failure; confirm before overwriting existing data.
+- [ ] Install `expo-notifications`; request notification permission once onboarding completes (or on first Home visit if user imported backup and skipped onboarding).
+- [ ] Create `utils/notifications.js` — exports `scheduleExpiryNotification(item)` (schedules notification 1 day before `estimated_expiry_date`, returns notification ID) and `cancelExpiryNotification(notificationId)` (cancels by ID).
+- [ ] On every item save/update: call `scheduleExpiryNotification(item)` and store returned ID on the item. Cancel + reschedule on edit via `cancelExpiryNotification` then `scheduleExpiryNotification`. Call `cancelExpiryNotification` on consumed/wasted/deleted.
+- [ ] Build Settings screen: AI provider selector (`Select`), API key input (masked `Input`, stored in `expiresnap_settings`), auto-delete period (`Select`), language selector (`Select`).
+- [ ] Wire Settings screen to `SettingsContext`; changes take effect immediately.
+- [ ] Add Italian translation file (`locales/it.json`) as second locale.
+- [ ] Audit touch targets — min 44×44pt on all interactive elements.
+- [ ] Test on iOS simulator (375pt baseline) and Android emulator.
+- [ ] Smoke-test full journey: onboarding → scan → review → fridge → mark consumed → history → settings → export/import.
+
+---
+
+## 5. Future Implementation: Backend & Multi-Device Sync
+
+Goal: allow multiple devices and household members to share one fridge inventory in real time.
+
+### Recommended Stack
+- **Backend:** Supabase (PostgreSQL + real-time subscriptions + Auth) — free tier, minimal ops overhead.
+- **Auth:** Supabase Auth (email/password or magic link); each household gets a shared `household_id`.
+- **Storage:** Replace AsyncStorage with Supabase DB; keep AsyncStorage as offline cache + optimistic UI.
+
+### Data Model Changes
+```
+households   { id, name }
+users        { id, household_id, email }
+inventory    { id, household_id, name, category, expiry_date, status, created_by, created_at }
+```
+
+### Migration Path (non-breaking)
+1. Add Supabase client (`@supabase/supabase-js`); keep AsyncStorage fallback for unauthenticated users.
+2. Replace `InventoryContext` CRUD calls with Supabase DB calls; sync real-time via `supabase.channel()`.
+3. Add Auth screens (Login / Register / Join Household via invite link).
+4. Move AI API calls to Supabase Edge Functions — hides API keys server-side (no client-side keys needed).
+5. Replace local `expo-notifications` scheduling with Supabase + Web Push for cross-device expiry alerts.
+
+### Key Considerations
+- Conflict resolution: last-write-wins is fine for grocery inventory.
+- Offline support: queue mutations in AsyncStorage, flush on reconnect.
+- API key security: Edge Functions remove the need for client-side AI keys entirely.
+
+---
+
+## 6. Definition of Done (Acceptance Criteria)
+
+- Runs on iOS and Android via Expo Go; production build via EAS Build.
+- Camera and gallery image picking works on physical device.
+- Local push notifications fire at item expiry minus 1 day — even with app closed.
+- Persistent data across app restarts via AsyncStorage.
+- AI provider and API key entered by user in Settings; stored in `expiresnap_settings`; never hardcoded in source.
+- Built-in error handling and fallback states for malformed AI responses.

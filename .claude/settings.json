@@ -1,0 +1,35 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; [ -z \"$f\" ] && exit 0; echo \"$f\" | grep -qE '\\.(js|jsx|ts|tsx|css|json)$' || exit 0; [ -f node_modules/.bin/prettier ] && node_modules/.bin/prettier --write \"$f\" 2>/dev/null || true; [ -f node_modules/.bin/eslint ] && node_modules/.bin/eslint --fix \"$f\" 2>/dev/null || true; } 2>/dev/null || true",
+            "statusMessage": "Formatting..."
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; (echo \"$f\" | grep -q 'locales/' && echo \"$f\" | grep -q '\\.json$' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"Locale file updated. Sync all translation keys to the other locale files.\"}}') || true; } 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\":\"Review gates: Phase 2 -> cavecrew-reviewer | Phase 4 -> verify skill | Phase 5 -> security-review skill\"}'"
+          }
+        ]
+      }
+    ]
+  }
+}
