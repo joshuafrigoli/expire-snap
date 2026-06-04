@@ -2,12 +2,12 @@ import React from 'react';
 import { View, Text, Pressable, TextInput, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
-function FloatingActionButton({ testID, onPress, icon }) {
+function FloatingActionButton({ testID, onPress, icon, style }) {
   return (
     <Pressable
       testID={testID}
       onPress={onPress}
-      style={styles.button}
+      style={[styles.button, style]}
     >
       {icon ? icon : <Text style={styles.plus}>+</Text>}
     </Pressable>
