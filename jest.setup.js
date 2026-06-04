@@ -63,6 +63,13 @@ jest.mock('expo-linear-gradient', () => {
       React.createElement(View, { testID, ...props }, children),
   };
 });
+jest.mock('react-native-shadow-2', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return {
+    Shadow: ({ children, ...props }) => React.createElement(View, props, children),
+  };
+});
 jest.mock('expo-document-picker', () => ({
   getDocumentAsync: jest.fn().mockResolvedValue({
     canceled: false,
