@@ -191,11 +191,11 @@ Build all reusable primitives **before any screen**. Every screen imports from h
 
 ### Phase 4: Review Screen (Validation UI)
 
-- [ ] Create `ReviewItem` component: editable name `TextInput`, `DatePicker` for expiry, delete `Pressable`.
-- [ ] Display `confidence_days` as "± N days" label next to expiry date on each `ReviewItem`.
-- [ ] Map AI response `items` into `ReviewItem` list using `FlatList`.
-- [ ] Validate all rows before commit (no empty names, no past expiry dates).
-- [ ] Implement "Confirm & Add to Fridge" — dispatch items to `InventoryContext`, then switch to the Fridge tab. Use `navigation.navigate('BottomTabs', { screen: 'Fridge' })` (or the configured bottom-tab navigator name) — do NOT push Fridge as a stack screen, since it is a tab destination.
+- [x] Create `ReviewItem` component: editable name `TextInput`, `DatePicker` for expiry, delete `Pressable`.
+- [x] Display `confidence_days` as "± N days" label next to expiry date on each `ReviewItem`.
+- [x] Map AI response `items` into `ReviewItem` list using `FlatList`.
+- [x] Validate all rows before commit (no empty names, no past expiry dates).
+- [x] Implement "Confirm & Add to Fridge" — dispatch items to `InventoryContext`, then switch to the Fridge tab. Use `navigation.navigate('BottomTabs', { screen: 'Fridge' })` (or the configured bottom-tab navigator name) — do NOT push Fridge as a stack screen, since it is a tab destination.
 
 ### Phase 5: Real API Integration, Notifications & Polish
 
