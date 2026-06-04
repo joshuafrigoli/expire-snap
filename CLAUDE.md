@@ -48,3 +48,15 @@ Do not batch multiple tasks then verify at the end. One task → one verify → 
 - Single file → `cavecrew-builder`
 - Cross-file or judgment call → `general-purpose`
 - 3+ parallel independent files → `Workflow`
+
+## Shared Test Helpers (MANDATORY)
+
+Never redefine `daysFromNow`, `Wrapper`, `mockItem`, or `today` inline in any test file. Always import from `@testHelpers`:
+
+```js
+import { daysFromNow, Wrapper, mockItem } from '@testHelpers';
+```
+
+`@testHelpers` maps to `__tests__/helpers/index.js` via `moduleNameMapper` in jest config.
+
+Navigation mock (`mockNavigate` + `jest.mock('@react-navigation/native', ...)`) cannot be imported — `jest.mock()` is hoisted by babel-jest. Copy the boilerplate block from the helpers file comment into each screen test.

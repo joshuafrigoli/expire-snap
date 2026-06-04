@@ -119,7 +119,8 @@ Image sent as base64 string along with current date (injected at runtime). AI mu
 - [ ] Install `react-native-shadow-2` for hard offset shadows.
 - [ ] Install `react-native-reanimated` (Expo SDK 51 compatible) — provides `withTiming`, `withSpring`, `FadeIn`, `FadeOut`, `SlideInDown`, `SlideInUp`, `SlideOutDown`, `FadeInRight`, `FadeOutLeft` for all component-level transitions. Add `'react-native-reanimated/babel-plugin'` as the **last** entry in `babel.config.js` plugins array.
 - [ ] Set path aliases (`@/components`, `@/context`, etc.) in `babel.config.js` + `tsconfig.json`.
-- [ ] Create folder structure: `components/`, `context/`, `hooks/`, `utils/`, `locales/`.
+- [ ] Create folder structure: `components/`, `context/`, `hooks/`, `utils/`, `locales/`, `__tests__/helpers/`.
+- [ ] Create `__tests__/helpers/index.js` — shared test utilities: `today`, `daysFromNow(n)`, `mockItem(overrides)`, `Wrapper` (SettingsProvider + InventoryProvider). Add `"^@testHelpers$": "<rootDir>/__tests__/helpers/index.js"` to `moduleNameMapper` in `package.json` jest config alongside the existing `@/` alias. All test files import from here — never redefine inline.
 - [ ] Install and configure `react-i18next` + `i18next`.
 - [ ] Create baseline English translation file (`locales/en.json`) with all UI strings.
 - [ ] Install `@react-native-async-storage/async-storage`.
