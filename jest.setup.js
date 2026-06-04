@@ -29,7 +29,62 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key) => key }),
   initReactI18next: { type: '3rdParty', init: () => {} },
 }));
-jest.mock('react-native-reanimated', () => require('react-native-reanimated/mock'));
+jest.mock('react-native-reanimated', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  const noop = () => {};
+  const useSharedValue = (val) => ({ value: val });
+  const useAnimatedStyle = (fn) => fn();
+  const withSpring = (val) => val;
+  const withTiming = (val) => val;
+  const withDelay = (_, val) => val;
+  const withSequence = (...vals) => vals[vals.length - 1];
+  const withRepeat = (val) => val;
+  const interpolate = (val) => val;
+  const Extrapolation = { CLAMP: 'clamp', EXTEND: 'extend', IDENTITY: 'identity' };
+  const useAnimatedScrollHandler = () => noop;
+  const useAnimatedRef = () => ({ current: null });
+  const useAnimatedReaction = noop;
+  const runOnJS = (fn) => fn;
+  const runOnUI = (fn) => fn;
+  const Easing = { linear: noop, ease: noop, bezier: () => noop, in: () => noop, out: () => noop, inOut: () => noop };
+  const AnimatedView = ({ children, style, ...props }) => React.createElement(View, { style, ...props }, children);
+  const createAnimatedComponent = (Component) => {
+    const Wrapped = ({ children, style, ...props }) => React.createElement(Component, { style, ...props }, children);
+    return Wrapped;
+  };
+  return {
+    __esModule: true,
+    default: {
+      View: AnimatedView,
+      Text: ({ children, style, ...props }) => React.createElement(require('react-native').Text, { style, ...props }, children),
+      ScrollView: ({ children, style, ...props }) => React.createElement(require('react-native').ScrollView, { style, ...props }, children),
+      Image: ({ style, ...props }) => React.createElement(require('react-native').Image, { style, ...props }),
+      FlatList: ({ style, ...props }) => React.createElement(require('react-native').FlatList, { style, ...props }),
+      createAnimatedComponent,
+    },
+    useSharedValue,
+    useAnimatedStyle,
+    withSpring,
+    withTiming,
+    withDelay,
+    withSequence,
+    withRepeat,
+    interpolate,
+    Extrapolation,
+    useAnimatedScrollHandler,
+    useAnimatedRef,
+    useAnimatedReaction,
+    runOnJS,
+    runOnUI,
+    Easing,
+    createAnimatedComponent,
+    Animated: {
+      View: AnimatedView,
+      createAnimatedComponent,
+    },
+  };
+});
 jest.mock('@react-native-community/datetimepicker', () => {
   const React = require('react');
   const { View } = require('react-native');

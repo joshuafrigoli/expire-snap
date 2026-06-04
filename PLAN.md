@@ -139,25 +139,25 @@ Image sent as base64 string along with current date (injected at runtime). AI mu
 
 Build all reusable primitives **before any screen**. Every screen imports from here. Use `to-be/*/code.html` as visual reference only — implement with React Native primitives.
 
-- [ ] Create `components/ui/Button.jsx` — variants: primary, secondary, ghost; sizes: sm, md, lg; pill shape (`borderRadius: 9999`), 2px border, hard shadow via `react-native-shadow-2`, press-shift via `Pressable` `onPressIn`/`onPressOut`; `useAnimatedStyle` + `withSpring({ damping: 10, stiffness: 200 })` scale to 0.96 on press for tactile spring-back.
-- [ ] Create `components/ui/Card.jsx` — white background, `borderRadius: 16`, hard 4px shadow, 2px border.
-- [ ] Create `components/ui/Badge.jsx` — pill shape, color variants: danger, warning, safe, neutral.
-- [ ] Create `components/ui/ProgressBar.jsx` — 16px height, hard-shadow track `View`, vibrant fill `Animated.View`; fill width animates via `withTiming(400, { easing: Easing.out(Easing.quad) })` on every value change; color driven by prop.
-- [ ] Create `components/ui/Input.jsx` — variants: text, date, password; `TextInput` base; thick 2px border, focus swaps border to primary + hard shadow.
-- [ ] Create `components/ui/Select.jsx` — custom modal-based selector (avoid native `Picker` — inconsistent cross-platform); same border/radius/shadow as Input.
-- [ ] Create `components/ui/DatePicker.jsx` — wraps `@react-native-community/datetimepicker`; modal presentation on iOS, inline on Android.
-- [ ] Create `components/ui/TopAppBar.jsx` — `View` row: page title (left) + optional back `Pressable` (left) + profile Avatar `Pressable` (right). No hamburger.
-- [ ] Create `components/ui/BottomNav.jsx` — custom tab bar component for React Navigation `tabBar` prop; icon + label; active tab uses primary color. Tabs: Home / Scan / Fridge / Settings.
-- [ ] Create `components/ui/FloatingActionButton.jsx` — circular `Pressable`, primary color, hard 8px shadow, used on Fridge screen.
-- [ ] Create `components/ui/FilterTabs.jsx` — horizontal `ScrollView` with pill tab `Pressable` items for category filtering; active pill indicator slides between tabs via `useSharedValue` + `withSpring` on `translateX`; inactive labels fade via `withTiming` on opacity.
-- [ ] Create `components/ui/Spinner.jsx` — `ActivityIndicator` wrapped with branded styling.
-- [ ] Create `components/ui/Modal.jsx` — RN `Modal` component + centered `Card`; backdrop `Animated.View` with `entering={FadeIn.duration(200)}` / `exiting={FadeOut.duration(150)}`; card `Animated.View` with `entering={SlideInUp.springify().damping(18)}` / `exiting={SlideOutDown.duration(200)}`; used for scan processing state.
-- [ ] Install `expo-linear-gradient` (used by `SkeletonBlock` shimmer animation).
-- [ ] Create `components/ui/SkeletonBlock.jsx` — animated `View` placeholder using `Animated` API or `expo-linear-gradient`.
-- [ ] Create `components/ui/Avatar.jsx` — displays emoji or initials in circular `View`; size variants sm/md/lg.
-- [ ] Create `components/ui/Snackbar.jsx` — bottom toast conditionally rendered `Animated.View`; variants: info, success, error; auto-dismiss after 3s; pill shape + hard shadow; positioned with absolute layout; `entering={SlideInDown.springify().damping(14)}` on mount, `exiting={FadeOut.duration(200)}` on dismiss. Must use conditional render (`{visible && ...}`) — not opacity-based — so RNTL `queryByText` returns null when not visible.
-- [ ] Create `components/ui/index.js` — barrel export for all primitives.
-- [ ] Visually verify all components in Expo Go before proceeding to Phase 2.
+- [x] Create `components/ui/Button.jsx` — variants: primary, secondary, ghost; sizes: sm, md, lg; pill shape (`borderRadius: 9999`), 2px border, hard shadow via `react-native-shadow-2`, press-shift via `Pressable` `onPressIn`/`onPressOut`; `useAnimatedStyle` + `withSpring({ damping: 10, stiffness: 200 })` scale to 0.96 on press for tactile spring-back.
+- [x] Create `components/ui/Card.jsx` — white background, `borderRadius: 16`, hard 4px shadow, 2px border.
+- [x] Create `components/ui/Badge.jsx` — pill shape, color variants: danger, warning, safe, neutral.
+- [x] Create `components/ui/ProgressBar.jsx` — 16px height, hard-shadow track `View`, vibrant fill `Animated.View`; fill width animates via `withTiming(400, { easing: Easing.out(Easing.quad) })` on every value change; color driven by prop.
+- [x] Create `components/ui/Input.jsx` — variants: text, date, password; `TextInput` base; thick 2px border, focus swaps border to primary + hard shadow.
+- [x] Create `components/ui/Select.jsx` — custom modal-based selector (avoid native `Picker` — inconsistent cross-platform); same border/radius/shadow as Input.
+- [x] Create `components/ui/DatePicker.jsx` — wraps `@react-native-community/datetimepicker`; modal presentation on iOS, inline on Android.
+- [x] Create `components/ui/TopAppBar.jsx` — `View` row: page title (left) + optional back `Pressable` (left) + profile Avatar `Pressable` (right). No hamburger.
+- [x] Create `components/ui/BottomNav.jsx` — custom tab bar component for React Navigation `tabBar` prop; icon + label; active tab uses primary color. Tabs: Home / Scan / Fridge / Settings.
+- [x] Create `components/ui/FloatingActionButton.jsx` — circular `Pressable`, primary color, hard 8px shadow, used on Fridge screen.
+- [x] Create `components/ui/FilterTabs.jsx` — horizontal `ScrollView` with pill tab `Pressable` items for category filtering; active pill indicator slides between tabs via `useSharedValue` + `withSpring` on `translateX`; inactive labels fade via `withTiming` on opacity.
+- [x] Create `components/ui/Spinner.jsx` — `ActivityIndicator` wrapped with branded styling.
+- [x] Create `components/ui/Modal.jsx` — RN `Modal` component + centered `Card`; backdrop `Animated.View` with `entering={FadeIn.duration(200)}` / `exiting={FadeOut.duration(150)}`; card `Animated.View` with `entering={SlideInUp.springify().damping(18)}` / `exiting={SlideOutDown.duration(200)}`; used for scan processing state.
+- [x] Install `expo-linear-gradient` (used by `SkeletonBlock` shimmer animation).
+- [x] Create `components/ui/SkeletonBlock.jsx` — animated `View` placeholder using `Animated` API or `expo-linear-gradient`.
+- [x] Create `components/ui/Avatar.jsx` — displays emoji or initials in circular `View`; size variants sm/md/lg.
+- [x] Create `components/ui/Snackbar.jsx` — bottom toast conditionally rendered `Animated.View`; variants: info, success, error; auto-dismiss after 3s; pill shape + hard shadow; positioned with absolute layout; `entering={SlideInDown.springify().damping(14)}` on mount, `exiting={FadeOut.duration(200)}` on dismiss. Must use conditional render (`{visible && ...}`) — not opacity-based — so RNTL `queryByText` returns null when not visible.
+- [x] Create `components/ui/index.js` — barrel export for all primitives.
+- [x] Visually verify all components in Expo Go before proceeding to Phase 2.
 
 ### Phase 2: Screen Development
 
