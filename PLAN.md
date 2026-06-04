@@ -178,16 +178,16 @@ Build all reusable primitives **before any screen**. Every screen imports from h
 
 ### Phase 3: Camera & Mock API Setup
 
-- [ ] Install `expo-image-picker` and `expo-image-manipulator`; request `CAMERA` and `MEDIA_LIBRARY` permissions.
-- [ ] Build Scan screen — primary "Take Photo" button + secondary "Choose from Gallery" button.
-- [ ] Add file validation (type: image only, size: max 10 MB).
-- [ ] Create `utils/validateImage.js` — throws on non-image MIME type or file size > 10 MB; called in Scan screen before compress step.
-- [ ] Create `utils/compressImage.js` — takes raw image URI from `expo-image-picker`, uses `expo-image-manipulator` to resize to max 1200px wide (maintain aspect ratio) + convert to JPEG quality 80. Returns compressed URI + base64. **Mandatory step before any AI call.**
-- [ ] Wire `compressImage` into Scan flow: pick/shoot → compress → base64 → AI.
-- [ ] Create mock data fixture matching the AI JSON schema.
-- [ ] Create `mockScanReceipt(imageBase64)` utility — returns mock fixture after 2-second delay.
-- [ ] Show `Modal` with `Spinner` + `SkeletonBlock` list while processing.
-- [ ] Disable "Take Photo" and "Choose from Gallery" buttons immediately on scan start; re-enable only after response (success or error). Prevents duplicate requests from accidental multi-tap.
+- [x] Install `expo-image-picker` and `expo-image-manipulator`; request `CAMERA` and `MEDIA_LIBRARY` permissions.
+- [x] Build Scan screen — primary "Take Photo" button + secondary "Choose from Gallery" button.
+- [x] Add file validation (type: image only, size: max 10 MB).
+- [x] Create `utils/validateImage.js` — throws on non-image MIME type or file size > 10 MB; called in Scan screen before compress step.
+- [x] Create `utils/compressImage.js` — takes raw image URI from `expo-image-picker`, uses `expo-image-manipulator` to resize to max 1200px wide (maintain aspect ratio) + convert to JPEG quality 80. Returns compressed URI + base64. **Mandatory step before any AI call.**
+- [x] Wire `compressImage` into Scan flow: pick/shoot → compress → base64 → AI.
+- [x] Create mock data fixture matching the AI JSON schema.
+- [x] Create `mockScanReceipt(imageBase64)` utility — returns mock fixture after 2-second delay.
+- [x] Show `Modal` with `Spinner` + `SkeletonBlock` list while processing.
+- [x] Disable "Take Photo" and "Choose from Gallery" buttons immediately on scan start; re-enable only after response (success or error). Prevents duplicate requests from accidental multi-tap.
 
 ### Phase 4: Review Screen (Validation UI)
 
