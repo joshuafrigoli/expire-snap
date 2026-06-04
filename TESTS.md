@@ -892,7 +892,7 @@ describe('Dashboard stats', () => {
 
 ```js
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 import InventoryItem from '@/components/InventoryItem';
 
 const today = new Date();

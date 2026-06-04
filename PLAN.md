@@ -120,12 +120,13 @@ Image sent as base64 string along with current date (injected at runtime). AI mu
 - [ ] Install `react-native-reanimated` (Expo SDK 51 compatible) — provides `withTiming`, `withSpring`, `FadeIn`, `FadeOut`, `SlideInDown`, `SlideInUp`, `SlideOutDown`, `FadeInRight`, `FadeOutLeft` for all component-level transitions. Add `'react-native-reanimated/babel-plugin'` as the **last** entry in `babel.config.js` plugins array.
 - [ ] Set path aliases (`@/components`, `@/context`, etc.) in `babel.config.js` + `tsconfig.json`.
 - [ ] Create folder structure: `components/`, `context/`, `hooks/`, `utils/`, `locales/`, `__tests__/helpers/`.
+- [ ] Create `jest.setup.js` at project root — paste all global mocks from `TESTS.md` "Test Stack" section (AsyncStorage, expo-notifications, expo-image-picker, expo-sharing, react-i18next, react-native-reanimated, datetimepicker, expo-file-system, react-native-screens, gesture-handler, expo-linear-gradient, expo-document-picker). Add `"./jest.setup.js"` to `setupFilesAfterFramework` in jest config.
 - [ ] Create `__tests__/helpers/index.js` — shared test utilities: `today`, `daysFromNow(n)`, `mockItem(overrides)`, `Wrapper` (SettingsProvider + InventoryProvider). Add `"^@testHelpers$": "<rootDir>/__tests__/helpers/index.js"` to `moduleNameMapper` in `package.json` jest config alongside the existing `@/` alias. All test files import from here — never redefine inline.
 - [ ] Install and configure `react-i18next` + `i18next`.
 - [ ] Create baseline English translation file (`locales/en.json`) with all UI strings.
 - [ ] Install `@react-native-async-storage/async-storage`.
 - [ ] Install `expo-sharing` (used by `exportData()` in `utils/dataTransfer.js`).
-- [ ] Install `expo-document-picker` (used by Import Data flow in Phase 5).
+- [ ] Install `expo-document-picker` (used by Onboarding import in Phase 2 and Profile import in Phase 5).
 - [ ] Define item data schema (JSDoc shape or TypeScript interface).
 - [ ] Create `utils/dataTransfer.js` — `exportData()` serializes full app state to JSON and triggers share sheet (`expo-sharing`). `importData(jsonString)` receives a raw JSON string (caller handles file reading), validates schema (`inventory` and `settings` fields required), merges into AsyncStorage. Throws on invalid JSON or missing fields.
 - [ ] Define settings schema: `{ aiProvider, apiKey, autoDeleteDays: 7|14|30|60|never, language, profile: { name, avatarEmoji } }`.
@@ -167,6 +168,7 @@ Build all reusable primitives **before any screen**. Every screen imports from h
 - [ ] Wrap all UI strings with `t()` from `react-i18next`.
 - [ ] Create `Layout` wrapper (`SafeAreaView` + screen padding + `TopAppBar` slot).
 - [ ] Create `StatCard` component (label, count, color variant: red/amber/green); count animates from 0 to actual value on mount using `withTiming(600, { easing: Easing.out(Easing.cubic) })` on a `useSharedValue`.
+- [ ] Build `DashboardScreen` (`screens/DashboardScreen.jsx`) — `SafeAreaView` with `testID="screen-home"`; renders three `StatCard` components (Expired / Expiring Soon / Safe) with `testID="stat-expired"`, `testID="stat-expiring"`, `testID="stat-safe"` on the count `Text` elements; prominent "Scan Receipt" button that navigates to Scan tab.
 - [ ] Compute Expired / Expiring Soon / Safe counts from context; wire to Dashboard.
 - [ ] Create `InventoryItem` card component (name, category badge, countdown days).
 - [ ] Add freshness `ProgressBar` to `InventoryItem` (green → amber → red based on days remaining).
