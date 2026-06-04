@@ -27,6 +27,7 @@ export function SettingsProvider({ children }) {
   async function updateSettings(partial) {
     const next = { ...settings, ...partial };
     setSettings(next);
+    // TODO: migrate apiKey storage to expo-secure-store for encryption at rest
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   }
 

@@ -40,12 +40,12 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
     };
   } else if (provider === 'gemini') {
     url =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' +
-      apiKey;
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
     options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey,
       },
       body: JSON.stringify({
         contents: [
@@ -97,7 +97,14 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
     throw new Error('Unknown provider');
   }
 
-  const response = await fetch(url, options);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
+  let response;
+  try {
+    response = await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!response.ok) {
     if (response.status === 429) {
@@ -117,10 +124,15 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
     text = data.content[0].text;
   }
 
-  const parsed = JSON.parse(text);
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error('Invalid response from AI: could not parse JSON');
+  }
 
   if (!Array.isArray(parsed.items)) {
-    throw new Error('Invalid response from AI');
+    throw new Error('Invalid response from AI: missing items array');
   }
 
   return parsed;

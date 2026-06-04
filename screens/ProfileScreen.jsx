@@ -37,7 +37,13 @@ export default function ProfileScreen() {
           const result = await DocumentPicker.getDocumentAsync({ type: 'application/json' });
           if (result.canceled) return;
           const uri = result.assets[0].uri;
-          const content = await FileSystem.readAsStringAsync(uri);
+          let content;
+          try {
+            content = await FileSystem.readAsStringAsync(uri);
+          } catch {
+            setSnackbarMsg(t('errors.importFailed'));
+            return;
+          }
           try {
             await importData(content);
             setSnackbarMsg(t('errors.importSuccess'));
