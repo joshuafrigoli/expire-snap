@@ -17,7 +17,7 @@ function Select({ label, value, options = [], onChange, testID }) {
 
       <Pressable testID={testID} style={styles.trigger} onPress={() => setOpen(true)}>
         <Text style={styles.selectedText}>{selectedLabel}</Text>
-        <Text style={styles.chevron}>▾</Text>
+        <Text style={styles.chevron}>⌄</Text>
       </Pressable>
 
       <Modal
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   selectedText: { fontSize: 15, color: '#001a3d', fontWeight: '500' },
-  chevron: { fontSize: 18, color: '#005bc4', fontWeight: '700' },
+  chevron: { fontSize: 22, color: '#005bc4', fontWeight: '700', paddingLeft: 8, minWidth: 28, textAlign: 'center' },
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,26,61,0.4)',
