@@ -28,6 +28,7 @@ function Select({ label, value, options = [], onChange, testID }) {
       >
         <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
           <View style={styles.sheet}>
+            <View style={styles.handle} />
             {label ? <Text style={styles.sheetTitle}>{label}</Text> : null}
             <FlatList
               data={options}
@@ -79,13 +80,22 @@ const styles = StyleSheet.create({
   },
   sheet: {
     backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
     borderWidth: 2,
     borderColor: '#001a3d',
-    paddingTop: 8,
-    paddingBottom: 32,
-    maxHeight: '60%',
+    paddingBottom: 40,
+    maxHeight: '70%',
+    minHeight: 180,
+  },
+  handle: {
+    width: 40,
+    height: 4,
+    backgroundColor: '#cbd5e1',
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginTop: 12,
+    marginBottom: 4,
   },
   sheetTitle: {
     fontSize: 13,
