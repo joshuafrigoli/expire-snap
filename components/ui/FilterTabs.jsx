@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 4,
+    paddingHorizontal: 16,
   },
   pill: {
     borderRadius: 9999,

@@ -1,17 +1,19 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import InventoryList from '@/components/InventoryList';
 import { FloatingActionButton } from '@/components/ui';
 
 export default function FridgeScreen() {
   const { t } = useTranslation();
+  const navigation = useNavigation();
   return (
     <SafeAreaView testID="screen-fridge" style={styles.root}>
-      <Text style={styles.title}>{t('fridge.title', 'My Fridge')}</Text>
+      <Text style={styles.title}>{t('fridge.title')}</Text>
       <InventoryList style={styles.list} />
-      <FloatingActionButton testID="fridge-fab" onPress={() => {}} style={styles.fab} />
+      <FloatingActionButton testID="fridge-fab" onPress={() => navigation.navigate('Scan')} style={styles.fab} />
     </SafeAreaView>
   );
 }
