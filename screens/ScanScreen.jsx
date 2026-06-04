@@ -8,6 +8,7 @@ import { compressImage } from '@/utils/compressImage';
 import { mockScanReceipt } from '@/utils/mockScanReceipt';
 
 export default function ScanScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const [scanning, setScanning] = useState(false);
   const scanningRef = useRef(false);
@@ -60,7 +61,7 @@ export default function ScanScreen() {
         disabled={scanning}
         accessibilityState={{ disabled: scanning }}
       >
-        <Text>Take Photo</Text>
+        <Text>{t('scan.camera')}</Text>
       </Pressable>
       <Pressable
         testID="scan-gallery-btn"
@@ -68,7 +69,7 @@ export default function ScanScreen() {
         disabled={scanning}
         accessibilityState={{ disabled: scanning }}
       >
-        <Text>Choose from Gallery</Text>
+        <Text>{t('scan.gallery')}</Text>
       </Pressable>
     </View>
   );

@@ -6,6 +6,7 @@ import { useInventory } from '@/context/InventoryContext';
 import StatCard from '@/components/StatCard';
 
 export default function DashboardScreen() {
+  const { t } = useTranslation();
   const { items } = useInventory();
   const navigation = useNavigation();
 
@@ -34,30 +35,30 @@ export default function DashboardScreen() {
 
   return (
     <View testID="screen-home">
-      <Text>ExpireSnap</Text>
+      <Text>{t('dashboard.title')}</Text>
       <StatCard
-        label="Expired"
+        label={t('dashboard.expired')}
         count={expired}
         variant="danger"
         testID="card-expired"
         countTestID="stat-expired"
       />
       <StatCard
-        label="Expiring Soon"
+        label={t('dashboard.expiring')}
         count={expiring}
         variant="warning"
         testID="card-expiring"
         countTestID="stat-expiring"
       />
       <StatCard
-        label="Safe"
+        label={t('dashboard.safe')}
         count={safe}
         variant="safe"
         testID="card-safe"
         countTestID="stat-safe"
       />
       <Pressable onPress={() => navigation.navigate('Scan')}>
-        <Text>Scan Receipt</Text>
+        <Text>{t('dashboard.scan')}</Text>
       </Pressable>
     </View>
   );
