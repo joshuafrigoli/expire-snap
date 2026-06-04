@@ -1,3 +1,64 @@
+require('@testing-library/jest-native/extend-expect');
+
+jest.mock('react-native-safe-area-context', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return {
+    SafeAreaProvider: ({ children }) => React.createElement(React.Fragment, null, children),
+    SafeAreaView: ({ children, style, ...props }) => React.createElement(View, { style, ...props }, children),
+    useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+    initialWindowMetrics: { frame: { x: 0, y: 0, width: 390, height: 844 }, insets: { top: 0, bottom: 0, left: 0, right: 0 } },
+  };
+});
+
+jest.mock('@react-navigation/native', () => {
+  const React = require('react');
+  return {
+    NavigationContainer: ({ children }) => React.createElement(React.Fragment, null, children),
+    useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn(), replace: jest.fn() }),
+    useRoute: () => ({ params: {} }),
+    useFocusEffect: () => {},
+    useIsFocused: () => true,
+    createNavigationContainerRef: () => ({ current: null }),
+  };
+});
+
+jest.mock('@react-navigation/stack', () => {
+  const React = require('react');
+  return {
+    createStackNavigator: () => ({
+      Navigator: ({ children }) => {
+        const arr = React.Children.toArray(children);
+        return arr.length ? arr[0] : null;
+      },
+      Screen: ({ component: Component }) =>
+        React.createElement(Component, {
+          navigation: { navigate: jest.fn(), goBack: jest.fn(), replace: jest.fn() },
+          route: { params: {} },
+        }),
+    }),
+    TransitionPresets: {},
+    CardStyleInterpolators: {},
+  };
+});
+
+jest.mock('@react-navigation/bottom-tabs', () => {
+  const React = require('react');
+  return {
+    createBottomTabNavigator: () => ({
+      Navigator: ({ children }) => {
+        const arr = React.Children.toArray(children);
+        return arr.length ? arr[0] : null;
+      },
+      Screen: ({ component: Component }) =>
+        React.createElement(Component, {
+          navigation: { navigate: jest.fn(), goBack: jest.fn() },
+          route: { params: {} },
+        }),
+    }),
+  };
+});
+
 let mockAsyncStore = {};
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn((key) => Promise.resolve(mockAsyncStore[key] ?? null)),

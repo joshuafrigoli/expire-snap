@@ -13,6 +13,7 @@ function ProgressBar({ value, max, color, testID, fillTestID }) {
   return (
     <View
       testID={testID}
+      color={color}
       style={[{
         height: 16,
         backgroundColor: '#e2e8f0',
