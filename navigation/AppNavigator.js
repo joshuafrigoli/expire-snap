@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { SettingsProvider } from '@/context/SettingsContext';
+import { SettingsProvider, useSettings } from '@/context/SettingsContext';
 import { InventoryProvider } from '@/context/InventoryContext';
 
 import DashboardScreen from '@/screens/DashboardScreen';
@@ -16,8 +15,6 @@ import ProfileScreen from '@/screens/ProfileScreen';
 import HistoryScreen from '@/screens/HistoryScreen';
 import OnboardingScreen from '@/screens/OnboardingScreen';
 import ReviewScreen from '@/screens/ReviewScreen';
-
-const STORAGE_KEY = 'expiresnap_settings';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -33,43 +30,32 @@ function BottomTabsNavigator() {
   );
 }
 
-export default function AppNavigator() {
-  const [hasProfile, setHasProfile] = useState(null);
+function AppContent() {
+  const { settings } = useSettings();
+  const hasProfile = !!(settings?.profile?.name?.trim());
 
   useEffect(() => {
     Notifications.requestPermissionsAsync();
   }, []);
 
-  useEffect(() => {
-    AsyncStorage.getItem(STORAGE_KEY)
-      .then((raw) => {
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          const name = parsed?.profile?.name;
-          setHasProfile(typeof name === 'string' && name.trim().length > 0);
-        } else {
-          setHasProfile(false);
-        }
-      })
-      .catch(() => {
-        setHasProfile(false);
-      });
-  }, []);
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {!hasProfile && <Stack.Screen name="Onboarding" component={OnboardingScreen} />}
+        {hasProfile && <Stack.Screen name="BottomTabs" component={BottomTabsNavigator} />}
+        {hasProfile && <Stack.Screen name="Profile" component={ProfileScreen} />}
+        {hasProfile && <Stack.Screen name="History" component={HistoryScreen} />}
+        {hasProfile && <Stack.Screen name="Review" component={ReviewScreen} />}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
-  if (hasProfile === null) return null;
-
+export default function AppNavigator() {
   return (
     <SettingsProvider>
       <InventoryProvider>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {!hasProfile && <Stack.Screen name="Onboarding" component={OnboardingScreen} />}
-            {hasProfile && <Stack.Screen name="BottomTabs" component={BottomTabsNavigator} />}
-            {hasProfile && <Stack.Screen name="Profile" component={ProfileScreen} />}
-            {hasProfile && <Stack.Screen name="History" component={HistoryScreen} />}
-            {hasProfile && <Stack.Screen name="Review" component={ReviewScreen} />}
-          </Stack.Navigator>
-        </NavigationContainer>
+        <AppContent />
       </InventoryProvider>
     </SettingsProvider>
   );
