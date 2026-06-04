@@ -4,11 +4,11 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-na
 
 function FilterTabs({ tabs, activeTab, onTabPress }) {
   return (
+    <View style={styles.wrapper}>
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.container}
-      style={styles.scroll}
     >
       {tabs.map((tab) => {
         const isActive = tab === activeTab;
@@ -26,19 +26,19 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
         );
       })}
     </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: {
+  wrapper: {
+    marginHorizontal: 16,
     overflow: 'hidden',
   },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 4,
-    paddingLeft: 16,
-    paddingRight: 16,
   },
   pill: {
     borderRadius: 9999,
