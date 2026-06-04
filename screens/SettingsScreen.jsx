@@ -16,7 +16,7 @@ export default function SettingsScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>Settings</Text>
+        <Text style={styles.title}>{t('settings.title')}</Text>
 
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>AI Provider</Text>

@@ -16,7 +16,7 @@ export default function HistoryScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.title}>History</Text>
+        <Text style={styles.title}>{t('history.title')}</Text>
         <FlatList
           data={historyItems}
           keyExtractor={(item) => item.id}

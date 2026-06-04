@@ -48,7 +48,7 @@ export default function DashboardScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#eff6ff' },
   container: { flex: 1, padding: 16, gap: 12 },
-  title: { fontSize: 28, fontWeight: '700', color: '#005bc4', marginBottom: 4 },
+  title: { fontSize: 24, fontWeight: '700', color: '#005bc4', marginBottom: 4 },
   cards: { gap: 10 },
   scanBtn: {
     backgroundColor: '#005bc4', borderRadius: 9999, paddingVertical: 16,
