@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   selectedText: { fontSize: 15, color: '#001a3d', fontWeight: '500' },
-  chevron: { fontSize: 20, color: '#005bc4', fontWeight: '700', paddingLeft: 8, transform: [{ scaleX: 2.2 }] },
+  chevron: { fontSize: 16, color: '#005bc4', fontWeight: '700', paddingLeft: 8, transform: [{ scaleX: 1.6 }] },
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,26,61,0.4)',
