@@ -65,7 +65,7 @@ export default function ScanScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View testID="screen-scan" style={styles.container}>
-        <Text style={styles.title}>Scan Receipt</Text>
+        <Text style={styles.title}>{t('scan.title')}</Text>
         <Text style={styles.subtitle}>Point your camera at a grocery receipt</Text>
 
         <Pressable
@@ -111,20 +111,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 24,
+    gap: 12,
     backgroundColor: '#eff6ff',
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
     color: '#005bc4',
+    marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
     color: '#64748b',
-    textAlign: 'center',
+    marginBottom: 8,
   },
   buttonPrimary: {
     backgroundColor: '#005bc4',
