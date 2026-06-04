@@ -217,6 +217,22 @@ Build all reusable primitives **before any screen**. Every screen imports from h
 - [ ] Audit touch targets — min 44×44pt on all interactive elements.
 - [ ] Test on iOS simulator (375pt baseline) and Android emulator.
 - [ ] Smoke-test full journey: onboarding → scan → review → fridge → mark consumed → history → settings → export/import.
+- [ ] Write `README.md` — must be self-sufficient for a new developer with zero prior context. Required sections:
+  1. **Overview** — what ExpireSnap does, key features (receipt scan, AI expiry estimation, push notifications, export/import), supported platforms (iOS + Android).
+  2. **Tech Stack** — React Native + Expo SDK 51, NativeWind v4, React Navigation v6, AsyncStorage, expo-notifications, expo-image-picker, expo-image-manipulator, react-i18next, react-native-shadow-2, react-native-reanimated; AI providers: OpenAI GPT-4o / Google Gemini Flash / Anthropic Claude.
+  3. **Prerequisites** — Node.js 18+, npm/yarn, Expo CLI (`npm install -g expo-cli`), Expo Go app on physical device (iOS/Android), EAS CLI for production builds (`npm install -g eas-cli`), an account on expo.dev, API key from at least one AI provider.
+  4. **Installation** — step-by-step: clone repo, `npm install`, copy `.env.example` to `.env` (if applicable), start dev server with `npx expo start`.
+  5. **Running on Device (Development)** — scan QR code with Expo Go; tunnel mode for networks that block UDP (`npx expo start --tunnel`); note that camera and notifications require a physical device (not simulator).
+  6. **Configuration** — where to enter AI provider and API key (Settings screen in app); list supported providers and where to get keys (OpenAI platform, Google AI Studio, Anthropic console); note keys are stored locally in AsyncStorage only.
+  7. **Running Tests** — `npx jest` (all), `npx jest --watch` (watch mode), `npx jest --coverage` (coverage report), `npx jest <path>` (single file); test stack: jest-expo + RNTL + jest-native.
+  8. **Project Structure** — annotated directory tree: `components/ui/` (primitives), `components/` (composite), `screens/` (full screens), `navigation/` (AppNavigator), `context/` (SettingsContext, InventoryContext), `utils/` (scanReceipt, compressImage, notifications, dataTransfer, validateImage), `locales/` (i18n), `__tests__/` (mirrors src structure + helpers/).
+  9. **Building for Production (EAS Build)** — step-by-step: `eas login`, `eas build:configure`, build Android APK: `eas build -p android --profile preview`, build iOS IPA: `eas build -p ios --profile preview`; explain difference between `preview` (internal testing) and `production` profiles; note iOS requires Apple Developer account ($99/yr).
+  10. **Submitting to App Stores** — Android: `eas submit -p android` → Google Play Console (create app listing, upload AAB, fill store details, submit for review); iOS: `eas submit -p ios` → App Store Connect (create app record, fill metadata, submit for TestFlight or direct review); note typical review times (Android 1–3 days, iOS 1–7 days).
+  11. **Push Notifications** — local only (no server); `expo-notifications` schedules alerts 1 day before expiry; OS delivers even with app closed; no backend or Firebase setup required.
+  12. **Export / Import Data** — Export: Profile → Export Data → shares JSON via system share sheet; Import: Profile → Import Data → select JSON file → merges into local storage; format documented inline (inventory array + settings object).
+  13. **Troubleshooting** — common issues: camera not working on simulator (use physical device), notifications not firing (check OS permission in Settings), AI returning malformed JSON (switch provider or check API key quota), Metro bundler cache issues (`npx expo start --clear`).
+  14. **Roadmap** — brief mention of Section 5 (Supabase multi-device sync, household sharing, Edge Function AI keys).
+  15. **License** — MIT.
 
 ---
 
