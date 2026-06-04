@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
@@ -30,7 +31,7 @@ export default function DashboardScreen() {
 
   return (
     <SafeAreaView testID="screen-home" style={styles.safe}>
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>{t('dashboard.title')}</Text>
         <View style={styles.cards}>
           <StatCard label={t('dashboard.expired')} count={expired} variant="danger" testID="card-expired" countTestID="stat-expired" />
@@ -40,15 +41,15 @@ export default function DashboardScreen() {
         <Pressable style={styles.scanBtn} onPress={() => navigation.navigate('Scan')}>
           <Text style={styles.scanBtnText}>📷  {t('dashboard.scan')}</Text>
         </Pressable>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#eff6ff' },
-  container: { flex: 1, padding: 16, gap: 12 },
-  title: { fontSize: 24, fontWeight: '700', color: '#005bc4', marginBottom: 4 },
+  content: { padding: 16, gap: 12 },
+  title: { fontSize: 24, fontWeight: '700', color: '#005bc4', marginBottom: 8 },
   cards: { gap: 10 },
   scanBtn: {
     backgroundColor: '#005bc4', borderRadius: 9999, paddingVertical: 16,
