@@ -1,0 +1,77 @@
+{
+  "dashboard": {
+    "title": "ExpireSnap",
+    "expired": "Expired",
+    "expiring": "Expiring Soon",
+    "safe": "Safe",
+    "scan": "Scan Receipt"
+  },
+  "onboarding": {
+    "title": "Welcome to ExpireSnap",
+    "namePlaceholder": "Your name",
+    "submit": "Let's Go",
+    "importBackup": "Import Backup"
+  },
+  "scan": {
+    "title": "Scan Receipt",
+    "camera": "Take Photo",
+    "gallery": "Choose from Gallery",
+    "processing": "Scanning receipt..."
+  },
+  "review": {
+    "title": "Review Items",
+    "confirm": "Confirm & Add to Fridge",
+    "confidenceDays": "± {{n}} days"
+  },
+  "fridge": {
+    "title": "My Fridge",
+    "empty": "Your fridge is empty",
+    "search": "Search items..."
+  },
+  "history": {
+    "title": "History"
+  },
+  "profile": {
+    "title": "Profile",
+    "export": "Export Data",
+    "import": "Import Data",
+    "history": "View History",
+    "totalScanned": "Total Scanned",
+    "savedFromWaste": "Saved from Waste"
+  },
+  "settings": {
+    "title": "Settings",
+    "aiProvider": "AI Provider",
+    "apiKey": "API Key",
+    "autoDelete": "Auto-Delete After",
+    "language": "Language"
+  },
+  "actions": {
+    "consume": "Consumed",
+    "waste": "Wasted",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit"
+  },
+  "errors": {
+    "rateLimit": "Too many requests — wait a few seconds and try again",
+    "invalidImage": "Please select a valid image file",
+    "scanFailed": "Scan failed — please try again",
+    "importFailed": "Import failed — invalid file format",
+    "importSuccess": "Data imported successfully"
+  },
+  "categories": {
+    "dairy": "Dairy",
+    "meat": "Meat & Fish",
+    "produce": "Fruits & Veggies",
+    "frozen": "Frozen",
+    "pantry": "Pantry"
+  },
+  "days": {
+    "expired": "Expired",
+    "today": "Expires today",
+    "tomorrow": "Expires tomorrow",
+    "daysLeft": "{{n}} days left"
+  }
+}

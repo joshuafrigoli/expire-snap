@@ -1,0 +1,77 @@
+{
+  "dashboard": {
+    "title": "ExpireSnap",
+    "expired": "Scaduti",
+    "expiring": "In Scadenza",
+    "safe": "Ok",
+    "scan": "Scansiona Scontrino"
+  },
+  "onboarding": {
+    "title": "Benvenuto in ExpireSnap",
+    "namePlaceholder": "Il tuo nome",
+    "submit": "Inizia",
+    "importBackup": "Importa Backup"
+  },
+  "scan": {
+    "title": "Scansiona Scontrino",
+    "camera": "Scatta Foto",
+    "gallery": "Scegli dalla Galleria",
+    "processing": "Scansione in corso..."
+  },
+  "review": {
+    "title": "Revisiona Prodotti",
+    "confirm": "Conferma e Aggiungi al Frigo",
+    "confidenceDays": "± {{n}} giorni"
+  },
+  "fridge": {
+    "title": "Il Mio Frigo",
+    "empty": "Il frigo è vuoto",
+    "search": "Cerca prodotti..."
+  },
+  "history": {
+    "title": "Cronologia"
+  },
+  "profile": {
+    "title": "Profilo",
+    "export": "Esporta Dati",
+    "import": "Importa Dati",
+    "history": "Vedi Cronologia",
+    "totalScanned": "Totale Scansionati",
+    "savedFromWaste": "Salvati dagli Sprechi"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "aiProvider": "Provider AI",
+    "apiKey": "Chiave API",
+    "autoDelete": "Elimina Automaticamente Dopo",
+    "language": "Lingua"
+  },
+  "actions": {
+    "consume": "Consumato",
+    "waste": "Sprecato",
+    "delete": "Elimina",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "edit": "Modifica"
+  },
+  "errors": {
+    "rateLimit": "Troppe richieste — attendi qualche secondo e riprova",
+    "invalidImage": "Seleziona un file immagine valido",
+    "scanFailed": "Scansione fallita — riprova",
+    "importFailed": "Importazione fallita — formato file non valido",
+    "importSuccess": "Dati importati con successo"
+  },
+  "categories": {
+    "dairy": "Latticini",
+    "meat": "Carne e Pesce",
+    "produce": "Frutta e Verdura",
+    "frozen": "Surgelati",
+    "pantry": "Dispensa"
+  },
+  "days": {
+    "expired": "Scaduto",
+    "today": "Scade oggi",
+    "tomorrow": "Scade domani",
+    "daysLeft": "{{n}} giorni rimanenti"
+  }
+}

@@ -112,28 +112,28 @@ Image sent as base64 string along with current date (injected at runtime). AI mu
 
 ### Phase 0: Project Setup & State Architecture
 
-- [ ] Scaffold with `npx create-expo-app expire-snap --template blank`.
-- [ ] Install and configure NativeWind v4 (babel plugin + `tailwind.config.js` + `global.css`).
-- [ ] Define design tokens in `tailwind.config.js` `theme.extend` using Blue palette from Section 1a plus secondary/tertiary/error from `to-be/DESIGN.md`. Includes colors, radius, spacing, font sizes.
-- [ ] Install and configure `expo-font`; load Poppins (500, 600, 700) in `_layout.tsx` or `App.js`.
-- [ ] Install `react-native-shadow-2` for hard offset shadows.
-- [ ] Install `react-native-reanimated` (Expo SDK 51 compatible) — provides `withTiming`, `withSpring`, `FadeIn`, `FadeOut`, `SlideInDown`, `SlideInUp`, `SlideOutDown`, `FadeInRight`, `FadeOutLeft` for all component-level transitions. Add `'react-native-reanimated/babel-plugin'` as the **last** entry in `babel.config.js` plugins array.
-- [ ] Set path aliases (`@/components`, `@/context`, etc.) in `babel.config.js` + `tsconfig.json`.
-- [ ] Create folder structure: `components/`, `context/`, `hooks/`, `utils/`, `locales/`, `screens/`, `navigation/`, `__tests__/helpers/`.
-- [ ] Create `jest.setup.js` at project root — paste all global mocks from `TESTS.md` "Test Stack" section (AsyncStorage, expo-notifications, expo-image-picker, expo-sharing, react-i18next, react-native-reanimated, datetimepicker, expo-file-system, react-native-screens, gesture-handler, expo-linear-gradient, expo-document-picker). Add `"./jest.setup.js"` to `setupFilesAfterFramework` in jest config.
-- [ ] Create `__tests__/helpers/index.js` — shared test utilities: `today`, `daysFromNow(n)`, `mockItem(overrides)`, `Wrapper` (SettingsProvider + InventoryProvider). Add `"^@testHelpers$": "<rootDir>/__tests__/helpers/index.js"` to `moduleNameMapper` in `package.json` jest config alongside the existing `@/` alias. All test files import from here — never redefine inline.
-- [ ] Install and configure `react-i18next` + `i18next`.
-- [ ] Create baseline English translation file (`locales/en.json`) with all UI strings.
-- [ ] Install `@react-native-async-storage/async-storage`.
-- [ ] Install `expo-sharing` (used by `exportData()` in `utils/dataTransfer.js`).
-- [ ] Install `expo-document-picker` (used by Onboarding import in Phase 2 and Profile import in Phase 5).
-- [ ] Define item data schema (JSDoc shape or TypeScript interface).
-- [ ] Create `utils/dataTransfer.js` — `exportData()` serializes full app state to JSON and triggers share sheet (`expo-sharing`). `importData(jsonString)` receives a raw JSON string (caller handles file reading), validates schema (`inventory` and `settings` fields required), merges into AsyncStorage. Throws on invalid JSON or missing fields.
-- [ ] Define settings schema: `{ aiProvider, apiKey, autoDeleteDays: 7|14|30|60|never, language, profile: { name, avatarEmoji } }`.
-- [ ] Create `SettingsContext` with get/set operations; persist to `expiresnap_settings` AsyncStorage key.
-- [ ] Create `InventoryContext` with CRUD operations (add, update, delete, markConsumed, markWasted). `updateItem` must refresh `updatedAt` to the current timestamp so auto-delete logic stays accurate.
-- [ ] Add AsyncStorage sync to `InventoryContext` (load on init, persist on change).
-- [ ] Add auto-delete logic to `InventoryContext`: on app load, purge consumed/wasted items where `updatedAt` is older than `autoDeleteDays` (skip if `never`).
+- [x] Scaffold with `npx create-expo-app expire-snap --template blank`.
+- [x] Install and configure NativeWind v4 (babel plugin + `tailwind.config.js` + `global.css`).
+- [x] Define design tokens in `tailwind.config.js` `theme.extend` using Blue palette from Section 1a plus secondary/tertiary/error from `to-be/DESIGN.md`. Includes colors, radius, spacing, font sizes.
+- [x] Install and configure `expo-font`; load Poppins (500, 600, 700) in `_layout.tsx` or `App.js`.
+- [x] Install `react-native-shadow-2` for hard offset shadows.
+- [x] Install `react-native-reanimated` (Expo SDK 51 compatible) — provides `withTiming`, `withSpring`, `FadeIn`, `FadeOut`, `SlideInDown`, `SlideInUp`, `SlideOutDown`, `FadeInRight`, `FadeOutLeft` for all component-level transitions. Add `'react-native-reanimated/babel-plugin'` as the **last** entry in `babel.config.js` plugins array.
+- [x] Set path aliases (`@/components`, `@/context`, etc.) in `babel.config.js` + `tsconfig.json`.
+- [x] Create folder structure: `components/`, `context/`, `hooks/`, `utils/`, `locales/`, `screens/`, `navigation/`, `__tests__/helpers/`.
+- [x] Create `jest.setup.js` at project root — paste all global mocks from `TESTS.md` "Test Stack" section (AsyncStorage, expo-notifications, expo-image-picker, expo-sharing, react-i18next, react-native-reanimated, datetimepicker, expo-file-system, react-native-screens, gesture-handler, expo-linear-gradient, expo-document-picker). Add `"./jest.setup.js"` to `setupFilesAfterFramework` in jest config.
+- [x] Create `__tests__/helpers/index.js` — shared test utilities: `today`, `daysFromNow(n)`, `mockItem(overrides)`, `Wrapper` (SettingsProvider + InventoryProvider). Add `"^@testHelpers$": "<rootDir>/__tests__/helpers/index.js"` to `moduleNameMapper` in `package.json` jest config alongside the existing `@/` alias. All test files import from here — never redefine inline.
+- [x] Install and configure `react-i18next` + `i18next`.
+- [x] Create baseline English translation file (`locales/en.json`) with all UI strings.
+- [x] Install `@react-native-async-storage/async-storage`.
+- [x] Install `expo-sharing` (used by `exportData()` in `utils/dataTransfer.js`).
+- [x] Install `expo-document-picker` (used by Onboarding import in Phase 2 and Profile import in Phase 5).
+- [x] Define item data schema (JSDoc shape or TypeScript interface).
+- [x] Create `utils/dataTransfer.js` — `exportData()` serializes full app state to JSON and triggers share sheet (`expo-sharing`). `importData(jsonString)` receives a raw JSON string (caller handles file reading), validates schema (`inventory` and `settings` fields required), merges into AsyncStorage. Throws on invalid JSON or missing fields.
+- [x] Define settings schema: `{ aiProvider, apiKey, autoDeleteDays: 7|14|30|60|never, language, profile: { name, avatarEmoji } }`.
+- [x] Create `SettingsContext` with get/set operations; persist to `expiresnap_settings` AsyncStorage key.
+- [x] Create `InventoryContext` with CRUD operations (add, update, delete, markConsumed, markWasted). `updateItem` must refresh `updatedAt` to the current timestamp so auto-delete logic stays accurate.
+- [x] Add AsyncStorage sync to `InventoryContext` (load on init, persist on change).
+- [x] Add auto-delete logic to `InventoryContext`: on app load, purge consumed/wasted items where `updatedAt` is older than `autoDeleteDays` (skip if `never`).
 
 ### Phase 1: Base UI Component Kit
 
