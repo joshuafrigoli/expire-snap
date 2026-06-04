@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, TextInput, View, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import { FilterTabs } from '@/components/ui/FilterTabs';
 import InventoryItem from '@/components/InventoryItem';
@@ -7,6 +8,7 @@ import InventoryItem from '@/components/InventoryItem';
 const CATEGORIES = ['All', 'Dairy', 'Meat & Fish', 'Fruits & Veggies', 'Frozen', 'Pantry'];
 
 function InventoryList() {
+  const { t } = useTranslation();
   const { items, markConsumed, markWasted } = useInventory();
   const [searchText, setSearchText] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
@@ -27,7 +29,7 @@ function InventoryList() {
         value={searchText}
         onChangeText={setSearchText}
         style={styles.searchInput}
-        placeholder="Search..."
+        placeholder={t('fridge.search')}
       />
       <FilterTabs
         tabs={CATEGORIES}

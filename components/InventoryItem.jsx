@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Badge, ProgressBar } from '@/components/ui';
 
 function computeDaysLeft(estimated_expiry_date) {
@@ -17,6 +18,7 @@ function getProgressColor(daysLeft) {
 }
 
 export function InventoryItem({ id, name, category, estimated_expiry_date, onConsume, onWaste }) {
+  const { t } = useTranslation();
   const daysLeft = computeDaysLeft(estimated_expiry_date);
   const progressColor = getProgressColor(daysLeft);
 
@@ -36,13 +38,13 @@ export function InventoryItem({ id, name, category, estimated_expiry_date, onCon
         testID={"item-consume-btn-" + id}
         onPress={() => onConsume && onConsume(id)}
       >
-        <Text>Consumed</Text>
+        <Text>{t('actions.consume')}</Text>
       </Pressable>
       <Pressable
         testID={"item-waste-btn-" + id}
         onPress={() => onWaste && onWaste(id)}
       >
-        <Text>Wasted</Text>
+        <Text>{t('actions.waste')}</Text>
       </Pressable>
     </View>
   );

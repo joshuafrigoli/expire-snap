@@ -1,7 +1,10 @@
+import React from 'react';
 import { View, TextInput, Text, Pressable } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import DatePicker from '@/components/ui/DatePicker';
 
 export default function ReviewItem({ item, onChange, onDelete }) {
+  const { t } = useTranslation();
   const dateValue = item.estimated_expiry_date ? new Date(item.estimated_expiry_date) : null;
 
   return (
@@ -25,7 +28,7 @@ export default function ReviewItem({ item, onChange, onDelete }) {
         testID={"review-item-delete-" + item.id}
         onPress={() => onDelete(item.id)}
       >
-        <Text>Delete</Text>
+        <Text>{t('actions.delete')}</Text>
       </Pressable>
     </View>
   );
