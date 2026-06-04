@@ -15,6 +15,7 @@ import SettingsScreen from '@/screens/SettingsScreen';
 import ProfileScreen from '@/screens/ProfileScreen';
 import HistoryScreen from '@/screens/HistoryScreen';
 import OnboardingScreen from '@/screens/OnboardingScreen';
+import ReviewScreen from '@/screens/ReviewScreen';
 
 const STORAGE_KEY = 'expiresnap_settings';
 
@@ -23,7 +24,7 @@ const Tab = createBottomTabNavigator();
 
 function BottomTabsNavigator() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen name="Home" component={DashboardScreen} />
       <Tab.Screen name="Scan" component={ScanScreen} />
       <Tab.Screen name="Fridge" component={FridgeScreen} />
@@ -55,28 +56,18 @@ export default function AppNavigator() {
       });
   }, []);
 
-  if (hasProfile === null) {
-    return null;
-  }
-
-  if (!hasProfile) {
-    return (
-      <SettingsProvider>
-        <InventoryProvider>
-          <OnboardingScreen />
-        </InventoryProvider>
-      </SettingsProvider>
-    );
-  }
+  if (hasProfile === null) return null;
 
   return (
     <SettingsProvider>
       <InventoryProvider>
         <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="BottomTabs" component={BottomTabsNavigator} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
-            <Stack.Screen name="History" component={HistoryScreen} />
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {!hasProfile && <Stack.Screen name="Onboarding" component={OnboardingScreen} />}
+            {hasProfile && <Stack.Screen name="BottomTabs" component={BottomTabsNavigator} />}
+            {hasProfile && <Stack.Screen name="Profile" component={ProfileScreen} />}
+            {hasProfile && <Stack.Screen name="History" component={HistoryScreen} />}
+            {hasProfile && <Stack.Screen name="Review" component={ReviewScreen} />}
           </Stack.Navigator>
         </NavigationContainer>
       </InventoryProvider>
