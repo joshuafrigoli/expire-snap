@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { scheduleExpiryNotification, cancelExpiryNotification } from '@/utils/notifications';
 
 const STORAGE_KEY = 'expiresnap_inventory';
 
@@ -38,24 +39,37 @@ export function InventoryProvider({ children }) {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   }
 
-  function addItem(item) {
-    persist([...items, item]);
+  async function addItem(item) {
+    const notificationId = await scheduleExpiryNotification(item);
+    await persist([...items, { ...item, notificationId }]);
   }
 
-  function deleteItem(id) {
-    persist(items.filter((i) => i.id !== id));
+  async function deleteItem(id) {
+    const item = items.find((i) => i.id === id);
+    if (item && item.notificationId) {
+      await cancelExpiryNotification(item.notificationId);
+    }
+    await persist(items.filter((i) => i.id !== id));
   }
 
-  function updateItem(id, changes) {
-    persist(
-      items.map((i) =>
-        i.id === id ? { ...i, ...changes, updatedAt: new Date().toISOString() } : i
-      )
+  async function updateItem(id, changes) {
+    const existing = items.find((i) => i.id === id);
+    if (existing && existing.notificationId) {
+      await cancelExpiryNotification(existing.notificationId);
+    }
+    const merged = { ...existing, ...changes, updatedAt: new Date().toISOString() };
+    const notificationId = await scheduleExpiryNotification(merged);
+    await persist(
+      items.map((i) => (i.id === id ? { ...merged, notificationId } : i))
     );
   }
 
-  function markConsumed(id) {
-    persist(
+  async function markConsumed(id) {
+    const item = items.find((i) => i.id === id);
+    if (item && item.notificationId) {
+      await cancelExpiryNotification(item.notificationId);
+    }
+    await persist(
       items.map((i) => {
         if (i.id !== id) return i;
         const prev = new Date(i.updatedAt).getTime();
@@ -65,8 +79,12 @@ export function InventoryProvider({ children }) {
     );
   }
 
-  function markWasted(id) {
-    persist(
+  async function markWasted(id) {
+    const item = items.find((i) => i.id === id);
+    if (item && item.notificationId) {
+      await cancelExpiryNotification(item.notificationId);
+    }
+    await persist(
       items.map((i) => {
         if (i.id !== id) return i;
         const prev = new Date(i.updatedAt).getTime();

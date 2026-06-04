@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as compressImageModule from '@/utils/compressImage';
-import * as mockScanModule from '@/utils/scanReceipt';
+import * as scanReceiptModule from '@/utils/scanReceipt';
 import ScanScreen from '@/screens/ScanScreen';
 import { SettingsProvider } from '@/context/SettingsContext';
 import { InventoryProvider } from '@/context/InventoryContext';
@@ -15,54 +15,48 @@ jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({ navigate: mockNavigate }),
 }));
 
+class RateLimitError extends Error {
+  constructor() { super('Too Many Requests'); this.name = 'RateLimitError'; }
+}
+
 const Wrapper = ({ children }) => (
   <SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider>
 );
 
-describe('ScanScreen button lock', () => {
+describe('ScanScreen 429 rate limit handling', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    mockNavigate.mockClear();
     ImagePicker.launchCameraAsync.mockResolvedValue({
       canceled: false,
       assets: [{ uri: 'file://raw.jpg', mimeType: 'image/jpeg', fileSize: 1024 }],
     });
     compressImageModule.compressImage.mockResolvedValue({ uri: 'file://c.jpg', base64: 'b64==' });
-    // scan takes a while — don't resolve immediately
-    mockScanModule.scanReceipt.mockImplementation(() => new Promise(() => {}));
   });
 
-  it('disables camera button while scan is in progress', async () => {
+  it('shows rate limit snackbar message on RateLimitError', async () => {
+    scanReceiptModule.scanReceipt.mockRejectedValueOnce(new RateLimitError());
     const { getByTestId } = render(<Wrapper><ScanScreen /></Wrapper>);
     fireEvent.press(getByTestId('scan-camera-btn'));
     await waitFor(() => {
-      expect(getByTestId('scan-camera-btn').props.accessibilityState?.disabled).toBe(true);
+      expect(getByTestId('snackbar-message').props.children).toMatch(/troppe richieste|too many requests/i);
     });
   });
 
-  it('disables gallery button while scan is in progress', async () => {
-    const { getByTestId } = render(<Wrapper><ScanScreen /></Wrapper>);
-    fireEvent.press(getByTestId('scan-camera-btn'));
-    await waitFor(() => {
-      expect(getByTestId('scan-gallery-btn').props.accessibilityState?.disabled).toBe(true);
-    });
-  });
-
-  it('scan utility called only once even if button tapped multiple times', async () => {
-    const { getByTestId } = render(<Wrapper><ScanScreen /></Wrapper>);
-    fireEvent.press(getByTestId('scan-camera-btn'));
-    fireEvent.press(getByTestId('scan-camera-btn'));
-    fireEvent.press(getByTestId('scan-camera-btn'));
-    await waitFor(() => {
-      expect(mockScanModule.scanReceipt).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  it('re-enables buttons after scan completes', async () => {
-    mockScanModule.scanReceipt.mockResolvedValue({ transaction_date: '2026-06-03', items: [] });
+  it('re-enables scan buttons after rate limit error', async () => {
+    scanReceiptModule.scanReceipt.mockRejectedValueOnce(new RateLimitError());
     const { getByTestId } = render(<Wrapper><ScanScreen /></Wrapper>);
     fireEvent.press(getByTestId('scan-camera-btn'));
     await waitFor(() => {
       expect(getByTestId('scan-camera-btn').props.accessibilityState?.disabled).toBeFalsy();
+    });
+  });
+
+  it('does not navigate to Review screen on rate limit error', async () => {
+    scanReceiptModule.scanReceipt.mockRejectedValueOnce(new RateLimitError());
+    const { getByTestId } = render(<Wrapper><ScanScreen /></Wrapper>);
+    fireEvent.press(getByTestId('scan-camera-btn'));
+    await waitFor(() => {
+      expect(mockNavigate).not.toHaveBeenCalledWith('Review');
     });
   });
 });

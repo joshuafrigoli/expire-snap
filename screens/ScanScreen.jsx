@@ -5,12 +5,16 @@ import { useTranslation } from 'react-i18next';
 import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
 import { validateImage } from '@/utils/validateImage';
 import { compressImage } from '@/utils/compressImage';
-import { mockScanReceipt } from '@/utils/mockScanReceipt';
+import { scanReceipt } from '@/utils/scanReceipt';
+import { useSettings } from '@/context/SettingsContext';
+import { Snackbar } from '@/components/ui';
 
 export default function ScanScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { settings } = useSettings();
   const [scanning, setScanning] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const scanningRef = useRef(false);
 
   const handleCamera = async () => {
@@ -23,10 +27,12 @@ export default function ScanScreen() {
       const asset = result.assets[0];
       validateImage({ mimeType: asset.mimeType, fileSize: asset.fileSize });
       const { base64 } = await compressImage(asset.uri);
-      const scanResult = await mockScanReceipt(base64);
+      const scanResult = await scanReceipt(base64, settings.aiProvider, settings.apiKey);
       navigation.navigate('Review', { scanResult });
     } catch (err) {
-      // handle error silently for now
+      if (err.name === 'RateLimitError') {
+        setSnackbarMessage(err.message);
+      }
     } finally {
       scanningRef.current = false;
       setScanning(false);
@@ -43,10 +49,12 @@ export default function ScanScreen() {
       const asset = result.assets[0];
       validateImage({ mimeType: asset.mimeType, fileSize: asset.fileSize });
       const { base64 } = await compressImage(asset.uri);
-      const scanResult = await mockScanReceipt(base64);
+      const scanResult = await scanReceipt(base64, settings.aiProvider, settings.apiKey);
       navigation.navigate('Review', { scanResult });
     } catch (err) {
-      // handle error silently for now
+      if (err.name === 'RateLimitError') {
+        setSnackbarMessage(err.message);
+      }
     } finally {
       scanningRef.current = false;
       setScanning(false);
@@ -71,6 +79,12 @@ export default function ScanScreen() {
       >
         <Text>{t('scan.gallery')}</Text>
       </Pressable>
+      <Snackbar
+        message={snackbarMessage}
+        visible={!!snackbarMessage}
+        onDismiss={() => setSnackbarMessage('')}
+        variant="error"
+      />
     </View>
   );
 }

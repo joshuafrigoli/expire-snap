@@ -199,25 +199,25 @@ Build all reusable primitives **before any screen**. Every screen imports from h
 
 ### Phase 5: Real API Integration, Notifications & Polish
 
-- [ ] Create provider-agnostic `scanReceipt(imageBase64, provider, apiKey)` service module.
-- [ ] Implement OpenAI (GPT-4o) provider — send image as base64 in vision message.
-- [ ] Implement Google Gemini Flash provider.
-- [ ] Implement Anthropic Claude (`claude-sonnet-4-6`) provider.
-- [ ] Add error handling and fallback for malformed AI responses.
-- [ ] Handle HTTP 429 (rate limit) explicitly in `scanReceipt`: define and **export** a `RateLimitError` class (`export class RateLimitError extends Error { constructor() { super('Too Many Requests'); this.name = 'RateLimitError'; } }`). Throw it on 429. In the UI, catch by checking `err.name === 'RateLimitError'` (not `instanceof` — test files define their own local class and check `.name`). Show a `Snackbar` with message "Too many requests — wait a few seconds and try again" instead of crashing.
-- [ ] Update `ScanScreen` to call `scanReceipt` (from `utils/scanReceipt`) using provider and API key from `SettingsContext`; remove `mockScanReceipt` import. Update mock targets in **both** `__tests__/screens/ScanScreen.test.js` and `__tests__/screens/ScanScreen.lock.test.js` from `@/utils/mockScanReceipt` to `@/utils/scanReceipt`.
-- [ ] Wire Export Data button to `exportData()` — shares JSON via `expo-sharing`.
-- [ ] Wire Import Data button — use `expo-document-picker` to select JSON file; read file content as string; pass to `importData(jsonString)`; show `Snackbar` on success/failure; confirm before overwriting existing data.
-- [ ] Install `expo-notifications`; request notification permission once onboarding completes (or on first Home visit if user imported backup and skipped onboarding).
-- [ ] Create `utils/notifications.js` — exports `scheduleExpiryNotification(item)` (schedules notification 1 day before `estimated_expiry_date`, returns notification ID) and `cancelExpiryNotification(notificationId)` (cancels by ID).
-- [ ] On every item save/update: call `scheduleExpiryNotification(item)` and store returned ID on the item. Cancel + reschedule on edit via `cancelExpiryNotification` then `scheduleExpiryNotification`. Call `cancelExpiryNotification` on consumed/wasted/deleted.
-- [ ] Build Settings screen: AI provider selector (`Select`), API key input (masked `Input`, stored in `expiresnap_settings`), auto-delete period (`Select`), language selector (`Select`).
-- [ ] Wire Settings screen to `SettingsContext`; changes take effect immediately.
-- [ ] Add Italian translation file (`locales/it.json`) as second locale.
-- [ ] Audit touch targets — min 44×44pt on all interactive elements.
-- [ ] Test on iOS simulator (375pt baseline) and Android emulator.
-- [ ] Smoke-test full journey: onboarding → scan → review → fridge → mark consumed → history → settings → export/import.
-- [ ] Write `README.md` — must be self-sufficient for a new developer with zero prior context. Required sections:
+- [x] Create provider-agnostic `scanReceipt(imageBase64, provider, apiKey)` service module.
+- [x] Implement OpenAI (GPT-4o) provider — send image as base64 in vision message.
+- [x] Implement Google Gemini Flash provider.
+- [x] Implement Anthropic Claude (`claude-sonnet-4-6`) provider.
+- [x] Add error handling and fallback for malformed AI responses.
+- [x] Handle HTTP 429 (rate limit) explicitly in `scanReceipt`: define and **export** a `RateLimitError` class (`export class RateLimitError extends Error { constructor() { super('Too Many Requests'); this.name = 'RateLimitError'; } }`). Throw it on 429. In the UI, catch by checking `err.name === 'RateLimitError'` (not `instanceof` — test files define their own local class and check `.name`). Show a `Snackbar` with message "Too many requests — wait a few seconds and try again" instead of crashing.
+- [x] Update `ScanScreen` to call `scanReceipt` (from `utils/scanReceipt`) using provider and API key from `SettingsContext`; remove `mockScanReceipt` import. Update mock targets in **both** `__tests__/screens/ScanScreen.test.js` and `__tests__/screens/ScanScreen.lock.test.js` from `@/utils/mockScanReceipt` to `@/utils/scanReceipt`.
+- [x] Wire Export Data button to `exportData()` — shares JSON via `expo-sharing`.
+- [x] Wire Import Data button — use `expo-document-picker` to select JSON file; read file content as string; pass to `importData(jsonString)`; show `Snackbar` on success/failure; confirm before overwriting existing data.
+- [x] Install `expo-notifications`; request notification permission once onboarding completes (or on first Home visit if user imported backup and skipped onboarding).
+- [x] Create `utils/notifications.js` — exports `scheduleExpiryNotification(item)` (schedules notification 1 day before `estimated_expiry_date`, returns notification ID) and `cancelExpiryNotification(notificationId)` (cancels by ID).
+- [x] On every item save/update: call `scheduleExpiryNotification(item)` and store returned ID on the item. Cancel + reschedule on edit via `cancelExpiryNotification` then `scheduleExpiryNotification`. Call `cancelExpiryNotification` on consumed/wasted/deleted.
+- [x] Build Settings screen: AI provider selector (`Select`), API key input (masked `Input`, stored in `expiresnap_settings`), auto-delete period (`Select`), language selector (`Select`).
+- [x] Wire Settings screen to `SettingsContext`; changes take effect immediately.
+- [x] Add Italian translation file (`locales/it.json`) as second locale.
+- [x] Audit touch targets — min 44×44pt on all interactive elements.
+- [x] Test on iOS simulator (375pt baseline) and Android emulator.
+- [x] Smoke-test full journey: onboarding → scan → review → fridge → mark consumed → history → settings → export/import.
+- [x] Write `README.md` — must be self-sufficient for a new developer with zero prior context. Required sections:
   1. **Overview** — what ExpireSnap does, key features (receipt scan, AI expiry estimation, push notifications, export/import), supported platforms (iOS + Android).
   2. **Tech Stack** — React Native + Expo SDK 51, NativeWind v4, React Navigation v6, AsyncStorage, expo-notifications, expo-image-picker, expo-image-manipulator, react-i18next, react-native-shadow-2, react-native-reanimated; AI providers: OpenAI GPT-4o / Google Gemini Flash / Anthropic Claude.
   3. **Prerequisites** — Node.js 18+, npm/yarn, Expo CLI (`npm install -g expo-cli`), Expo Go app on physical device (iOS/Android), EAS CLI for production builds (`npm install -g eas-cli`), an account on expo.dev, API key from at least one AI provider.
