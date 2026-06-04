@@ -8,6 +8,7 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.container}
+      style={styles.scroll}
     >
       {tabs.map((tab) => {
         const isActive = tab === activeTab;
@@ -29,6 +30,9 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
 }
 
 const styles = StyleSheet.create({
+  scroll: {
+    overflow: 'hidden',
+  },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
