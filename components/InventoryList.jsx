@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, TextInput, View, StyleSheet } from 'react-native';
+import { FlatList, TextInput, View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import { FilterTabs } from '@/components/ui/FilterTabs';
@@ -39,6 +39,12 @@ function InventoryList() {
       <FlatList
         data={filtered}
         keyExtractor={(i) => i.id}
+        contentContainerStyle={styles.listContent}
+        ListEmptyComponent={
+          <View style={styles.empty}>
+            <Text style={styles.emptyText}>{t('fridge.empty')}</Text>
+          </View>
+        }
         renderItem={({ item }) => (
           <InventoryItem
             id={item.id}
@@ -55,17 +61,31 @@ function InventoryList() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   searchInput: {
-    borderWidth: 1,
-    borderColor: '#cbd5e1',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    borderWidth: 2,
+    borderColor: '#001a3d',
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginHorizontal: 16,
+    marginTop: 12,
     marginBottom: 8,
-    fontSize: 14,
+    fontSize: 15,
+    backgroundColor: '#fff',
+    color: '#001a3d',
+  },
+  listContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 100,
+  },
+  empty: {
+    alignItems: 'center',
+    paddingTop: 60,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#94a3b8',
   },
 });
 
