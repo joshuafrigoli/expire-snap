@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
 import { validateImage } from '@/utils/validateImage';
 import { compressImage } from '@/utils/compressImage';

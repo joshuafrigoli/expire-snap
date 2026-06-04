@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, TextInput, Pressable, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { useSettings } from '@/context/SettingsContext';
 
 export default function OnboardingScreen() {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const { updateSettings } = useSettings();
   const [name, setName] = useState('');
   const [avatarEmoji, setAvatarEmoji] = useState('');
@@ -18,6 +20,7 @@ export default function OnboardingScreen() {
     <View testID="screen-onboarding">
       <TextInput
         testID="onboarding-name-input"
+        placeholder={t('onboarding.namePlaceholder')}
         value={name}
         onChangeText={setName}
       />
@@ -27,7 +30,7 @@ export default function OnboardingScreen() {
         accessibilityState={{ disabled: !name.trim() }}
         onPress={handleSubmit}
       >
-        <Text>Let's Go</Text>
+        <Text>{t('onboarding.submit')}</Text>
       </Pressable>
     </View>
   );

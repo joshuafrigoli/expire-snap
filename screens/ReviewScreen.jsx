@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import ReviewItem from '@/components/ReviewItem';
 
 export default function ReviewScreen() {
   const navigation = useNavigation();
   const route = useRoute();
+  const { t } = useTranslation();
   const { addItem } = useInventory();
 
   const [items, setItems] = useState(route.params.scanResult.items);
@@ -56,7 +58,7 @@ export default function ReviewScreen() {
         )}
       />
       <Pressable testID="review-confirm-btn" onPress={handleConfirm}>
-        <Text>Confirm & Add to Fridge</Text>
+        <Text>{t('review.confirm')}</Text>
       </Pressable>
     </View>
   );
