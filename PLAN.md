@@ -60,7 +60,7 @@ All other tokens (secondary Amber, tertiary Violet, error, typography, spacing, 
 ## 2. Application Flow & User Journey
 
 0. **Onboarding / Profile Setup:** Shown on first launch only (no profile in AsyncStorage). User enters name and picks an avatar emoji. Saved to AsyncStorage; never shown again unless profile is reset.
-1. **Dashboard / Home:** Main view showing quick stats (Expired, Expiring Soon, Safe items) with color-coded urgency (Red, Amber, Green) and a prominent "Scan Receipt" primary action button. Thresholds (active items only): **Expired** = expiry date < today; **Expiring Soon** = expiry date within 0–3 days (inclusive); **Safe** = expiry date > 3 days out.
+1. **Dashboard / Home:** Main view showing quick stats (Expired, Expiring Soon, Safe items) with color-coded urgency (Red, Amber, Green) and a prominent "Scan Receipt" primary action button. Thresholds (active items only): **Expired** = expiry date < today; **Expiring Soon** = expiry date within 0–3 days inclusive (i.e., today and the next 3 days — days 0, 1, 2, 3 all count as expiring soon); **Safe** = expiry date > 3 days out.
 2. **Upload & Processing State:** Camera capture or gallery picker interface. Displays skeleton loader or animated spinner while AI processes the receipt.
 3. **Review & Validation Screen:** List of AI-extracted products with estimated expiration dates. User can edit names, adjust dates via native date picker, or delete rows before saving.
 4. **Virtual Fridge (Inventory):** Active inventory tracker with search, category filters, and quick actions to mark items as "Consumed" or "Wasted".
@@ -129,7 +129,7 @@ Image sent as base64 string along with current date (injected at runtime). AI mu
 - [ ] Create `utils/dataTransfer.js` — `exportData()` serializes full app state to JSON and triggers share sheet (`expo-sharing`). `importData(jsonString)` receives a raw JSON string (caller handles file reading), validates schema (`inventory` and `settings` fields required), merges into AsyncStorage. Throws on invalid JSON or missing fields.
 - [ ] Define settings schema: `{ aiProvider, apiKey, autoDeleteDays: 7|14|30|60|never, language, profile: { name, avatarEmoji } }`.
 - [ ] Create `SettingsContext` with get/set operations; persist to `expiresnap_settings` AsyncStorage key.
-- [ ] Create `InventoryContext` with CRUD operations (add, update, delete, markConsumed, markWasted).
+- [ ] Create `InventoryContext` with CRUD operations (add, update, delete, markConsumed, markWasted). `updateItem` must refresh `updatedAt` to the current timestamp so auto-delete logic stays accurate.
 - [ ] Add AsyncStorage sync to `InventoryContext` (load on init, persist on change).
 - [ ] Add auto-delete logic to `InventoryContext`: on app load, purge consumed/wasted items where `updatedAt` is older than `autoDeleteDays` (skip if `never`).
 
@@ -161,7 +161,7 @@ Build all reusable primitives **before any screen**. Every screen imports from h
 
 - [ ] Set up React Navigation: `NavigationContainer` + `BottomTabNavigator` (Home / Scan / Fridge / Settings) + `StackNavigator` for Profile, Onboarding, Review, History (nested above tabs). Stack screens use default slide-from-right transition; tab switches use a `tabBarStyle` fade crossfade (configure via `screenOptions: { animation: 'fade' }` on the tab navigator).
 - [ ] Add navigation guard: if `expiresnap_settings.profile.name` missing in AsyncStorage → redirect to Onboarding before any other screen.
-- [ ] Build `Onboarding` screen — `TextInput` for name + emoji grid picker; "Let's Go" button saves profile to `SettingsContext` and navigates to Home. Include "Import Backup" option — triggers `importData()`; skips onboarding if import succeeds.
+- [ ] Build `Onboarding` screen — `TextInput` for name + emoji grid picker; "Let's Go" button saves profile to `SettingsContext` and navigates to Home. Include "Import Backup" option — uses `expo-document-picker` to select a JSON file, reads content as string, calls `importData(jsonString)`; skips onboarding and navigates to Home if import succeeds.
 - [ ] Build `Profile` screen — show avatar + name (editable inline); app stats (total scanned, saved from waste); Export Data button; Import Data button; link to History screen.
 - [ ] Wrap all UI strings with `t()` from `react-i18next`.
 - [ ] Create `Layout` wrapper (`SafeAreaView` + screen padding + `TopAppBar` slot).
@@ -170,6 +170,7 @@ Build all reusable primitives **before any screen**. Every screen imports from h
 - [ ] Create `InventoryItem` card component (name, category badge, countdown days).
 - [ ] Add freshness `ProgressBar` to `InventoryItem` (green → amber → red based on days remaining).
 - [ ] Create `InventoryList` with `TextInput` search and `FilterTabs` category filter; use `FlatList`; wrap each row in `Animated.View` with `entering={FadeInRight.duration(250)}` and `exiting={FadeOutLeft.duration(200)}` so items animate in/out on add, delete, and filter changes.
+- [ ] Build `FridgeScreen` — `SafeAreaView` wrapper with `testID="screen-fridge"`, renders `InventoryList`, and a `FloatingActionButton` with `testID="fridge-fab"` (reserved for future add-item shortcut). Install `expo-document-picker` here (needed for Onboarding import flow below).
 - [ ] Build `History` screen — `FlatList` of consumed/wasted items, status `Badge`, date; accessible from Profile only.
 
 ### Phase 3: Camera & Mock API Setup
@@ -191,7 +192,7 @@ Build all reusable primitives **before any screen**. Every screen imports from h
 - [ ] Display `confidence_days` as "± N days" label next to expiry date on each `ReviewItem`.
 - [ ] Map AI response `items` into `ReviewItem` list using `FlatList`.
 - [ ] Validate all rows before commit (no empty names, no past expiry dates).
-- [ ] Implement "Confirm & Add to Fridge" — dispatch items to `InventoryContext`, navigate to Fridge.
+- [ ] Implement "Confirm & Add to Fridge" — dispatch items to `InventoryContext`, then switch to the Fridge tab. Use `navigation.navigate('BottomTabs', { screen: 'Fridge' })` (or the configured bottom-tab navigator name) — do NOT push Fridge as a stack screen, since it is a tab destination.
 
 ### Phase 5: Real API Integration, Notifications & Polish
 
@@ -200,8 +201,8 @@ Build all reusable primitives **before any screen**. Every screen imports from h
 - [ ] Implement Google Gemini Flash provider.
 - [ ] Implement Anthropic Claude (`claude-sonnet-4-6`) provider.
 - [ ] Add error handling and fallback for malformed AI responses.
-- [ ] Handle HTTP 429 (rate limit) explicitly in `scanReceipt`: catch the error and throw a typed `RateLimitError`. In the UI, show a `Snackbar` with message "Too many requests — wait a few seconds and try again" instead of crashing.
-- [ ] Update `ScanScreen` to call `scanReceipt` (from `utils/scanReceipt`) using provider and API key from `SettingsContext`; remove `mockScanReceipt` import. Update `__tests__/screens/ScanScreen.test.js` mock target from `@/utils/mockScanReceipt` to `@/utils/scanReceipt`.
+- [ ] Handle HTTP 429 (rate limit) explicitly in `scanReceipt`: define and **export** a `RateLimitError` class (`export class RateLimitError extends Error { constructor() { super('Too Many Requests'); this.name = 'RateLimitError'; } }`). Throw it on 429. In the UI, catch by checking `err.name === 'RateLimitError'` (not `instanceof` — test files define their own local class and check `.name`). Show a `Snackbar` with message "Too many requests — wait a few seconds and try again" instead of crashing.
+- [ ] Update `ScanScreen` to call `scanReceipt` (from `utils/scanReceipt`) using provider and API key from `SettingsContext`; remove `mockScanReceipt` import. Update mock targets in **both** `__tests__/screens/ScanScreen.test.js` and `__tests__/screens/ScanScreen.lock.test.js` from `@/utils/mockScanReceipt` to `@/utils/scanReceipt`.
 - [ ] Wire Export Data button to `exportData()` — shares JSON via `expo-sharing`.
 - [ ] Wire Import Data button — use `expo-document-picker` to select JSON file; read file content as string; pass to `importData(jsonString)`; show `Snackbar` on success/failure; confirm before overwriting existing data.
 - [ ] Install `expo-notifications`; request notification permission once onboarding completes (or on first Home visit if user imported backup and skipped onboarding).

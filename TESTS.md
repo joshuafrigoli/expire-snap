@@ -88,6 +88,9 @@ jest.mock('expo-linear-gradient', () => {
       React.createElement(View, { testID, ...props }, children),
   };
 });
+jest.mock('expo-document-picker', () => ({
+  getDocumentAsync: jest.fn().mockResolvedValue({ canceled: false, assets: [{ uri: 'file://doc.json', name: 'backup.json', mimeType: 'application/json' }] }),
+}));
 ```
 
 ---
@@ -880,6 +883,32 @@ describe('InventoryItem', () => {
     );
     expect(getByTestId('item-progress').props.color).toBe('safe');
   });
+
+  it('renders consume and waste action buttons', () => {
+    const { getByTestId } = render(
+      <InventoryItem id="1" name="Milk" category="Dairy" estimated_expiry_date={daysFromNow(5)} onConsume={() => {}} onWaste={() => {}} />
+    );
+    expect(getByTestId('item-consume-btn-1')).toBeTruthy();
+    expect(getByTestId('item-waste-btn-1')).toBeTruthy();
+  });
+
+  it('fires onConsume with item id when consume button pressed', () => {
+    const onConsume = jest.fn();
+    const { getByTestId } = render(
+      <InventoryItem id="1" name="Milk" category="Dairy" estimated_expiry_date={daysFromNow(5)} onConsume={onConsume} onWaste={() => {}} />
+    );
+    fireEvent.press(getByTestId('item-consume-btn-1'));
+    expect(onConsume).toHaveBeenCalledWith('1');
+  });
+
+  it('fires onWaste with item id when waste button pressed', () => {
+    const onWaste = jest.fn();
+    const { getByTestId } = render(
+      <InventoryItem id="1" name="Milk" category="Dairy" estimated_expiry_date={daysFromNow(5)} onConsume={() => {}} onWaste={onWaste} />
+    );
+    fireEvent.press(getByTestId('item-waste-btn-1'));
+    expect(onWaste).toHaveBeenCalledWith('1');
+  });
 });
 ```
 
@@ -998,6 +1027,61 @@ describe('InventoryList', () => {
     await waitFor(() => expect(getByText('Milk')).toBeTruthy());
     fireEvent.press(getByTestId('filter-tab-Meat & Fish'));
     await waitFor(() => expect(queryByText('Milk')).toBeNull());
+  });
+});
+```
+
+---
+
+### FridgeScreen — `__tests__/screens/FridgeScreen.test.js`
+
+```js
+import React from 'react';
+import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import FridgeScreen from '@/screens/FridgeScreen';
+import { InventoryProvider } from '@/context/InventoryContext';
+import { SettingsProvider } from '@/context/SettingsContext';
+
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({ navigate: jest.fn() }),
+}));
+
+const Wrapper = ({ children }) => (
+  <SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider>
+);
+
+const today = new Date();
+const daysFromNow = (n) => new Date(today.getTime() + n * 86400000).toISOString().split('T')[0];
+
+const items = [
+  { id: '1', name: 'Milk', category: 'Dairy', status: 'active', estimated_expiry_date: daysFromNow(5), confidence_days: 1, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+  { id: '2', name: 'Consumed', category: 'Dairy', status: 'consumed', estimated_expiry_date: daysFromNow(5), confidence_days: 1, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+];
+
+describe('FridgeScreen', () => {
+  beforeEach(() => AsyncStorage.clear());
+
+  it('renders with testID screen-fridge', async () => {
+    const { getByTestId } = render(<Wrapper><FridgeScreen /></Wrapper>);
+    await waitFor(() => expect(getByTestId('screen-fridge')).toBeTruthy());
+  });
+
+  it('renders active inventory items', async () => {
+    await AsyncStorage.setItem('expiresnap_inventory', JSON.stringify(items));
+    const { getByText } = render(<Wrapper><FridgeScreen /></Wrapper>);
+    await waitFor(() => expect(getByText('Milk')).toBeTruthy());
+  });
+
+  it('does not render consumed items', async () => {
+    await AsyncStorage.setItem('expiresnap_inventory', JSON.stringify(items));
+    const { queryByText } = render(<Wrapper><FridgeScreen /></Wrapper>);
+    await waitFor(() => expect(queryByText('Consumed')).toBeNull());
+  });
+
+  it('renders FloatingActionButton with testID fridge-fab', async () => {
+    const { getByTestId } = render(<Wrapper><FridgeScreen /></Wrapper>);
+    await waitFor(() => expect(getByTestId('fridge-fab')).toBeTruthy());
   });
 });
 ```
@@ -1576,14 +1660,11 @@ describe('Notification scheduling', () => {
   it('schedules notification 1 day before expiry date', async () => {
     const expiryDate = '2026-06-10';
     await scheduleExpiryNotification({ id: 'uuid-001', name: 'Milk', estimated_expiry_date: expiryDate });
-    expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledWith(
-      expect.objectContaining({
-        content: expect.objectContaining({ title: expect.stringContaining('Milk') }),
-        trigger: expect.objectContaining({
-          date: new Date('2026-06-09'),
-        }),
-      })
-    );
+    expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledTimes(1);
+    const call = Notifications.scheduleNotificationAsync.mock.calls[0][0];
+    expect(call.content.title).toMatch(/Milk/);
+    // Compare date at ISO-string level to avoid timezone-dependent millisecond mismatches
+    expect(call.trigger.date.toISOString().split('T')[0]).toBe('2026-06-09');
   });
 
   it('returns notification id from scheduleNotificationAsync', async () => {
@@ -1594,6 +1675,96 @@ describe('Notification scheduling', () => {
   it('calls cancelScheduledNotificationAsync with stored notification id', async () => {
     await cancelExpiryNotification('notification-id-123');
     expect(Notifications.cancelScheduledNotificationAsync).toHaveBeenCalledWith('notification-id-123');
+  });
+});
+```
+
+---
+
+### InventoryContext notification integration (Phase 5) — `__tests__/context/InventoryContext.notifications.test.js`
+
+```js
+import React from 'react';
+import { render, act, waitFor } from '@testing-library/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { InventoryProvider, useInventory } from '@/context/InventoryContext';
+import { SettingsProvider } from '@/context/SettingsContext';
+import * as notifications from '@/utils/notifications';
+
+jest.mock('@/utils/notifications', () => ({
+  scheduleExpiryNotification: jest.fn().mockResolvedValue('notif-id-1'),
+  cancelExpiryNotification: jest.fn().mockResolvedValue(undefined),
+}));
+
+const mockItem = (overrides = {}) => ({
+  id: 'uuid-001',
+  name: 'Milk',
+  category: 'Dairy',
+  estimated_expiry_date: '2026-06-10',
+  confidence_days: 1,
+  status: 'active',
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  ...overrides,
+});
+
+const Wrapper = ({ children }) => (
+  <SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider>
+);
+
+const TestConsumer = ({ onRender }) => {
+  const ctx = useInventory();
+  onRender(ctx);
+  return null;
+};
+
+describe('InventoryContext notification integration', () => {
+  beforeEach(() => { AsyncStorage.clear(); jest.clearAllMocks(); });
+
+  it('schedules notification when item is added', async () => {
+    let ctx;
+    render(<Wrapper><TestConsumer onRender={c => { ctx = c; }} /></Wrapper>);
+    await waitFor(() => expect(ctx).toBeDefined());
+    await act(async () => { ctx.addItem(mockItem()); });
+    await waitFor(() =>
+      expect(notifications.scheduleExpiryNotification).toHaveBeenCalledWith(
+        expect.objectContaining({ id: 'uuid-001' })
+      )
+    );
+  });
+
+  it('cancels notification when item is deleted', async () => {
+    let ctx;
+    render(<Wrapper><TestConsumer onRender={c => { ctx = c; }} /></Wrapper>);
+    await waitFor(() => expect(ctx).toBeDefined());
+    await act(async () => { ctx.addItem(mockItem({ notificationId: 'notif-id-1' })); });
+    await act(async () => { ctx.deleteItem('uuid-001'); });
+    await waitFor(() =>
+      expect(notifications.cancelExpiryNotification).toHaveBeenCalledWith('notif-id-1')
+    );
+  });
+
+  it('cancels notification when item is marked consumed', async () => {
+    let ctx;
+    render(<Wrapper><TestConsumer onRender={c => { ctx = c; }} /></Wrapper>);
+    await waitFor(() => expect(ctx).toBeDefined());
+    await act(async () => { ctx.addItem(mockItem({ notificationId: 'notif-id-1' })); });
+    await act(async () => { ctx.markConsumed('uuid-001'); });
+    await waitFor(() =>
+      expect(notifications.cancelExpiryNotification).toHaveBeenCalledWith('notif-id-1')
+    );
+  });
+
+  it('cancels and reschedules notification when item is updated', async () => {
+    let ctx;
+    render(<Wrapper><TestConsumer onRender={c => { ctx = c; }} /></Wrapper>);
+    await waitFor(() => expect(ctx).toBeDefined());
+    await act(async () => { ctx.addItem(mockItem({ notificationId: 'notif-id-1' })); });
+    await act(async () => { ctx.updateItem('uuid-001', { estimated_expiry_date: '2026-06-15' }); });
+    await waitFor(() => {
+      expect(notifications.cancelExpiryNotification).toHaveBeenCalledWith('notif-id-1');
+      expect(notifications.scheduleExpiryNotification).toHaveBeenCalledTimes(2);
+    });
   });
 });
 ```
