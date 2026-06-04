@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { Ionicons } from '@expo/vector-icons';
 import { SettingsProvider, useSettings } from '@/context/SettingsContext';
 import { InventoryProvider } from '@/context/InventoryContext';
 
@@ -19,9 +20,21 @@ import ReviewScreen from '@/screens/ReviewScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const TAB_ICONS = { Home: 'home', Scan: 'camera', Fridge: 'nutrition', Settings: 'settings' };
+
 function BottomTabsNavigator() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name={TAB_ICONS[route.name]} size={size} color={color} />
+        ),
+        tabBarActiveTintColor: '#005bc4',
+        tabBarInactiveTintColor: '#64748b',
+        tabBarStyle: { borderTopWidth: 2, borderTopColor: '#001a3d' },
+      })}
+    >
       <Tab.Screen name="Home" component={DashboardScreen} />
       <Tab.Screen name="Scan" component={ScanScreen} />
       <Tab.Screen name="Fridge" component={FridgeScreen} />
