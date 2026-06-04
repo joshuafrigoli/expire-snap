@@ -3,7 +3,12 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 function FilterTabs({ tabs, activeTab, onTabPress }) {
-  const [scrolledLeft, setScrolledLeft] = useState(false);
+  const [scrollX, setScrollX] = useState(0);
+  const [viewW, setViewW] = useState(0);
+  const [contentW, setContentW] = useState(0);
+
+  const showLeftFade = scrollX > 2;
+  const showRightFade = contentW > viewW && scrollX + viewW < contentW - 2;
 
   return (
     <View style={styles.wrapper}>
@@ -12,7 +17,9 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.container}
         scrollEventThrottle={16}
-        onScroll={(e) => setScrolledLeft(e.nativeEvent.contentOffset.x > 2)}
+        onScroll={(e) => setScrollX(e.nativeEvent.contentOffset.x)}
+        onLayout={(e) => setViewW(e.nativeEvent.layout.width)}
+        onContentSizeChange={(w) => setContentW(w)}
       >
         {tabs.map((tab) => {
           const isActive = tab === activeTab;
@@ -30,7 +37,8 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
           );
         })}
       </ScrollView>
-      {scrolledLeft && (
+
+      {showLeftFade && (
         <LinearGradient
           colors={['#eff6ff', 'transparent']}
           start={{ x: 0, y: 0.5 }}
@@ -39,13 +47,15 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
           pointerEvents="none"
         />
       )}
-      <LinearGradient
-        colors={['transparent', '#eff6ff']}
-        start={{ x: 0, y: 0.5 }}
-        end={{ x: 1, y: 0.5 }}
-        style={styles.fadeRight}
-        pointerEvents="none"
-      />
+      {showRightFade && (
+        <LinearGradient
+          colors={['transparent', '#eff6ff']}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
+          style={styles.fadeRight}
+          pointerEvents="none"
+        />
+      )}
     </View>
   );
 }
@@ -77,7 +87,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 24,
-    pointerEvents: 'none',
   },
   fadeRight: {
     position: 'absolute',
@@ -85,7 +94,6 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 24,
-    pointerEvents: 'none',
   },
 });
 
