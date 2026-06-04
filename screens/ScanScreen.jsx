@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
@@ -62,29 +63,115 @@ export default function ScanScreen() {
   };
 
   return (
-    <View testID="screen-scan">
-      <Pressable
-        testID="scan-camera-btn"
-        onPress={handleCamera}
-        disabled={scanning}
-        accessibilityState={{ disabled: scanning }}
-      >
-        <Text>{t('scan.camera')}</Text>
-      </Pressable>
-      <Pressable
-        testID="scan-gallery-btn"
-        onPress={handleGallery}
-        disabled={scanning}
-        accessibilityState={{ disabled: scanning }}
-      >
-        <Text>{t('scan.gallery')}</Text>
-      </Pressable>
-      <Snackbar
-        message={snackbarMessage}
-        visible={!!snackbarMessage}
-        onDismiss={() => setSnackbarMessage('')}
-        variant="error"
-      />
-    </View>
+    <SafeAreaView style={styles.safeArea}>
+      <View testID="screen-scan" style={styles.container}>
+        <Text style={styles.title}>Scan Receipt</Text>
+        <Text style={styles.subtitle}>Point your camera at a grocery receipt</Text>
+
+        <Pressable
+          testID="scan-camera-btn"
+          onPress={handleCamera}
+          disabled={scanning}
+          accessibilityState={{ disabled: scanning }}
+          style={[styles.buttonPrimary, scanning && styles.buttonDisabled]}
+        >
+          <Text style={styles.buttonPrimaryText}>{'📷  ' + t('scan.camera')}</Text>
+        </Pressable>
+
+        <Pressable
+          testID="scan-gallery-btn"
+          onPress={handleGallery}
+          disabled={scanning}
+          accessibilityState={{ disabled: scanning }}
+          style={[styles.buttonSecondary, scanning && styles.buttonDisabled]}
+        >
+          <Text style={styles.buttonSecondaryText}>{'🖼️  ' + t('scan.gallery')}</Text>
+        </Pressable>
+
+        {scanning && (
+          <Text style={styles.scanningText}>Scanning...</Text>
+        )}
+
+        <Snackbar
+          message={snackbarMessage}
+          visible={!!snackbarMessage}
+          onDismiss={() => setSnackbarMessage('')}
+          variant="error"
+        />
+      </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#eff6ff',
+  },
+  container: {
+    flex: 1,
+    padding: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 24,
+    backgroundColor: '#eff6ff',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#005bc4',
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#64748b',
+    textAlign: 'center',
+  },
+  buttonPrimary: {
+    backgroundColor: '#005bc4',
+    borderWidth: 2,
+    borderColor: '#001a3d',
+    borderRadius: 9999,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    alignItems: 'center',
+    shadowColor: '#001a3d',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
+    width: '100%',
+  },
+  buttonPrimaryText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  buttonSecondary: {
+    backgroundColor: '#fff',
+    borderWidth: 2,
+    borderColor: '#005bc4',
+    borderRadius: 9999,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    alignItems: 'center',
+    shadowColor: '#001a3d',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
+    width: '100%',
+  },
+  buttonSecondaryText: {
+    color: '#005bc4',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
+  scanningText: {
+    fontSize: 14,
+    color: '#64748b',
+    textAlign: 'center',
+  },
+});
