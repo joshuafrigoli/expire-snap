@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 function FilterTabs({ tabs, activeTab, onTabPress }) {
+  const [scrolledLeft, setScrolledLeft] = useState(false);
+
   return (
     <View style={styles.wrapper}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.container}
+        scrollEventThrottle={16}
+        onScroll={(e) => setScrolledLeft(e.nativeEvent.contentOffset.x > 2)}
       >
         {tabs.map((tab) => {
           const isActive = tab === activeTab;
@@ -26,13 +30,15 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
           );
         })}
       </ScrollView>
-      <LinearGradient
-        colors={['#eff6ff', 'transparent']}
-        start={{ x: 0, y: 0.5 }}
-        end={{ x: 1, y: 0.5 }}
-        style={styles.fadeLeft}
-        pointerEvents="none"
-      />
+      {scrolledLeft && (
+        <LinearGradient
+          colors={['#eff6ff', 'transparent']}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
+          style={styles.fadeLeft}
+          pointerEvents="none"
+        />
+      )}
       <LinearGradient
         colors={['transparent', '#eff6ff']}
         start={{ x: 0, y: 0.5 }}
