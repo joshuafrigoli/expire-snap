@@ -8,11 +8,11 @@ const variantStyles = {
   neutral: { bg: '#e2e8f0', text: '#475569' },
 };
 
-export function Badge({ label, variant = 'neutral' }) {
+export function Badge({ label, variant = 'neutral', testID }) {
   const colors = variantStyles[variant] || variantStyles.neutral;
 
   return (
-    <View style={[styles.pill, { backgroundColor: colors.bg }]}>
+    <View testID={testID} style={[styles.pill, { backgroundColor: colors.bg }]}>
       <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
     </View>
   );

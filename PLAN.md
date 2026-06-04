@@ -161,20 +161,20 @@ Build all reusable primitives **before any screen**. Every screen imports from h
 
 ### Phase 2: Screen Development
 
-- [ ] Set up React Navigation: `NavigationContainer` + `BottomTabNavigator` (Home / Scan / Fridge / Settings) + `StackNavigator` for Profile, Onboarding, Review, History (nested above tabs). Stack screens use default slide-from-right transition; tab switches use a `tabBarStyle` fade crossfade (configure via `screenOptions: { animation: 'fade' }` on the tab navigator).
-- [ ] Add navigation guard: if `expiresnap_settings.profile.name` missing in AsyncStorage → redirect to Onboarding before any other screen.
-- [ ] Build `Onboarding` screen — `TextInput` for name + emoji grid picker; "Let's Go" button saves profile to `SettingsContext` and navigates to Home. Include "Import Backup" option — uses `expo-document-picker` to select a JSON file, reads content as string, calls `importData(jsonString)`; skips onboarding and navigates to Home if import succeeds.
-- [ ] Build `Profile` screen — show avatar + name (editable inline); app stats (total scanned, saved from waste); Export Data button; Import Data button; link to History screen.
-- [ ] Wrap all UI strings with `t()` from `react-i18next`.
-- [ ] Create `Layout` wrapper (`SafeAreaView` + screen padding + `TopAppBar` slot).
-- [ ] Create `StatCard` component (label, count, color variant: red/amber/green); count animates from 0 to actual value on mount using `withTiming(600, { easing: Easing.out(Easing.cubic) })` on a `useSharedValue`.
-- [ ] Build `DashboardScreen` (`screens/DashboardScreen.jsx`) — `SafeAreaView` with `testID="screen-home"`; renders three `StatCard` components (Expired / Expiring Soon / Safe) with `testID="stat-expired"`, `testID="stat-expiring"`, `testID="stat-safe"` on the count `Text` elements; prominent "Scan Receipt" button that navigates to Scan tab.
-- [ ] Compute Expired / Expiring Soon / Safe counts from context; wire to Dashboard.
-- [ ] Create `InventoryItem` card component (name, category badge, countdown days).
-- [ ] Add freshness `ProgressBar` to `InventoryItem` (green → amber → red based on days remaining).
-- [ ] Create `InventoryList` with `TextInput` search and `FilterTabs` category filter; use `FlatList`; wrap each row in `Animated.View` with `entering={FadeInRight.duration(250)}` and `exiting={FadeOutLeft.duration(200)}` so items animate in/out on add, delete, and filter changes.
-- [ ] Build `FridgeScreen` — `SafeAreaView` wrapper with `testID="screen-fridge"`, renders `InventoryList`, and a `FloatingActionButton` with `testID="fridge-fab"` (reserved for future add-item shortcut). Install `expo-document-picker` here (needed for Onboarding import flow below).
-- [ ] Build `History` screen — `FlatList` of consumed/wasted items, status `Badge`, date; accessible from Profile only.
+- [x] Set up React Navigation: `NavigationContainer` + `BottomTabNavigator` (Home / Scan / Fridge / Settings) + `StackNavigator` for Profile, Onboarding, Review, History (nested above tabs). Stack screens use default slide-from-right transition; tab switches use a `tabBarStyle` fade crossfade (configure via `screenOptions: { animation: 'fade' }` on the tab navigator).
+- [x] Add navigation guard: if `expiresnap_settings.profile.name` missing in AsyncStorage → redirect to Onboarding before any other screen.
+- [x] Build `Onboarding` screen — `TextInput` for name + emoji grid picker; "Let's Go" button saves profile to `SettingsContext` and navigates to Home. Include "Import Backup" option — uses `expo-document-picker` to select a JSON file, reads content as string, calls `importData(jsonString)`; skips onboarding and navigates to Home if import succeeds.
+- [x] Build `Profile` screen — show avatar + name (editable inline); app stats (total scanned, saved from waste); Export Data button; Import Data button; link to History screen.
+- [x] Wrap all UI strings with `t()` from `react-i18next`.
+- [x] Create `Layout` wrapper (`SafeAreaView` + screen padding + `TopAppBar` slot).
+- [x] Create `StatCard` component (label, count, color variant: red/amber/green); count animates from 0 to actual value on mount using `withTiming(600, { easing: Easing.out(Easing.cubic) })` on a `useSharedValue`.
+- [x] Build `DashboardScreen` (`screens/DashboardScreen.jsx`) — `SafeAreaView` with `testID="screen-home"`; renders three `StatCard` components (Expired / Expiring Soon / Safe) with `testID="stat-expired"`, `testID="stat-expiring"`, `testID="stat-safe"` on the count `Text` elements; prominent "Scan Receipt" button that navigates to Scan tab.
+- [x] Compute Expired / Expiring Soon / Safe counts from context; wire to Dashboard.
+- [x] Create `InventoryItem` card component (name, category badge, countdown days).
+- [x] Add freshness `ProgressBar` to `InventoryItem` (green → amber → red based on days remaining).
+- [x] Create `InventoryList` with `TextInput` search and `FilterTabs` category filter; use `FlatList`; wrap each row in `Animated.View` with `entering={FadeInRight.duration(250)}` and `exiting={FadeOutLeft.duration(200)}` so items animate in/out on add, delete, and filter changes.
+- [x] Build `FridgeScreen` — `SafeAreaView` wrapper with `testID="screen-fridge"`, renders `InventoryList`, and a `FloatingActionButton` with `testID="fridge-fab"` (reserved for future add-item shortcut). Install `expo-document-picker` here (needed for Onboarding import flow below).
+- [x] Build `History` screen — `FlatList` of consumed/wasted items, status `Badge`, date; accessible from Profile only.
 
 ### Phase 3: Camera & Mock API Setup
 

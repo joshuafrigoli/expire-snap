@@ -71,6 +71,7 @@ npm install --save-dev jest-expo
   "jest": {
     "preset": "jest-expo",
     "setupFiles": ["./jest.setup.js"],
+    "setupFilesAfterEnv": ["@testing-library/jest-native/extend-expect"],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/$1",
       "^@testHelpers$": "<rootDir>/__tests__/helpers/index.js"
