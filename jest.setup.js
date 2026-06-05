@@ -1,3 +1,7 @@
+jest.mock('expo-localization', () => ({
+  getLocales: () => [{ languageCode: 'en', regionCode: 'US' }],
+  locale: 'en-US',
+}));
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react');
   const { View } = require('react-native');
