@@ -25,6 +25,7 @@
   },
   "review": {
     "title": "Review Items",
+    "itemCount": "{{n}} items",
     "confirm": "Confirm & Add to Fridge",
     "confidenceDays": "± {{n}} days"
   },

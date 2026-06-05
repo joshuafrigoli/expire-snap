@@ -25,6 +25,7 @@
   },
   "review": {
     "title": "Revisiona Prodotti",
+    "itemCount": "{{n}} prodotti",
     "confirm": "Conferma e Aggiungi al Frigo",
     "confidenceDays": "± {{n}} giorni"
   },

@@ -66,7 +66,7 @@ export default function ReviewScreen() {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>{t('review.title')}</Text>
-          <Text style={styles.subtitle}>{items.length} {items.length === 1 ? 'item' : 'items'}</Text>
+          <Text style={styles.subtitle}>{t('review.itemCount', { n: items.length })}</Text>
         </View>
 
         <FlatList
