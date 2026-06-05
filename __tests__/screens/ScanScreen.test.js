@@ -9,6 +9,10 @@ import { InventoryProvider } from '@/context/InventoryContext';
 
 jest.mock('@/utils/compressImage');
 jest.mock('@/utils/scanReceipt');
+jest.mock('@/context/SettingsContext', () => ({
+  SettingsProvider: ({ children }) => children,
+  useSettings: () => ({ settings: { apiKey: 'test-key', aiProvider: 'openai', autoDeleteDays: 30, language: 'en', profile: { name: 'Test', avatarEmoji: '' } }, updateSettings: jest.fn() }),
+}));
 
 const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => ({

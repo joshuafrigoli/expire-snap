@@ -70,6 +70,7 @@ export default function ScanScreen() {
 
   const handleCamera = async () => {
     if (scanningRef.current) return;
+    if (!settings.apiKey?.trim()) { setSnackbarMessage(t('errors.noApiKey')); return; }
     scanningRef.current = true;
     setScanning(true);
     try {
@@ -102,6 +103,7 @@ export default function ScanScreen() {
 
   const handleGallery = async () => {
     if (scanningRef.current) return;
+    if (!settings.apiKey?.trim()) { setSnackbarMessage(t('errors.noApiKey')); return; }
     scanningRef.current = true;
     setScanning(true);
     try {

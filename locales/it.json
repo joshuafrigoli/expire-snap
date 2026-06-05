@@ -82,7 +82,8 @@
     "importFailed": "Importazione fallita — formato file non valido",
     "importSuccess": "Dati importati con successo",
     "noItemsFound": "Nessun prodotto trovato — prova a scansionare uno scontrino",
-    "permissionDenied": "Permesso negato — abilita l'accesso nelle Impostazioni del dispositivo"
+    "permissionDenied": "Permesso negato — abilita l'accesso nelle Impostazioni del dispositivo",
+    "noApiKey": "Nessuna chiave API — aggiungila nelle Impostazioni"
   },
   "categories": {
     "all": "Tutti",
