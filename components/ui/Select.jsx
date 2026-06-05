@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
-import { View, Text, Pressable, Modal, FlatList, StyleSheet } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet } from 'react-native';
 
 function Select({ label, value, options = [], onChange, testID }) {
   const [open, setOpen] = useState(false);
+  const borderAnim = useRef(new Animated.Value(0)).current;
   const selectedOption = options.find((opt) => opt.value === value);
   const selectedLabel = selectedOption ? selectedOption.label : '';
+
+  useEffect(() => {
+    Animated.timing(borderAnim, { toValue: open ? 1 : 0, duration: 180, useNativeDriver: false }).start();
+  }, [open]);
+
+  const borderColor = borderAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#001a3d', '#005bc4'],
+  });
 
   function handleSelect(opt) {
     onChange && onChange(opt.value);
@@ -15,10 +25,12 @@ function Select({ label, value, options = [], onChange, testID }) {
     <View style={styles.container}>
       {label ? <Text style={styles.label}>{label}</Text> : null}
 
-      <Pressable testID={testID} style={styles.trigger} onPress={() => setOpen(true)}>
-        <Text style={styles.selectedText}>{selectedLabel}</Text>
-        <Text style={styles.chevron}>▾</Text>
-      </Pressable>
+      <Animated.View style={[styles.trigger, { borderColor }]}>
+        <Pressable testID={testID} style={styles.triggerPressable} onPress={() => setOpen(true)}>
+          <Text style={styles.selectedText}>{selectedLabel}</Text>
+          <Text style={styles.chevron}>▾</Text>
+        </Pressable>
+      </Animated.View>
 
       <Modal
         visible={open}
@@ -57,19 +69,20 @@ const styles = StyleSheet.create({
   label: { fontSize: 14, marginBottom: 4, color: '#64748b', fontWeight: '600' },
   trigger: {
     borderWidth: 2,
-    borderColor: '#001a3d',
     borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
     backgroundColor: '#fff',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     shadowColor: '#001a3d',
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 0,
     elevation: 4,
+  },
+  triggerPressable: {
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   selectedText: { fontSize: 15, color: '#001a3d', fontWeight: '500' },
   chevron: { fontSize: 16, color: '#005bc4', fontWeight: '700', paddingLeft: 8, transform: [{ scaleX: 1.6 }] },
