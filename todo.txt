@@ -3,3 +3,4 @@
 3 give project as completed and find incoherences in PLAN.md, CLAUDE.md, README.md and fix them 
 4 remove all unneeded files from github
 5 update SAD file
+6 in settings page api key field needs to have a paste icon button to paste from clipboard

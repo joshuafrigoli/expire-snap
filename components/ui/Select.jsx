@@ -1,11 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet, Platform } from 'react-native';
-import * as SystemUI from 'expo-system-ui';
+import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme';
 
 function Select({ label, value, options = [], onChange, testID }) {
   const colors = useTheme();
-  const styles = makeStyles(colors);
+  const insets = useSafeAreaInsets();
+  const styles = makeStyles(colors, insets.bottom);
   const [open, setOpen] = useState(false);
   const borderAnim = useRef(new Animated.Value(0)).current;
   const selectedOption = options.find((opt) => opt.value === value);
@@ -42,7 +43,6 @@ function Select({ label, value, options = [], onChange, testID }) {
         animationType="fade"
         statusBarTranslucent
         onRequestClose={() => setOpen(false)}
-        onShow={() => { if (Platform.OS === 'android') SystemUI.setBackgroundColorAsync(colors.surface); }}
       >
         <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
           <View style={styles.sheet}>
@@ -64,13 +64,15 @@ function Select({ label, value, options = [], onChange, testID }) {
               )}
             />
           </View>
+          {/* Solid fill that covers the system navigation bar area below the sheet */}
+          <View style={styles.navBarFill} />
         </Pressable>
       </Modal>
     </View>
   );
 }
 
-function makeStyles(colors) {
+function makeStyles(colors, bottomInset) {
   return StyleSheet.create({
     container: { marginVertical: 4 },
     label: { fontSize: 14, marginBottom: 4, color: colors.textSecondary, fontWeight: '600' },
@@ -104,9 +106,13 @@ function makeStyles(colors) {
       borderTopRightRadius: 24,
       borderWidth: 2,
       borderColor: colors.border,
-      paddingBottom: 40,
+      paddingBottom: 12,
       maxHeight: '70%',
       minHeight: 180,
+    },
+    navBarFill: {
+      backgroundColor: colors.surface,
+      height: bottomInset > 0 ? bottomInset : 34,
     },
     handle: {
       width: 40,
