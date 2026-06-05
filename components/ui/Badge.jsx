@@ -1,21 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useTheme } from '@/theme';
+import { useTheme, lightColors } from '@/theme';
 
-function makeVariants(colors) {
-  return {
-    danger: { bg: colors.dangerBg, text: colors.danger },
-    warning: { bg: colors.warningBg, text: colors.warningText },
-    safe: { bg: colors.successBg, text: colors.success },
-    neutral: { bg: colors.inactive, text: colors.textBody },
-  };
-}
+// Badges always use light-palette vivid colors so they pop on both light and dark backgrounds
+const VARIANTS = {
+  danger: { bg: lightColors.dangerBg, text: lightColors.danger },
+  warning: { bg: lightColors.warningBg, text: lightColors.warningText },
+  safe: { bg: lightColors.successBg, text: lightColors.success },
+  neutral: { bg: lightColors.inactive, text: lightColors.textBody },
+};
 
 export function Badge({ label, variant = 'neutral', testID }) {
   const colors = useTheme();
   const styles = makeStyles(colors);
-  const variantStyles = makeVariants(colors);
-  const variantColor = variantStyles[variant] || variantStyles.neutral;
+  const variantColor = VARIANTS[variant] || VARIANTS.neutral;
 
   return (
     <View testID={testID} style={[styles.pill, { backgroundColor: variantColor.bg }]}>
