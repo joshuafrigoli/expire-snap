@@ -9,7 +9,7 @@ const VARIANTS = {
   error:   { bg: '#dc2626', text: '#ffffff', border: '#001a3d', icon: '⚠️  ' },
 };
 
-function Snackbar({ message, visible, variant = 'info', onDismiss }) {
+function Snackbar({ message, visible, variant = 'info', onDismiss, bottomOffset = 0 }) {
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function Snackbar({ message, visible, variant = 'info', onDismiss }) {
   return (
     <Modal transparent visible animationType="none" statusBarTranslucent>
       <View
-        style={[styles.overlay, { paddingBottom: insets.bottom + 16 }]}
+        style={[styles.overlay, { paddingBottom: insets.bottom + 16 + bottomOffset }]}
         pointerEvents="box-none"
       >
         <Animated.View

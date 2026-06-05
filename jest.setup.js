@@ -47,6 +47,7 @@ jest.mock('@react-navigation/stack', () => {
 jest.mock('@react-navigation/bottom-tabs', () => {
   const React = require('react');
   return {
+    useBottomTabBarHeight: () => 56,
     createBottomTabNavigator: () => ({
       Navigator: ({ children }) => {
         const arr = React.Children.toArray(children);
