@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet, Platform } from 'react-native';
+import * as NavigationBar from 'expo-navigation-bar';
 import { useTheme } from '@/theme';
 
 function Select({ label, value, options = [], onChange, testID }) {
@@ -13,6 +14,11 @@ function Select({ label, value, options = [], onChange, testID }) {
   useEffect(() => {
     Animated.timing(borderAnim, { toValue: open ? 1 : 0, duration: 180, useNativeDriver: false }).start();
   }, [open]);
+
+  useEffect(() => {
+    if (Platform.OS !== 'android') return;
+    NavigationBar.setBackgroundColorAsync(colors.surface);
+  }, [open, colors.surface]);
 
   const borderColor = borderAnim.interpolate({
     inputRange: [0, 1],

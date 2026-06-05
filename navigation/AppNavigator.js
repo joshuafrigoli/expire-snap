@@ -66,6 +66,7 @@ function AppContent() {
   useEffect(() => {
     SystemUI.setBackgroundColorAsync(colors.surface);
     if (Platform.OS !== 'android') return;
+    NavigationBar.setBackgroundColorAsync(colors.surface);
     NavigationBar.setButtonStyleAsync(isDark ? 'light' : 'dark');
   }, [colors.surface, isDark]);
 
