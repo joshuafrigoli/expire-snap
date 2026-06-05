@@ -35,7 +35,7 @@ function Snackbar({ message, visible, variant = 'info', onDismiss }) {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 2,
+    bottom: 1,
     left: 16,
     right: 16,
     borderRadius: 12,
