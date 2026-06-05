@@ -27,11 +27,11 @@ function Snackbar({ message, visible, variant = 'info', onDismiss }) {
 
   return (
     <Modal transparent visible animationType="none" statusBarTranslucent>
-      <View style={[styles.overlay, { paddingBottom: bottomPad }]} pointerEvents="box-none">
+      <View style={StyleSheet.absoluteFillObject} pointerEvents="box-none">
         <Animated.View
           entering={SlideInLeft.duration(280)}
           exiting={SlideOutLeft.duration(250)}
-          style={[styles.container, { backgroundColor: v.bg, borderColor: v.border }]}
+          style={[styles.container, { backgroundColor: v.bg, borderColor: v.border, bottom: bottomPad }]}
         >
           <Text testID="snackbar-message" style={[styles.message, { color: v.text }]}>
             {v.icon + message}
@@ -43,13 +43,10 @@ function Snackbar({ message, visible, variant = 'info', onDismiss }) {
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    paddingHorizontal: 16,
-    backgroundColor: 'transparent',
-  },
   container: {
+    position: 'absolute',
+    left: 16,
+    right: 16,
     borderRadius: 12,
     borderWidth: 2,
     paddingVertical: 14,
