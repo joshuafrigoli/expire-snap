@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
 import { BackHandler } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -9,7 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { SettingsProvider, useSettings } from '@/context/SettingsContext';
 import { InventoryProvider } from '@/context/InventoryContext';
-import { useTheme } from '@/theme';
+import { useTheme, darkColors } from '@/theme';
 
 import DashboardScreen from '@/screens/DashboardScreen';
 import ScanScreen from '@/screens/ScanScreen';
@@ -52,6 +53,8 @@ function BottomTabsNavigator() {
 function AppContent() {
   const { settings } = useSettings();
   const hasProfile = !!(settings?.profile?.name?.trim());
+  const colors = useTheme();
+  const isDark = colors === darkColors;
   const navRef = useNavigationContainerRef();
 
   useEffect(() => {
@@ -72,6 +75,7 @@ function AppContent() {
 
   return (
     <NavigationContainer ref={navRef}>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!hasProfile && <Stack.Screen name="Onboarding" component={OnboardingScreen} />}
         {hasProfile && <Stack.Screen name="BottomTabs" component={BottomTabsNavigator} />}
