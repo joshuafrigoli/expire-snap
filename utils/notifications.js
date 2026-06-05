@@ -10,7 +10,7 @@ export async function scheduleExpiryNotification(item) {
       title: item.name + ' expiring soon',
       body: item.name + ' expires tomorrow',
     },
-    trigger: { date: triggerDate },
+    trigger: { type: 'date', date: triggerDate },
   });
 
   return result;
