@@ -68,6 +68,12 @@
     "frozen": "Frozen",
     "pantry": "Pantry"
   },
+  "nav": {
+    "home": "Home",
+    "scan": "Scan",
+    "fridge": "Fridge",
+    "settings": "Settings"
+  },
   "days": {
     "expired": "Expired",
     "today": "Expires today",

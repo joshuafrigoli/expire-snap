@@ -68,6 +68,12 @@
     "frozen": "Surgelati",
     "pantry": "Dispensa"
   },
+  "nav": {
+    "home": "Home",
+    "scan": "Scansiona",
+    "fridge": "Frigo",
+    "settings": "Impostazioni"
+  },
   "days": {
     "expired": "Scaduto",
     "today": "Scade oggi",
