@@ -187,13 +187,14 @@ export default function ProfileScreen() {
           </View>
         </ScrollView>
 
-        <Snackbar
-          message={snackbarMsg}
-          visible={!!snackbarMsg}
-          onDismiss={() => setSnackbarMsg('')}
-          variant={snackbarVariant}
-        />
       </KeyboardAvoidingView>
+
+      <Snackbar
+        message={snackbarMsg}
+        visible={!!snackbarMsg}
+        onDismiss={() => setSnackbarMsg('')}
+        variant={snackbarVariant}
+      />
     </SafeAreaView>
   );
 }
