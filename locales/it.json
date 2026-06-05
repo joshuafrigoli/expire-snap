@@ -32,7 +32,12 @@
   "fridge": {
     "title": "Il Mio Frigo",
     "empty": "Il frigo è vuoto",
-    "search": "Cerca prodotti..."
+    "search": "Cerca prodotti...",
+    "clearFridge": "Svuota Frigo",
+    "clearConfirmTitle": "Svuotare il frigo?",
+    "clearConfirmMessage": "Rimuoverà tutti i prodotti attivi. Non è possibile annullare.",
+    "clearConfirm": "Svuota",
+    "clearCancel": "Annulla"
   },
   "history": {
     "title": "Cronologia",

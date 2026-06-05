@@ -32,7 +32,12 @@
   "fridge": {
     "title": "My Fridge",
     "empty": "Your fridge is empty",
-    "search": "Search items..."
+    "search": "Search items...",
+    "clearFridge": "Empty Fridge",
+    "clearConfirmTitle": "Empty Fridge?",
+    "clearConfirmMessage": "This will remove all active items. This cannot be undone.",
+    "clearConfirm": "Empty",
+    "clearCancel": "Cancel"
   },
   "history": {
     "title": "History",

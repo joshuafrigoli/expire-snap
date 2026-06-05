@@ -79,6 +79,14 @@ export function InventoryProvider({ children }) {
     );
   }
 
+  async function clearInventory() {
+    const active = items.filter((i) => i.status === 'active');
+    for (const item of active) {
+      if (item.notificationId) await cancelExpiryNotification(item.notificationId);
+    }
+    await persist(items.filter((i) => i.status !== 'active'));
+  }
+
   async function markWasted(id) {
     const item = items.find((i) => i.id === id);
     if (item && item.notificationId) {
@@ -95,7 +103,7 @@ export function InventoryProvider({ children }) {
   }
 
   return (
-    <InventoryContext.Provider value={{ items, addItem, deleteItem, updateItem, markConsumed, markWasted }}>
+    <InventoryContext.Provider value={{ items, addItem, deleteItem, updateItem, markConsumed, markWasted, clearInventory }}>
       {children}
     </InventoryContext.Provider>
   );
