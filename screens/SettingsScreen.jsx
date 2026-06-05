@@ -91,6 +91,20 @@ export default function SettingsScreen() {
             onChange={(v) => updateSettings({ language: v })}
           />
         </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>{t('settings.theme')}</Text>
+          <Select
+            testID="settings-theme"
+            value={settings.theme ?? 'system'}
+            options={[
+              { label: t('settings.themes.system'), value: 'system' },
+              { label: t('settings.themes.light'), value: 'light' },
+              { label: t('settings.themes.dark'), value: 'dark' },
+            ]}
+            onChange={(v) => updateSettings({ theme: v })}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

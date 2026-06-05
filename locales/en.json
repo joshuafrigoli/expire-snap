@@ -59,6 +59,12 @@
     "apiKeyPlaceholder": "Enter API key",
     "autoDelete": "Auto-Delete Data After",
     "language": "Language",
+    "theme": "Theme",
+    "themes": {
+      "system": "System Default",
+      "light": "Light",
+      "dark": "Dark"
+    },
     "providers": {
       "openrouter": "OpenRouter (Free)",
       "openai": "OpenAI",

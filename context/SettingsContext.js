@@ -20,10 +20,11 @@ const DEFAULT_SETTINGS = {
   autoDeleteDays: 30,
   language: detectLanguage(),
   languageLockedByUser: false,
+  theme: 'system',
   profile: { name: '', avatarEmoji: '' },
 };
 
-const SettingsContext = createContext(null);
+export const SettingsContext = createContext(null);
 
 export function SettingsProvider({ children }) {
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);

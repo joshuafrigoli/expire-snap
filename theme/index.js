@@ -1,4 +1,6 @@
+import { useContext } from 'react';
 import { useColorScheme } from 'react-native';
+import { SettingsContext } from '@/context/SettingsContext';
 
 export const lightColors = {
   bg: '#eff6ff',
@@ -87,6 +89,9 @@ export const darkColors = {
 };
 
 export function useTheme() {
-  const scheme = useColorScheme();
+  const systemScheme = useColorScheme();
+  const ctx = useContext(SettingsContext);
+  const themeSetting = ctx?.settings?.theme ?? 'system';
+  const scheme = themeSetting === 'system' ? systemScheme : themeSetting;
   return scheme === 'dark' ? darkColors : lightColors;
 }

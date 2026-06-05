@@ -59,6 +59,12 @@
     "apiKeyPlaceholder": "Inserisci la chiave API",
     "autoDelete": "Elimina dati automaticamente dopo",
     "language": "Lingua",
+    "theme": "Tema",
+    "themes": {
+      "system": "Predefinito sistema",
+      "light": "Chiaro",
+      "dark": "Scuro"
+    },
     "providers": {
       "openrouter": "OpenRouter (Gratuito)",
       "openai": "OpenAI",
