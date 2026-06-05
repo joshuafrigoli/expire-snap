@@ -1,13 +1,18 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet, Platform } from 'react-native';
-import * as NavigationBar from 'expo-navigation-bar';
+import { View, Text, Pressable, FlatList, Animated, StyleSheet, BackHandler } from 'react-native';
+import { usePortal } from '@/context/PortalContext';
 import { useTheme } from '@/theme';
+
+let _seq = 0;
 
 function Select({ label, value, options = [], onChange, testID }) {
   const colors = useTheme();
   const styles = makeStyles(colors);
   const [open, setOpen] = useState(false);
   const borderAnim = useRef(new Animated.Value(0)).current;
+  const portal = usePortal();
+  const portalKey = useRef(`select-${_seq++}`).current;
+
   const selectedOption = options.find((opt) => opt.value === value);
   const selectedLabel = selectedOption ? selectedOption.label : '';
 
@@ -16,59 +21,64 @@ function Select({ label, value, options = [], onChange, testID }) {
   }, [open]);
 
   useEffect(() => {
-    if (Platform.OS !== 'android') return;
-    NavigationBar.setBackgroundColorAsync(colors.surface);
-  }, [open, colors.surface]);
+    if (!open) return;
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      setOpen(false);
+      return true;
+    });
+    return () => sub.remove();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) {
+      portal.unmount(portalKey);
+      return;
+    }
+    const s = makeStyles(colors);
+    portal.mount(
+      portalKey,
+      <Pressable key={portalKey} style={s.backdrop} onPress={() => setOpen(false)}>
+        <View style={s.sheet}>
+          <View style={s.handle} />
+          {label ? <Text style={s.sheetTitle}>{label}</Text> : null}
+          <FlatList
+            data={options}
+            keyExtractor={(o) => o.value}
+            renderItem={({ item }) => (
+              <Pressable
+                style={[s.option, item.value === value && s.optionActive]}
+                onPress={() => {
+                  onChange && onChange(item.value);
+                  setOpen(false);
+                }}
+              >
+                <Text style={[s.optionText, item.value === value && s.optionTextActive]}>
+                  {item.label}
+                </Text>
+                {item.value === value && <Text style={s.check}>✓</Text>}
+              </Pressable>
+            )}
+          />
+        </View>
+      </Pressable>,
+    );
+    return () => portal.unmount(portalKey);
+  }, [open, colors, label, options, value, onChange]);
 
   const borderColor = borderAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [colors.border, colors.primary],
   });
 
-  function handleSelect(opt) {
-    onChange && onChange(opt.value);
-    setOpen(false);
-  }
-
   return (
     <View style={styles.container}>
       {label ? <Text style={styles.label}>{label}</Text> : null}
-
       <Animated.View style={[styles.trigger, { borderColor }]}>
         <Pressable testID={testID} style={styles.triggerPressable} onPress={() => setOpen(true)}>
           <Text style={styles.selectedText}>{selectedLabel}</Text>
           <Text style={styles.chevron}>▾</Text>
         </Pressable>
       </Animated.View>
-
-      <Modal
-        visible={open}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setOpen(false)}
-      >
-        <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
-          <View style={styles.sheet}>
-            <View style={styles.handle} />
-            {label ? <Text style={styles.sheetTitle}>{label}</Text> : null}
-            <FlatList
-              data={options}
-              keyExtractor={(o) => o.value}
-              renderItem={({ item }) => (
-                <Pressable
-                  style={[styles.option, item.value === value && styles.optionActive]}
-                  onPress={() => handleSelect(item)}
-                >
-                  <Text style={[styles.optionText, item.value === value && styles.optionTextActive]}>
-                    {item.label}
-                  </Text>
-                  {item.value === value && <Text style={styles.check}>✓</Text>}
-                </Pressable>
-              )}
-            />
-          </View>
-        </Pressable>
-      </Modal>
     </View>
   );
 }
