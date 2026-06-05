@@ -5,7 +5,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import ReviewItem from '@/components/ReviewItem';
-import { Snackbar, ProfileButton } from '@/components/ui';
+import { ProfileButton } from '@/components/ui';
+import { useSnackbar } from '@/context/SnackbarContext';
 
 export default function ReviewScreen() {
   const navigation = useNavigation();
@@ -13,8 +14,8 @@ export default function ReviewScreen() {
   const { t } = useTranslation();
   const { addItem } = useInventory();
 
+  const { showSnackbar } = useSnackbar();
   const [items, setItems] = useState(route.params.scanResult.items);
-  const [snackbar, setSnackbar] = useState('');
 
   function handleChange(id, changes) {
     setItems((prev) =>
@@ -32,18 +33,18 @@ export default function ReviewScreen() {
 
     for (const item of items) {
       if (item.name.trim() === '') {
-        setSnackbar('Item name cannot be empty');
+        showSnackbar('Item name cannot be empty', 'error');
         return;
       }
       const expiry = new Date(item.estimated_expiry_date);
       console.log('[Review] item:', item.name, 'expiry:', item.estimated_expiry_date, 'parsed:', expiry, 'today:', today);
       if (isNaN(expiry.getTime())) {
-        setSnackbar('Invalid date for "' + item.name + '" — tap the date to fix it');
+        showSnackbar('Invalid date for "' + item.name + '" — tap the date to fix it', 'error');
         return;
       }
       expiry.setHours(0, 0, 0, 0);
       if (expiry < today) {
-        setSnackbar('"' + item.name + '" expiry is in the past — tap the date to fix it');
+        showSnackbar('"' + item.name + '" expiry is in the past — tap the date to fix it', 'error');
         return;
       }
     }
@@ -95,12 +96,6 @@ export default function ReviewScreen() {
           </Pressable>
         </View>
 
-        <Snackbar
-          message={snackbar}
-          visible={!!snackbar}
-          onDismiss={() => setSnackbar('')}
-          variant="error"
-        />
       </View>
     </SafeAreaView>
   );

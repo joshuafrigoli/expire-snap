@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfileScreen from '@/screens/ProfileScreen';
 import { SettingsProvider } from '@/context/SettingsContext';
 import { InventoryProvider } from '@/context/InventoryContext';
+import { SnackbarProvider } from '@/context/SnackbarContext';
 
 const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => ({
@@ -11,7 +12,7 @@ jest.mock('@react-navigation/native', () => ({
 }));
 
 const Wrapper = ({ children }) => (
-  <SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider>
+  <SnackbarProvider><SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider></SnackbarProvider>
 );
 
 describe('ProfileScreen', () => {

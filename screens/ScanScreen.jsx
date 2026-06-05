@@ -21,7 +21,8 @@ import { validateImage } from '@/utils/validateImage';
 import { compressImage } from '@/utils/compressImage';
 import { scanReceipt } from '@/utils/scanReceipt';
 import { useSettings } from '@/context/SettingsContext';
-import { Snackbar, ProfileButton } from '@/components/ui';
+import { ProfileButton } from '@/components/ui';
+import { useSnackbar } from '@/context/SnackbarContext';
 
 function ScanOverlay({ t }) {
   const scale = useSharedValue(1);
@@ -63,21 +64,21 @@ export default function ScanScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { settings } = useSettings();
+  const { showSnackbar } = useSnackbar();
   const [scanning, setScanning] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
   const scanningRef = useRef(false);
 
   const handleCamera = async () => {
     if (scanningRef.current) return;
-    if (!settings.apiKey?.trim()) { setSnackbarMessage(t('errors.noApiKey')); return; }
+    if (!settings.apiKey?.trim()) { showSnackbar(t('errors.noApiKey'), 'error'); return; }
     scanningRef.current = true;
     setScanning(true);
     try {
       console.log('[Scan] requesting camera permission...');
       const { granted } = await requestCameraPermissionsAsync();
       console.log('[Scan] camera permission:', granted);
-      if (!granted) { setSnackbarMessage(t('errors.permissionDenied')); return; }
+      if (!granted) { showSnackbar(t('errors.permissionDenied'), 'error'); return; }
       const result = await launchCameraAsync({ mediaTypes: ['images'], quality: 1 });
       if (result.canceled || !result.assets?.[0]) { console.log('[Scan] camera cancelled'); return; }
       setProcessing(true);
@@ -90,16 +91,16 @@ export default function ScanScreen() {
       const scanResult = await scanReceipt(base64, settings.aiProvider, settings.apiKey);
       console.log('[Scan] AI response — items:', scanResult.items.length, JSON.stringify(scanResult.items, null, 2));
       if (!scanResult.items.length) {
-        setSnackbarMessage(t('errors.noItemsFound'));
+        showSnackbar(t('errors.noItemsFound'), 'error');
         return;
       }
       navigation.navigate('Review', { scanResult });
     } catch (err) {
       console.error('[Scan] error:', err.name, err.message);
       if (err.name === 'RateLimitError') {
-        setSnackbarMessage(err.message);
+        showSnackbar(err.message, 'error');
       } else {
-        setSnackbarMessage(t('errors.scanFailed'));
+        showSnackbar(t('errors.scanFailed'), 'error');
       }
     } finally {
       scanningRef.current = false;
@@ -110,14 +111,14 @@ export default function ScanScreen() {
 
   const handleGallery = async () => {
     if (scanningRef.current) return;
-    if (!settings.apiKey?.trim()) { setSnackbarMessage(t('errors.noApiKey')); return; }
+    if (!settings.apiKey?.trim()) { showSnackbar(t('errors.noApiKey'), 'error'); return; }
     scanningRef.current = true;
     setScanning(true);
     try {
       console.log('[Scan] requesting media library permission...');
       const { granted } = await requestMediaLibraryPermissionsAsync();
       console.log('[Scan] media library permission:', granted);
-      if (!granted) { setSnackbarMessage(t('errors.permissionDenied')); return; }
+      if (!granted) { showSnackbar(t('errors.permissionDenied'), 'error'); return; }
       const result = await launchImageLibraryAsync({ mediaTypes: ['images'], quality: 1 });
       if (result.canceled || !result.assets?.[0]) { console.log('[Scan] gallery cancelled'); return; }
       setProcessing(true);
@@ -130,16 +131,16 @@ export default function ScanScreen() {
       const scanResult = await scanReceipt(base64, settings.aiProvider, settings.apiKey);
       console.log('[Scan] AI response — items:', scanResult.items.length, JSON.stringify(scanResult.items, null, 2));
       if (!scanResult.items.length) {
-        setSnackbarMessage(t('errors.noItemsFound'));
+        showSnackbar(t('errors.noItemsFound'), 'error');
         return;
       }
       navigation.navigate('Review', { scanResult });
     } catch (err) {
       console.error('[Scan] error:', err.name, err.message);
       if (err.name === 'RateLimitError') {
-        setSnackbarMessage(err.message);
+        showSnackbar(err.message, 'error');
       } else {
-        setSnackbarMessage(t('errors.scanFailed'));
+        showSnackbar(t('errors.scanFailed'), 'error');
       }
     } finally {
       scanningRef.current = false;
@@ -182,12 +183,6 @@ export default function ScanScreen() {
 
         {processing && <ScanOverlay t={t} />}
 
-        <Snackbar
-          message={snackbarMessage}
-          visible={!!snackbarMessage}
-          onDismiss={() => setSnackbarMessage('')}
-          variant="error"
-        />
       </View>
     </SafeAreaView>
   );

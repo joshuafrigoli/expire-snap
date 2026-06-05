@@ -6,6 +6,7 @@ import * as scanReceiptModule from '@/utils/scanReceipt';
 import ScanScreen from '@/screens/ScanScreen';
 import { SettingsProvider } from '@/context/SettingsContext';
 import { InventoryProvider } from '@/context/InventoryContext';
+import { SnackbarProvider } from '@/context/SnackbarContext';
 
 jest.mock('@/utils/compressImage');
 jest.mock('@/utils/scanReceipt');
@@ -24,7 +25,7 @@ class RateLimitError extends Error {
 }
 
 const Wrapper = ({ children }) => (
-  <SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider>
+  <SnackbarProvider><SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider></SnackbarProvider>
 );
 
 describe('ScanScreen 429 rate limit handling', () => {

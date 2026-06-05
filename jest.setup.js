@@ -93,7 +93,7 @@ jest.mock('expo-sharing', () => ({
   isAvailableAsync: jest.fn().mockResolvedValue(true),
 }));
 jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key) => key }),
+  useTranslation: () => ({ t: (key, opts) => opts?.defaultValue ?? key }),
   initReactI18next: { type: '3rdParty', init: () => {} },
 }));
 jest.mock('react-native-reanimated', () => {

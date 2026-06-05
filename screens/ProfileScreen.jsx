@@ -12,7 +12,7 @@ import { useInventory } from '@/context/InventoryContext';
 import { exportData, importData } from '@/utils/dataTransfer';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
-import { Snackbar } from '@/components/ui';
+import { useSnackbar } from '@/context/SnackbarContext';
 
 const EMOJIS = ['🥦', '🍕', '🍎', '🥩', '🧀', '🥛', '🐟', '🥚', '🥕', '🍌', '🍇', '🥑', '🍞', '🧁', '☕'];
 
@@ -23,12 +23,11 @@ export default function ProfileScreen() {
   const { items } = useInventory();
 
   const insets = useSafeAreaInsets();
+  const { showSnackbar } = useSnackbar();
   const [name, setName] = useState(settings.profile?.name || '');
   const [avatarEmoji, setAvatarEmoji] = useState(settings.profile?.avatarEmoji || '🥦');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [editingName, setEditingName] = useState(false);
-  const [snackbarMsg, setSnackbarMsg] = useState('');
-  const [snackbarVariant, setSnackbarVariant] = useState('info');
 
   useEffect(() => {
     setName(settings.profile?.name || '');
@@ -47,8 +46,7 @@ export default function ProfileScreen() {
     Keyboard.dismiss();
     setEditingName(false);
     await updateSettings({ profile: { name: name.trim(), avatarEmoji } });
-    setSnackbarVariant('success');
-    setSnackbarMsg('Saved!');
+    showSnackbar('Saved!', 'success');
   }
 
   return (
@@ -149,7 +147,7 @@ export default function ProfileScreen() {
               style={styles.outlineBtn}
               onPress={async () => {
                 try { await exportData(); }
-                catch { setSnackbarVariant('error'); setSnackbarMsg(t('errors.importFailed')); }
+                catch { showSnackbar(t('errors.importFailed'), 'error'); }
               }}
             >
               <Text style={styles.outlineBtnText}>📤  {t('profile.export')}</Text>
@@ -164,14 +162,12 @@ export default function ProfileScreen() {
                 const uri = result.assets[0].uri;
                 let content;
                 try { content = await FileSystem.readAsStringAsync(uri); }
-                catch { setSnackbarVariant('error'); setSnackbarMsg(t('errors.importFailed')); return; }
+                catch { showSnackbar(t('errors.importFailed'), 'error'); return; }
                 try {
                   await importData(content);
-                  setSnackbarVariant('success');
-                  setSnackbarMsg(t('errors.importSuccess'));
+                  showSnackbar(t('errors.importSuccess'), 'success');
                 } catch {
-                  setSnackbarVariant('error');
-                  setSnackbarMsg(t('errors.importFailed'));
+                  showSnackbar(t('errors.importFailed'), 'error');
                 }
               }}
             >
@@ -191,12 +187,6 @@ export default function ProfileScreen() {
 
       </KeyboardAvoidingView>
 
-      <Snackbar
-        message={snackbarMsg}
-        visible={!!snackbarMsg}
-        onDismiss={() => setSnackbarMsg('')}
-        variant={snackbarVariant}
-      />
       </View>
     </SafeAreaView>
   );

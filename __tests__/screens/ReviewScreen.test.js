@@ -3,6 +3,7 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import ReviewScreen from '@/screens/ReviewScreen';
 import { InventoryProvider } from '@/context/InventoryContext';
 import { SettingsProvider } from '@/context/SettingsContext';
+import { SnackbarProvider } from '@/context/SnackbarContext';
 
 const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => ({
@@ -21,7 +22,7 @@ jest.mock('@react-navigation/native', () => ({
 }));
 
 const Wrapper = ({ children }) => (
-  <SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider>
+  <SnackbarProvider><SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider></SnackbarProvider>
 );
 
 describe('ReviewScreen validation', () => {

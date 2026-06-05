@@ -1,6 +1,7 @@
 import React from 'react';
 import { SettingsProvider } from '@/context/SettingsContext';
 import { InventoryProvider } from '@/context/InventoryContext';
+import { SnackbarProvider } from '@/context/SnackbarContext';
 
 export const today = new Date();
 export const daysFromNow = (n) =>
@@ -19,9 +20,11 @@ export const mockItem = (overrides = {}) => ({
 });
 
 export const Wrapper = ({ children }) => (
-  <SettingsProvider>
-    <InventoryProvider>{children}</InventoryProvider>
-  </SettingsProvider>
+  <SnackbarProvider>
+    <SettingsProvider>
+      <InventoryProvider>{children}</InventoryProvider>
+    </SettingsProvider>
+  </SnackbarProvider>
 );
 
 // Navigation mock: CANNOT be exported — jest.mock() is hoisted by babel-jest.

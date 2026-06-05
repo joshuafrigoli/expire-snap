@@ -6,6 +6,7 @@ import * as mockScanModule from '@/utils/scanReceipt';
 import ScanScreen from '@/screens/ScanScreen';
 import { SettingsProvider } from '@/context/SettingsContext';
 import { InventoryProvider } from '@/context/InventoryContext';
+import { SnackbarProvider } from '@/context/SnackbarContext';
 
 jest.mock('@/utils/compressImage');
 jest.mock('@/utils/scanReceipt');
@@ -20,7 +21,7 @@ jest.mock('@react-navigation/native', () => ({
 }));
 
 const Wrapper = ({ children }) => (
-  <SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider>
+  <SnackbarProvider><SettingsProvider><InventoryProvider>{children}</InventoryProvider></SettingsProvider></SnackbarProvider>
 );
 
 describe('ScanScreen compression wiring', () => {
