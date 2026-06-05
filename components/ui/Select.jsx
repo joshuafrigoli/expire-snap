@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet, Platform } from 'react-native';
+import * as SystemUI from 'expo-system-ui';
 import { useTheme } from '@/theme';
 
 function Select({ label, value, options = [], onChange, testID }) {
@@ -39,7 +40,9 @@ function Select({ label, value, options = [], onChange, testID }) {
         visible={open}
         transparent
         animationType="fade"
+        statusBarTranslucent
         onRequestClose={() => setOpen(false)}
+        onShow={() => { if (Platform.OS === 'android') SystemUI.setBackgroundColorAsync(colors.surface); }}
       >
         <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
           <View style={styles.sheet}>
