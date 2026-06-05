@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getLocales } from 'expo-localization';
+import i18n from '@/utils/i18n';
 
 const STORAGE_KEY = 'expiresnap_settings';
 const SUPPORTED_LANGUAGES = ['en', 'it'];
@@ -29,7 +30,9 @@ export function SettingsProvider({ children }) {
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY).then((raw) => {
       if (raw) {
-        setSettings((prev) => ({ ...prev, ...JSON.parse(raw) }));
+        const parsed = JSON.parse(raw);
+        setSettings((prev) => ({ ...prev, ...parsed }));
+        if (parsed.language) i18n.changeLanguage(parsed.language);
       }
     });
   }, []);
@@ -37,6 +40,7 @@ export function SettingsProvider({ children }) {
   async function updateSettings(partial) {
     const next = { ...settings, ...partial };
     setSettings(next);
+    if (partial.language) i18n.changeLanguage(partial.language);
     // TODO: migrate apiKey storage to expo-secure-store for encryption at rest
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   }
