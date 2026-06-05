@@ -137,9 +137,9 @@ export default function ProfileScreen() {
             </View>
           </View>
 
-          <Text style={styles.sectionLabel}>{t('profile.dataSection')}</Text>
-
-          <View style={styles.buttonGroup}>
+          <View style={styles.dataSection}>
+            <Text style={styles.sectionLabel}>{t('profile.dataSection')}</Text>
+            <View style={styles.buttonGroup}>
             <Pressable
               testID="profile-export-btn"
               style={styles.outlineBtn}
@@ -181,6 +181,7 @@ export default function ProfileScreen() {
             >
               <Text style={styles.primaryBtnText}>📋  {t('profile.history')}</Text>
             </Pressable>
+          </View>
           </View>
         </ScrollView>
 
@@ -361,6 +362,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
 
+  dataSection: { gap: 8 },
   buttonGroup: { gap: 10 },
   outlineBtn: {
     backgroundColor: '#fff',
