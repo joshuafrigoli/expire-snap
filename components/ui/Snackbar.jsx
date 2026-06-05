@@ -25,7 +25,7 @@ function Snackbar({ message, visible, variant = 'info', onDismiss, bottomOffset 
   return (
     <Modal transparent visible animationType="none" statusBarTranslucent>
       <View
-        style={[styles.overlay, { paddingBottom: insets.bottom + 16 + bottomOffset }]}
+        style={[styles.overlay, { paddingBottom: (bottomOffset || insets.bottom) + 16 }]}
         pointerEvents="box-none"
       >
         <Animated.View
