@@ -5,6 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import ReviewItem from '@/components/ReviewItem';
+import { Snackbar } from '@/components/ui';
 
 export default function ReviewScreen() {
   const navigation = useNavigation();
@@ -13,6 +14,7 @@ export default function ReviewScreen() {
   const { addItem } = useInventory();
 
   const [items, setItems] = useState(route.params.scanResult.items);
+  const [snackbar, setSnackbar] = useState('');
 
   function handleChange(id, changes) {
     setItems((prev) =>
@@ -24,23 +26,33 @@ export default function ReviewScreen() {
     setItems((prev) => prev.filter((item) => item.id !== id));
   }
 
-  function handleConfirm() {
+  async function handleConfirm() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     for (const item of items) {
-      if (item.name.trim() === '') return;
-
+      if (item.name.trim() === '') {
+        setSnackbar('Item name cannot be empty');
+        return;
+      }
       const expiry = new Date(item.estimated_expiry_date);
+      console.log('[Review] item:', item.name, 'expiry:', item.estimated_expiry_date, 'parsed:', expiry, 'today:', today);
+      if (isNaN(expiry.getTime())) {
+        setSnackbar('Invalid date for "' + item.name + '" — tap the date to fix it');
+        return;
+      }
       expiry.setHours(0, 0, 0, 0);
-
-      if (expiry < today) return;
+      if (expiry < today) {
+        setSnackbar('"' + item.name + '" expiry is in the past — tap the date to fix it');
+        return;
+      }
     }
 
     const now = new Date().toISOString();
     for (const item of items) {
-      addItem({ ...item, status: 'active', createdAt: now, updatedAt: now });
+      await addItem({ ...item, status: 'active', createdAt: now, updatedAt: now });
     }
+    console.log('[Review] added', items.length, 'items to fridge');
 
     navigation.navigate('BottomTabs', { screen: 'Fridge' });
   }
@@ -64,6 +76,13 @@ export default function ReviewScreen() {
               onDelete={handleDelete}
             />
           )}
+        />
+
+        <Snackbar
+          message={snackbar}
+          visible={!!snackbar}
+          onDismiss={() => setSnackbar('')}
+          variant="error"
         />
 
         <View style={styles.footer}>
