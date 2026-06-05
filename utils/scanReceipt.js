@@ -1,3 +1,5 @@
+import { normalizeCategory } from '@/constants/categories';
+
 export class RateLimitError extends Error {
   constructor() {
     super('Too Many Requests');
@@ -174,6 +176,7 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
   const ts = Date.now().toString(36);
   parsed.items = parsed.items.map((item, i) => ({
     ...item,
+    category: normalizeCategory(item.category),
     id: ts + i.toString(36) + Math.random().toString(36).slice(2, 6),
   }));
 
