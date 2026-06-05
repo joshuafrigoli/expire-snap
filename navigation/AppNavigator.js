@@ -20,7 +20,7 @@ import ReviewScreen from '@/screens/ReviewScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const TAB_ICONS = { Home: 'home', Scan: 'camera', Fridge: 'nutrition', Settings: 'settings' };
+const TAB_ICONS = { Home: 'home', Scan: 'scan', Fridge: 'nutrition', Settings: 'settings' };
 
 function BottomTabsNavigator() {
   return (

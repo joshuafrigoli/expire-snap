@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, Pressable, TextInput, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { Pressable, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 function FloatingActionButton({ testID, onPress, icon, style }) {
   return (
@@ -9,7 +9,7 @@ function FloatingActionButton({ testID, onPress, icon, style }) {
       onPress={onPress}
       style={[styles.button, style]}
     >
-      {icon ? icon : <Text style={styles.plus}>+</Text>}
+      {icon ? icon : <Ionicons name="scan" size={24} color="#fff" />}
     </Pressable>
   );
 }
@@ -22,11 +22,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#005bc4',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  plus: {
-    color: '#ffffff',
-    fontSize: 24,
-    lineHeight: 28,
+    borderWidth: 2,
+    borderColor: '#001a3d',
+    shadowColor: '#001a3d',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
   },
 });
 
