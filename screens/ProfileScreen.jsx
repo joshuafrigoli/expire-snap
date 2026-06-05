@@ -3,6 +3,7 @@ import {
   View, Text, Pressable, ScrollView, TextInput,
   StyleSheet, KeyboardAvoidingView, Platform,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -59,7 +60,7 @@ export default function ProfileScreen() {
             onPress={() => navigation.goBack()}
             style={styles.backBtn}
           >
-            <Text style={styles.backBtnText}>←</Text>
+            <Ionicons name="arrow-back" size={20} color="#001a3d" />
           </Pressable>
           <Text style={styles.pageTitle}>{t('profile.title')}</Text>
           {isDirty ? (
