@@ -5,12 +5,14 @@ const VARIANT_BG = {
   danger: '#fca5a5',
   warning: '#fde68a',
   safe: '#bbf7d0',
+  info: '#bfdbfe',
 };
 
 const VARIANT_COUNT_COLOR = {
   danger: '#dc2626',
   warning: '#b45309',
   safe: '#15803d',
+  info: '#1d4ed8',
 };
 
 export function StatCard({ label, count, variant, testID, countTestID }) {

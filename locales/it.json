@@ -1,6 +1,7 @@
 {
   "dashboard": {
     "title": "ExpireSnap",
+    "total": "In Frigo",
     "expired": "Scaduti",
     "expiring": "In Scadenza",
     "safe": "Ok",

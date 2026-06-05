@@ -41,6 +41,7 @@ export default function DashboardScreen() {
       </View>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.cards}>
+          <StatCard label={t('dashboard.total')} count={activeItems.length} variant="info" testID="card-total" countTestID="stat-total" />
           <StatCard label={t('dashboard.expired')} count={expired} variant="danger" testID="card-expired" countTestID="stat-expired" />
           <StatCard label={t('dashboard.expiring')} count={expiring} variant="warning" testID="card-expiring" countTestID="stat-expiring" />
           <StatCard label={t('dashboard.safe')} count={safe} variant="safe" testID="card-safe" countTestID="stat-safe" />
