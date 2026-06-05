@@ -20,7 +20,8 @@
     "camera": "Take Photo",
     "gallery": "Choose from Gallery",
     "processing": "Scanning receipt...",
-    "scanning": "Scanning..."
+    "scanning": "Scanning...",
+    "processingSubtitle": "AI is reading your receipt…"
   },
   "review": {
     "title": "Review Items",

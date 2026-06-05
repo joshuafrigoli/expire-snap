@@ -20,7 +20,8 @@
     "camera": "Scatta Foto",
     "gallery": "Scegli dalla Galleria",
     "processing": "Scansione in corso...",
-    "scanning": "Scansione..."
+    "scanning": "Scansione...",
+    "processingSubtitle": "L'AI sta leggendo il tuo scontrino…"
   },
   "review": {
     "title": "Revisiona Prodotti",

@@ -53,7 +53,7 @@ function ScanOverlay({ t }) {
           <Animated.View style={[styles.scanLine, lineStyle]} />
         </View>
         <Text style={styles.overlayTitle}>{t('scan.processing')}</Text>
-        <Text style={styles.overlaySubtitle}>AI is reading your receipt…</Text>
+        <Text style={styles.overlaySubtitle}>{t('scan.processingSubtitle')}</Text>
       </View>
     </View>
   );
@@ -64,6 +64,7 @@ export default function ScanScreen() {
   const navigation = useNavigation();
   const { settings } = useSettings();
   const [scanning, setScanning] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const scanningRef = useRef(false);
 
@@ -76,6 +77,7 @@ export default function ScanScreen() {
       if (!granted) { setSnackbarMessage(t('errors.permissionDenied')); return; }
       const result = await launchCameraAsync({ mediaTypes: 'Images', quality: 1 });
       if (result.canceled || !result.assets?.[0]) return;
+      setProcessing(true);
       const asset = result.assets[0];
       validateImage({ mimeType: asset.mimeType, fileSize: asset.fileSize });
       const { base64 } = await compressImage(asset.uri);
@@ -94,6 +96,7 @@ export default function ScanScreen() {
     } finally {
       scanningRef.current = false;
       setScanning(false);
+      setProcessing(false);
     }
   };
 
@@ -106,6 +109,7 @@ export default function ScanScreen() {
       if (!granted) { setSnackbarMessage(t('errors.permissionDenied')); return; }
       const result = await launchImageLibraryAsync({ mediaTypes: 'Images', quality: 1 });
       if (result.canceled || !result.assets?.[0]) return;
+      setProcessing(true);
       const asset = result.assets[0];
       validateImage({ mimeType: asset.mimeType, fileSize: asset.fileSize });
       const { base64 } = await compressImage(asset.uri);
@@ -124,6 +128,7 @@ export default function ScanScreen() {
     } finally {
       scanningRef.current = false;
       setScanning(false);
+      setProcessing(false);
     }
   };
 
@@ -158,7 +163,7 @@ export default function ScanScreen() {
           </Pressable>
         </View>
 
-        {scanning && <ScanOverlay t={t} />}
+        {processing && <ScanOverlay t={t} />}
 
         <Snackbar
           message={snackbarMessage}
