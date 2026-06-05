@@ -3,7 +3,7 @@ import * as Notifications from 'expo-notifications';
 import { BackHandler, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as NavigationBar from 'expo-navigation-bar';
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -64,10 +64,8 @@ function AppContent() {
 
   useEffect(() => {
     if (Platform.OS !== 'android') return;
-    NavigationBar.setPositionAsync('relative');
-    NavigationBar.setBackgroundColorAsync(colors.surface);
     NavigationBar.setButtonStyleAsync(isDark ? 'light' : 'dark');
-  }, [colors.surface, isDark]);
+  }, [isDark]);
 
   useEffect(() => {
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -82,8 +80,10 @@ function AppContent() {
   }, [navRef]);
 
   const navTheme = {
+    ...DefaultTheme,
     dark: isDark,
     colors: {
+      ...DefaultTheme.colors,
       background: colors.surface,
       card: colors.surface,
       text: colors.textPrimary,
