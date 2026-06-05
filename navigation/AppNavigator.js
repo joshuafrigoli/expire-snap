@@ -39,7 +39,7 @@ function BottomTabsNavigator() {
         ),
         tabBarActiveTintColor: colors.tabActive,
         tabBarInactiveTintColor: colors.tabInactive,
-        tabBarStyle: { borderTopWidth: 2, borderTopColor: colors.tabBorder },
+        tabBarStyle: { borderTopWidth: 2, borderTopColor: colors.tabBorder, backgroundColor: colors.surface },
       })}
     >
       <Tab.Screen name="Home" component={DashboardScreen} options={{ tabBarLabel: t('nav.home') }} />
