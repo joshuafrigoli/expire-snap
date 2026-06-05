@@ -15,8 +15,8 @@ function detectLanguage() {
 }
 
 const DEFAULT_SETTINGS = {
-  aiProvider: 'openai',
-  apiKey: '',
+  aiProvider: process.env.EXPO_PUBLIC_GEMINI_API_KEY ? 'gemini' : 'openai',
+  apiKey: process.env.EXPO_PUBLIC_GEMINI_API_KEY || '',
   autoDeleteDays: 30,
   language: detectLanguage(),
   languageLockedByUser: false,
