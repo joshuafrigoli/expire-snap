@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Pressable, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Pressable, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { Input } from '@/components/ui';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -25,14 +26,11 @@ export default function OnboardingScreen() {
         <Text style={styles.title}>ExpireSnap</Text>
         <Text style={styles.subtitle}>Track food. Waste less.</Text>
 
-        <TextInput
+        <Input
           testID="onboarding-name-input"
-          style={styles.input}
           placeholder={t('onboarding.namePlaceholder')}
-          placeholderTextColor="#94a3b8"
           value={name}
           onChangeText={setName}
-          autoFocus
         />
 
         <Text style={styles.emojiLabel}>Pick an avatar</Text>
@@ -63,11 +61,6 @@ const styles = StyleSheet.create({
   inner: { flex: 1, justifyContent: 'center', paddingHorizontal: 24, gap: 16 },
   title: { fontSize: 32, fontWeight: '700', color: '#005bc4', textAlign: 'center' },
   subtitle: { fontSize: 16, color: '#64748b', textAlign: 'center', marginBottom: 8 },
-  input: {
-    borderWidth: 2, borderColor: '#001a3d', borderRadius: 12,
-    padding: 14, fontSize: 16, backgroundColor: '#fff',
-    color: '#001a3d',
-  },
   emojiLabel: { fontSize: 14, color: '#64748b', fontWeight: '600' },
   emojiRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   emojiBtn: { padding: 8, borderRadius: 8, borderWidth: 2, borderColor: 'transparent' },
