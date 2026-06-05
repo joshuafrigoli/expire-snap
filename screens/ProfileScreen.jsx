@@ -55,10 +55,6 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.flex}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.flex}
-      >
         <View style={styles.topBar}>
           <Pressable
             testID="profile-back-btn"
@@ -79,6 +75,10 @@ export default function ProfileScreen() {
           ) : <View style={styles.saveBtnSpacer} />}
         </View>
 
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.flex}
+      >
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
