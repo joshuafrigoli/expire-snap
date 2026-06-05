@@ -41,7 +41,7 @@ export default function ReviewScreen() {
       addItem({ ...item, status: 'active', createdAt: now, updatedAt: now });
     }
 
-    navigation.navigate('Fridge');
+    navigation.navigate('BottomTabs', { screen: 'Fridge' });
   }
 
   return (

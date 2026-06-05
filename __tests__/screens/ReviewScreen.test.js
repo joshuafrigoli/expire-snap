@@ -45,6 +45,6 @@ describe('ReviewScreen validation', () => {
   it('dispatches items to InventoryContext and navigates to Fridge on valid confirm', async () => {
     const { getByTestId } = render(<Wrapper><ReviewScreen /></Wrapper>);
     fireEvent.press(getByTestId('review-confirm-btn'));
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('Fridge'));
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('BottomTabs', { screen: 'Fridge' }));
   });
 });

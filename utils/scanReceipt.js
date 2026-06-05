@@ -9,10 +9,16 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
   let url;
   let options;
 
+  const today = new Date().toISOString().split('T')[0];
   const instruction =
-    'Extract all food items from this receipt. Return a JSON object with an "items" array. ' +
-    'Each item should have "name" (string), "expiry_days" (number, estimated days until expiry), ' +
-    'and "category" (string). Return only valid JSON, no markdown.';
+    `Today is ${today}. Extract all food items from this grocery receipt image.\n\n` +
+    'Return a JSON object in exactly this format (no markdown, no extra keys):\n' +
+    '{"items":[{"name":"Clean Product Name","category":"Dairy","estimated_expiry_date":"YYYY-MM-DD","confidence_days":2}]}\n\n' +
+    'Rules:\n' +
+    '- category must be one of: Dairy, Meat & Fish, Fruits & Veggies, Frozen, Pantry\n' +
+    `- estimated_expiry_date must be a future YYYY-MM-DD date calculated from today (${today})\n` +
+    '- confidence_days is your uncertainty margin in days (1–5)\n' +
+    '- Typical shelf life from purchase: Fresh Milk +6d, Yogurt +20d, Fresh Meat +3d, Fresh Fish +2d, Cold cuts/Hard cheese +15d, Pantry (pasta/rice/canned) +180d+';
 
   if (provider === 'openai') {
     url = 'https://api.openai.com/v1/chat/completions';
@@ -134,6 +140,12 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
   if (!Array.isArray(parsed.items)) {
     throw new Error('Invalid response from AI: missing items array');
   }
+
+  const ts = Date.now().toString(36);
+  parsed.items = parsed.items.map((item, i) => ({
+    ...item,
+    id: ts + i.toString(36) + Math.random().toString(36).slice(2, 6),
+  }));
 
   return parsed;
 }
