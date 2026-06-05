@@ -11,7 +11,9 @@
       "@/locales/*": ["locales/*"],
       "@/screens/*": ["screens/*"],
       "@/navigation/*": ["navigation/*"],
-      "@/theme/*": ["theme/*"]
+      "@/theme": ["theme/index"],
+      "@/theme/*": ["theme/*"],
+      "@/constants/*": ["constants/*"]
     }
   }
 }

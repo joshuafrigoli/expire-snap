@@ -21,6 +21,7 @@ module.exports = function (api) {
           '@/screens': './screens',
           '@/navigation': './navigation',
           '@/theme': './theme',
+          '@/constants': './constants',
         },
       }],
       'react-native-reanimated/plugin',
