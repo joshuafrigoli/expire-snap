@@ -53,6 +53,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <View style={styles.flex}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.flex}
@@ -195,8 +196,8 @@ export default function ProfileScreen() {
         visible={!!snackbarMsg}
         onDismiss={() => setSnackbarMsg('')}
         variant={snackbarVariant}
-        bottomOffset={insets.bottom}
       />
+      </View>
     </SafeAreaView>
   );
 }

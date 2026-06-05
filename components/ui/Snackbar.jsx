@@ -8,7 +8,7 @@ const VARIANTS = {
   error:   { bg: '#dc2626', text: '#ffffff', border: '#001a3d', icon: '⚠️  ' },
 };
 
-function Snackbar({ message, visible, variant = 'info', onDismiss, bottomOffset = 0 }) {
+function Snackbar({ message, visible, variant = 'info', onDismiss }) {
   useEffect(() => {
     if (!visible) return;
     const timer = setTimeout(() => { onDismiss && onDismiss(); }, 3000);
@@ -23,7 +23,7 @@ function Snackbar({ message, visible, variant = 'info', onDismiss, bottomOffset 
     <Animated.View
       entering={SlideInLeft.duration(280)}
       exiting={SlideOutLeft.duration(250)}
-      style={[styles.container, { backgroundColor: v.bg, borderColor: v.border, bottom: bottomOffset }]}
+      style={[styles.container, { backgroundColor: v.bg, borderColor: v.border }]}
     >
       <Text testID="snackbar-message" style={[styles.message, { color: v.text }]}>
         {v.icon + message}
