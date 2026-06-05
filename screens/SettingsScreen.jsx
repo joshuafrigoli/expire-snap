@@ -24,6 +24,7 @@ export default function SettingsScreen() {
             testID="settings-ai-provider"
             value={settings.aiProvider}
             options={[
+              { label: t('settings.providers.openrouter'), value: 'openrouter' },
               { label: t('settings.providers.openai'), value: 'openai' },
               { label: t('settings.providers.gemini'), value: 'gemini' },
               { label: t('settings.providers.anthropic'), value: 'anthropic' },

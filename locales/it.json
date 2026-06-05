@@ -54,6 +54,7 @@
     "autoDelete": "Elimina dati automaticamente dopo",
     "language": "Lingua",
     "providers": {
+      "openrouter": "OpenRouter (Gratuito)",
       "openai": "OpenAI",
       "gemini": "Google Gemini",
       "anthropic": "Anthropic Claude"

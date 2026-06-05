@@ -97,6 +97,32 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
         ],
       }),
     };
+  } else if (provider === 'openrouter') {
+    url = 'https://openrouter.ai/api/v1/chat/completions';
+    options = {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + apiKey,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'http://localhost:19006',
+        'X-Title': 'ExpireSnap',
+      },
+      body: JSON.stringify({
+        model: 'meta-llama/llama-3.2-11b-vision-instruct:free',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: instruction },
+              {
+                type: 'image_url',
+                image_url: { url: 'data:image/jpeg;base64,' + imageBase64 },
+              },
+            ],
+          },
+        ],
+      }),
+    };
   } else {
     throw new Error('Unknown provider');
   }
@@ -111,7 +137,7 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
   }
 
   if (!response.ok) {
-    const errBody = await response.text().catch(() => '');
+    const errBody = await response.text?.().catch(() => '') ?? '';
     console.error('[scanReceipt] HTTP', response.status, errBody);
     if (response.status === 429) {
       throw new RateLimitError();
@@ -122,7 +148,7 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
   const data = await response.json();
 
   let text;
-  if (provider === 'openai') {
+  if (provider === 'openai' || provider === 'openrouter') {
     text = data.choices[0].message.content;
   } else if (provider === 'gemini') {
     text = data.candidates[0].content.parts[0].text;
