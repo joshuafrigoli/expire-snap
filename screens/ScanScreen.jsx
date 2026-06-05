@@ -3,6 +3,14 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withSequence,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 import {
   launchCameraAsync,
   launchImageLibraryAsync,
@@ -14,6 +22,42 @@ import { compressImage } from '@/utils/compressImage';
 import { scanReceipt } from '@/utils/scanReceipt';
 import { useSettings } from '@/context/SettingsContext';
 import { Snackbar } from '@/components/ui';
+
+function ScanOverlay({ t }) {
+  const scale = useSharedValue(1);
+  const lineY = useSharedValue(0);
+
+  React.useEffect(() => {
+    scale.value = withRepeat(
+      withSequence(
+        withTiming(1.12, { duration: 600, easing: Easing.inOut(Easing.ease) }),
+        withTiming(1.0, { duration: 600, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1
+    );
+    lineY.value = withRepeat(
+      withTiming(96, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
+      -1,
+      true
+    );
+  }, []);
+
+  const iconStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  const lineStyle = useAnimatedStyle(() => ({ transform: [{ translateY: lineY.value }] }));
+
+  return (
+    <View style={styles.overlayBackdrop}>
+      <View style={styles.overlayCard}>
+        <View style={styles.receiptBox}>
+          <Animated.Text style={[styles.receiptIcon, iconStyle]}>🧾</Animated.Text>
+          <Animated.View style={[styles.scanLine, lineStyle]} />
+        </View>
+        <Text style={styles.overlayTitle}>{t('scan.processing')}</Text>
+        <Text style={styles.overlaySubtitle}>AI is reading your receipt…</Text>
+      </View>
+    </View>
+  );
+}
 
 export default function ScanScreen() {
   const { t } = useTranslation();
@@ -86,32 +130,35 @@ export default function ScanScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View testID="screen-scan" style={styles.container}>
-        <Text style={styles.title}>{t('scan.title')}</Text>
-        <Text style={styles.subtitle}>{t('scan.hint')}</Text>
 
-        <Pressable
-          testID="scan-camera-btn"
-          onPress={handleCamera}
-          disabled={scanning}
-          accessibilityState={{ disabled: scanning }}
-          style={[styles.buttonPrimary, scanning && styles.buttonDisabled]}
-        >
-          <Text style={styles.buttonPrimaryText}>{'📷  ' + t('scan.camera')}</Text>
-        </Pressable>
+        <View style={styles.header}>
+          <Text style={styles.title}>{t('scan.title')}</Text>
+          <Text style={styles.subtitle}>{t('scan.hint')}</Text>
+        </View>
 
-        <Pressable
-          testID="scan-gallery-btn"
-          onPress={handleGallery}
-          disabled={scanning}
-          accessibilityState={{ disabled: scanning }}
-          style={[styles.buttonSecondary, scanning && styles.buttonDisabled]}
-        >
-          <Text style={styles.buttonSecondaryText}>{'🖼️  ' + t('scan.gallery')}</Text>
-        </Pressable>
+        <View style={styles.buttonArea}>
+          <Pressable
+            testID="scan-camera-btn"
+            onPress={handleCamera}
+            disabled={scanning}
+            accessibilityState={{ disabled: scanning }}
+            style={[styles.buttonPrimary, scanning && styles.buttonDisabled]}
+          >
+            <Text style={styles.buttonPrimaryText}>{'📷  ' + t('scan.camera')}</Text>
+          </Pressable>
 
-        {scanning && (
-          <Text style={styles.scanningText}>{t('scan.scanning')}</Text>
-        )}
+          <Pressable
+            testID="scan-gallery-btn"
+            onPress={handleGallery}
+            disabled={scanning}
+            accessibilityState={{ disabled: scanning }}
+            style={[styles.buttonSecondary, scanning && styles.buttonDisabled]}
+          >
+            <Text style={styles.buttonSecondaryText}>{'🖼️  ' + t('scan.gallery')}</Text>
+          </Pressable>
+        </View>
+
+        {scanning && <ScanOverlay t={t} />}
 
         <Snackbar
           message={snackbarMessage}
@@ -131,9 +178,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 16,
-    gap: 12,
     backgroundColor: '#eff6ff',
+  },
+  header: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
   },
   title: {
     fontSize: 24,
@@ -144,7 +194,12 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     color: '#64748b',
-    marginBottom: 8,
+  },
+  buttonArea: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    gap: 12,
   },
   buttonPrimary: {
     backgroundColor: '#005bc4',
@@ -187,10 +242,61 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   buttonDisabled: {
-    opacity: 0.5,
+    opacity: 0.4,
   },
-  scanningText: {
-    fontSize: 14,
+
+  // Scanning overlay
+  overlayBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,26,61,0.55)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  overlayCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: '#001a3d',
+    padding: 32,
+    alignItems: 'center',
+    gap: 12,
+    width: 260,
+    shadowColor: '#001a3d',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
+  },
+  receiptBox: {
+    width: 80,
+    height: 100,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#bfdbfe',
+    backgroundColor: '#eff6ff',
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+  },
+  receiptIcon: {
+    fontSize: 40,
+  },
+  scanLine: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    height: 2,
+    backgroundColor: '#005bc4',
+    opacity: 0.8,
+  },
+  overlayTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#001a3d',
+  },
+  overlaySubtitle: {
+    fontSize: 12,
     color: '#64748b',
     textAlign: 'center',
   },
