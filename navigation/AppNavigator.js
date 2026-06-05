@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
-import { BackHandler } from 'react-native';
+import { BackHandler, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as NavigationBar from 'expo-navigation-bar';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
@@ -63,6 +63,8 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
+    if (Platform.OS !== 'android') return;
+    NavigationBar.setPositionAsync('relative');
     NavigationBar.setBackgroundColorAsync(colors.surface);
     NavigationBar.setButtonStyleAsync(isDark ? 'light' : 'dark');
   }, [colors.surface, isDark]);
