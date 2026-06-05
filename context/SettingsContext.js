@@ -1,13 +1,23 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getLocales } from 'expo-localization';
 
 const STORAGE_KEY = 'expiresnap_settings';
+const SUPPORTED_LANGUAGES = ['en', 'it'];
+
+function detectLanguage() {
+  const locales = getLocales();
+  for (const locale of locales) {
+    if (SUPPORTED_LANGUAGES.includes(locale.languageCode)) return locale.languageCode;
+  }
+  return 'en';
+}
 
 const DEFAULT_SETTINGS = {
   aiProvider: 'openai',
   apiKey: '',
   autoDeleteDays: 30,
-  language: 'en',
+  language: detectLanguage(),
   profile: { name: '', avatarEmoji: '' },
 };
 
