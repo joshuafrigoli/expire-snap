@@ -4,7 +4,7 @@ import {
   StyleSheet, KeyboardAvoidingView, Platform, Keyboard,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '@/context/SettingsContext';
@@ -22,6 +22,7 @@ export default function ProfileScreen() {
   const { settings, updateSettings } = useSettings();
   const { items } = useInventory();
 
+  const insets = useSafeAreaInsets();
   const [name, setName] = useState(settings.profile?.name || '');
   const [avatarEmoji, setAvatarEmoji] = useState(settings.profile?.avatarEmoji || '🥦');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -194,6 +195,7 @@ export default function ProfileScreen() {
         visible={!!snackbarMsg}
         onDismiss={() => setSnackbarMsg('')}
         variant={snackbarVariant}
+        bottomOffset={insets.bottom}
       />
     </SafeAreaView>
   );
