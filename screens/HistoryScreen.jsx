@@ -1,12 +1,15 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import { useInventory } from '@/context/InventoryContext';
 import { Badge } from '@/components/ui';
 
 export default function HistoryScreen() {
   const { t } = useTranslation();
+  const navigation = useNavigation();
   const { items } = useInventory();
 
   const historyItems = items.filter(
@@ -16,7 +19,16 @@ export default function HistoryScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.title}>{t('history.title')}</Text>
+        <View style={styles.header}>
+          <Pressable
+            testID="history-back-btn"
+            onPress={() => navigation.goBack()}
+            style={styles.backBtn}
+          >
+            <Ionicons name="arrow-back" size={20} color="#001a3d" />
+          </Pressable>
+          <Text style={styles.title}>{t('history.title')}</Text>
+        </View>
         <FlatList
           data={historyItems}
           keyExtractor={(item) => item.id}
@@ -53,12 +65,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  backBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 9999,
+    borderWidth: 2,
+    borderColor: '#001a3d',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#001a3d',
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 3,
+  },
   title: {
+    flex: 1,
     fontSize: 24,
     fontWeight: '700',
     color: '#005bc4',
-    padding: 16,
-    paddingBottom: 8,
   },
   listContent: {
     padding: 8,
