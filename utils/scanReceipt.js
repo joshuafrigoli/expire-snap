@@ -45,12 +45,14 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
       }),
     };
   } else if (provider === 'gemini') {
-    url =
-      'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=' + apiKey;
+    const geminiModel = apiKey.startsWith('AQ.') ? 'gemini-2.0-flash' : 'gemini-1.5-flash';
+    const geminiBase = 'https://generativelanguage.googleapis.com/v1beta/models/' + geminiModel + ':generateContent';
+    url = apiKey.startsWith('AQ.') ? geminiBase : geminiBase + '?key=' + apiKey;
     options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...(apiKey.startsWith('AQ.') ? { Authorization: 'Bearer ' + apiKey } : { 'x-goog-api-key': apiKey }),
       },
       body: JSON.stringify({
         contents: [
