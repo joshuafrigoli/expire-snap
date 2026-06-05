@@ -108,7 +108,7 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
         'X-Title': 'ExpireSnap',
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.2-11b-vision-instruct:free',
+        model: 'qwen/qwen2.5-vl-7b-instruct:free',
         messages: [
           {
             role: 'user',
