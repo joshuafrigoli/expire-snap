@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
 import { BackHandler } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import * as NavigationBar from 'expo-navigation-bar';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -60,6 +61,11 @@ function AppContent() {
   useEffect(() => {
     Notifications.requestPermissionsAsync();
   }, []);
+
+  useEffect(() => {
+    NavigationBar.setBackgroundColorAsync(colors.surface);
+    NavigationBar.setButtonStyleAsync(isDark ? 'light' : 'dark');
+  }, [colors.surface, isDark]);
 
   useEffect(() => {
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
