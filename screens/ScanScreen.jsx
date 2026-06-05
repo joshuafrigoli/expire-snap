@@ -181,9 +181,8 @@ export default function ScanScreen() {
           </Pressable>
         </View>
 
-        {processing && <ScanOverlay t={t} />}
-
       </View>
+      {processing && <ScanOverlay t={t} />}
     </SafeAreaView>
   );
 }
