@@ -108,7 +108,7 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
         'X-Title': 'ExpireSnap',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash:free',
+        model: 'openrouter/auto',
         messages: [
           {
             role: 'user',
