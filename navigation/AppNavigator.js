@@ -81,8 +81,20 @@ function AppContent() {
     return () => sub.remove();
   }, [navRef]);
 
+  const navTheme = {
+    dark: isDark,
+    colors: {
+      background: colors.surface,
+      card: colors.surface,
+      text: colors.textPrimary,
+      border: colors.border,
+      primary: colors.primary,
+      notification: colors.danger,
+    },
+  };
+
   return (
-    <NavigationContainer ref={navRef}>
+    <NavigationContainer ref={navRef} theme={navTheme}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!hasProfile && <Stack.Screen name="Onboarding" component={OnboardingScreen} />}
