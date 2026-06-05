@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Text, StyleSheet } from 'react-native';
-import Animated, { SlideInDown, FadeOut } from 'react-native-reanimated';
+import Animated, { SlideInLeft, SlideOutLeft } from 'react-native-reanimated';
 
 const VARIANTS = {
   info:    { bg: '#005bc4', text: '#ffffff', border: '#001a3d', icon: 'ℹ️  ' },
@@ -21,8 +21,8 @@ function Snackbar({ message, visible, variant = 'info', onDismiss }) {
 
   return (
     <Animated.View
-      entering={SlideInDown.springify().damping(14)}
-      exiting={FadeOut.duration(200)}
+      entering={SlideInLeft.springify().damping(14)}
+      exiting={SlideOutLeft.duration(250)}
       style={[styles.container, { backgroundColor: v.bg, borderColor: v.border }]}
     >
       <Text testID="snackbar-message" style={[styles.message, { color: v.text }]}>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     bottom: 32,
     left: 16,
     right: 16,
-    borderRadius: 9999,
+    borderRadius: 12,
     borderWidth: 2,
     paddingVertical: 14,
     paddingHorizontal: 20,

@@ -113,6 +113,7 @@ jest.mock('react-native-reanimated', () => {
   const Easing = { linear: noop, ease: noop, bezier: () => noop, in: () => noop, out: () => noop, inOut: () => noop };
   const animBuilder = () => { const b = { springify: () => b, damping: () => b, duration: () => b, delay: () => b, easing: () => b, withInitialValues: () => b, withCallback: () => b, reduceMotion: () => b }; return b; };
   const SlideInDown = animBuilder(); const SlideInUp = animBuilder(); const SlideOutDown = animBuilder();
+  const SlideInLeft = animBuilder(); const SlideOutLeft = animBuilder(); const SlideInRight = animBuilder(); const SlideOutRight = animBuilder();
   const FadeIn = animBuilder(); const FadeOut = animBuilder(); const FadeInRight = animBuilder(); const FadeOutLeft = animBuilder();
   const AnimatedView = ({ children, style, ...props }) => React.createElement(View, { style, ...props }, children);
   const createAnimatedComponent = (Component) => {
@@ -146,6 +147,7 @@ jest.mock('react-native-reanimated', () => {
     Easing,
     createAnimatedComponent,
     SlideInDown, SlideInUp, SlideOutDown,
+    SlideInLeft, SlideOutLeft, SlideInRight, SlideOutRight,
     FadeIn, FadeOut, FadeInRight, FadeOutLeft,
     Animated: {
       View: AnimatedView,
