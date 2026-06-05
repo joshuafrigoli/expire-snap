@@ -21,7 +21,7 @@ function Snackbar({ message, visible, variant = 'info', onDismiss }) {
 
   return (
     <Animated.View
-      entering={SlideInLeft.springify().damping(14)}
+      entering={SlideInLeft.duration(280)}
       exiting={SlideOutLeft.duration(250)}
       style={[styles.container, { backgroundColor: v.bg, borderColor: v.border }]}
     >
