@@ -23,7 +23,7 @@ export default function HistoryScreen() {
           contentContainerStyle={styles.listContent}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No history yet</Text>
+              <Text style={styles.emptyText}>{t('history.empty')}</Text>
             </View>
           }
           renderItem={({ item }) => (
@@ -34,7 +34,7 @@ export default function HistoryScreen() {
               </View>
               <Badge
                 testID={'history-badge-' + item.id}
-                label={item.status}
+                label={t(item.status === 'consumed' ? 'actions.consume' : 'actions.waste')}
                 variant={item.status === 'consumed' ? 'safe' : 'danger'}
               />
             </View>

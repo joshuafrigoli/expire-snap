@@ -8,15 +8,19 @@
   },
   "onboarding": {
     "title": "Benvenuto in ExpireSnap",
+    "subtitle": "Traccia il cibo. Spreca meno.",
     "namePlaceholder": "Il tuo nome",
+    "pickAvatar": "Scegli un avatar",
     "submit": "Inizia",
     "importBackup": "Importa Backup"
   },
   "scan": {
     "title": "Scansiona Scontrino",
+    "hint": "Punta la fotocamera sullo scontrino",
     "camera": "Scatta Foto",
     "gallery": "Scegli dalla Galleria",
-    "processing": "Scansione in corso..."
+    "processing": "Scansione in corso...",
+    "scanning": "Scansione..."
   },
   "review": {
     "title": "Revisiona Prodotti",
@@ -29,10 +33,12 @@
     "search": "Cerca prodotti..."
   },
   "history": {
-    "title": "Cronologia"
+    "title": "Cronologia",
+    "empty": "Nessuna cronologia"
   },
   "profile": {
     "title": "Profilo",
+    "dataSection": "Dati",
     "export": "Esporta Dati",
     "import": "Importa Dati",
     "history": "Vedi Cronologia",
@@ -43,8 +49,22 @@
     "title": "Impostazioni",
     "aiProvider": "Provider AI",
     "apiKey": "Chiave API",
+    "apiKeyPlaceholder": "Inserisci la chiave API",
     "autoDelete": "Elimina Automaticamente Dopo",
-    "language": "Lingua"
+    "language": "Lingua",
+    "providers": {
+      "openai": "OpenAI",
+      "gemini": "Google Gemini",
+      "anthropic": "Anthropic Claude"
+    },
+    "autoDeleteOptions": {
+      "days": "{{n}} giorni",
+      "never": "Mai"
+    },
+    "languages": {
+      "en": "English",
+      "it": "Italiano"
+    }
   },
   "actions": {
     "consume": "Consumato",
@@ -62,6 +82,7 @@
     "importSuccess": "Dati importati con successo"
   },
   "categories": {
+    "all": "Tutti",
     "dairy": "Latticini",
     "meat": "Carne e Pesce",
     "produce": "Frutta e Verdura",
@@ -75,6 +96,7 @@
     "settings": "Impostazioni"
   },
   "days": {
+    "unit": "giorni",
     "expired": "Scaduto",
     "today": "Scade oggi",
     "tomorrow": "Scade domani",

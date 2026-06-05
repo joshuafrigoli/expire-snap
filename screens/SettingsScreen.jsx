@@ -19,41 +19,41 @@ export default function SettingsScreen() {
         <Text style={styles.title}>{t('settings.title')}</Text>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>AI Provider</Text>
+          <Text style={styles.sectionLabel}>{t('settings.aiProvider')}</Text>
           <Select
             testID="settings-ai-provider"
             value={settings.aiProvider}
             options={[
-              { label: 'OpenAI', value: 'openai' },
-              { label: 'Google Gemini', value: 'gemini' },
-              { label: 'Anthropic Claude', value: 'anthropic' },
+              { label: t('settings.providers.openai'), value: 'openai' },
+              { label: t('settings.providers.gemini'), value: 'gemini' },
+              { label: t('settings.providers.anthropic'), value: 'anthropic' },
             ]}
             onChange={(v) => updateSettings({ aiProvider: v })}
           />
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>API Key</Text>
+          <Text style={styles.sectionLabel}>{t('settings.apiKey')}</Text>
           <Input
             testID="settings-api-key"
             value={settings.apiKey || ''}
             onChangeText={(v) => updateSettings({ apiKey: v })}
             variant="password"
-            placeholder="Enter API key"
+            placeholder={t('settings.apiKeyPlaceholder')}
           />
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>Auto-Delete Period</Text>
+          <Text style={styles.sectionLabel}>{t('settings.autoDelete')}</Text>
           <Select
             testID="settings-auto-delete"
             value={String(settings.autoDeleteDays)}
             options={[
-              { label: '7 days', value: '7' },
-              { label: '14 days', value: '14' },
-              { label: '30 days', value: '30' },
-              { label: '60 days', value: '60' },
-              { label: 'Never', value: 'never' },
+              { label: t('settings.autoDeleteOptions.days', { n: 7 }), value: '7' },
+              { label: t('settings.autoDeleteOptions.days', { n: 14 }), value: '14' },
+              { label: t('settings.autoDeleteOptions.days', { n: 30 }), value: '30' },
+              { label: t('settings.autoDeleteOptions.days', { n: 60 }), value: '60' },
+              { label: t('settings.autoDeleteOptions.never'), value: 'never' },
             ]}
             onChange={(v) =>
               updateSettings({ autoDeleteDays: v === 'never' ? 'never' : Number(v) })
@@ -62,13 +62,13 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>Language</Text>
+          <Text style={styles.sectionLabel}>{t('settings.language')}</Text>
           <Select
             testID="settings-language"
             value={settings.language}
             options={[
-              { label: 'English', value: 'en' },
-              { label: 'Italiano', value: 'it' },
+              { label: t('settings.languages.en'), value: 'en' },
+              { label: t('settings.languages.it'), value: 'it' },
             ]}
             onChange={(v) => updateSettings({ language: v })}
           />

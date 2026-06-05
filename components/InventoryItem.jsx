@@ -57,7 +57,7 @@ export function InventoryItem({ id, name, category, estimated_expiry_date, onCon
             {daysLeft}
           </Text>
           <Text style={[styles.countdownLabel, { color: countdownColors.text }]}>
-            {t('days', { defaultValue: 'days' })}
+            {t('days.unit')}
           </Text>
         </View>
 

@@ -21,7 +21,7 @@ describe('ReviewItem', () => {
     const { getByText } = render(
       <ReviewItem item={baseItem} onChange={() => {}} onDelete={() => {}} />
     );
-    expect(getByText('± 2 days')).toBeTruthy();
+    expect(getByText('review.confidenceDays')).toBeTruthy();
   });
 
   it('calls onChange when name edited', () => {

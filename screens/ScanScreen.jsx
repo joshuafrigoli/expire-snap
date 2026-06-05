@@ -66,7 +66,7 @@ export default function ScanScreen() {
     <SafeAreaView style={styles.safeArea}>
       <View testID="screen-scan" style={styles.container}>
         <Text style={styles.title}>{t('scan.title')}</Text>
-        <Text style={styles.subtitle}>Point your camera at a grocery receipt</Text>
+        <Text style={styles.subtitle}>{t('scan.hint')}</Text>
 
         <Pressable
           testID="scan-camera-btn"
@@ -89,7 +89,7 @@ export default function ScanScreen() {
         </Pressable>
 
         {scanning && (
-          <Text style={styles.scanningText}>Scanning...</Text>
+          <Text style={styles.scanningText}>{t('scan.scanning')}</Text>
         )}
 
         <Snackbar

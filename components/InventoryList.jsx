@@ -5,11 +5,19 @@ import { useInventory } from '@/context/InventoryContext';
 import { FilterTabs, Input } from '@/components/ui';
 import InventoryItem from '@/components/InventoryItem';
 
-const CATEGORIES = ['All', 'Dairy', 'Meat & Fish', 'Fruits & Veggies', 'Frozen', 'Pantry'];
+const CATEGORY_KEYS = [
+  { value: 'All', key: 'categories.all' },
+  { value: 'Dairy', key: 'categories.dairy' },
+  { value: 'Meat & Fish', key: 'categories.meat' },
+  { value: 'Fruits & Veggies', key: 'categories.produce' },
+  { value: 'Frozen', key: 'categories.frozen' },
+  { value: 'Pantry', key: 'categories.pantry' },
+];
 
 function InventoryList() {
   const { t } = useTranslation();
   const { items, markConsumed, markWasted } = useInventory();
+  const categories = CATEGORY_KEYS.map(c => ({ value: c.value, label: t(c.key) }));
   const [searchText, setSearchText] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
@@ -33,7 +41,7 @@ function InventoryList() {
         />
       </View>
       <FilterTabs
-        tabs={CATEGORIES}
+        tabs={categories}
         activeTab={activeCategory}
         onTabPress={setActiveCategory}
       />

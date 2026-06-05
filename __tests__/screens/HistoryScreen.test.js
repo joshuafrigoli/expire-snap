@@ -41,7 +41,7 @@ describe('HistoryScreen', () => {
     await AsyncStorage.setItem('expiresnap_inventory', JSON.stringify(items));
     const { getByTestId } = render(<Wrapper><HistoryScreen /></Wrapper>);
     await waitFor(() =>
-      expect(within(getByTestId('history-badge-1')).getByText(/consumed/i)).toBeTruthy()
+      expect(within(getByTestId('history-badge-1')).getByText('actions.consume')).toBeTruthy()
     );
   });
 
@@ -49,7 +49,7 @@ describe('HistoryScreen', () => {
     await AsyncStorage.setItem('expiresnap_inventory', JSON.stringify(items));
     const { getByTestId } = render(<Wrapper><HistoryScreen /></Wrapper>);
     await waitFor(() =>
-      expect(within(getByTestId('history-badge-2')).getByText(/wasted/i)).toBeTruthy()
+      expect(within(getByTestId('history-badge-2')).getByText('actions.waste')).toBeTruthy()
     );
   });
 });

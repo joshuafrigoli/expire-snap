@@ -8,15 +8,19 @@
   },
   "onboarding": {
     "title": "Welcome to ExpireSnap",
+    "subtitle": "Track food. Waste less.",
     "namePlaceholder": "Your name",
+    "pickAvatar": "Pick an avatar",
     "submit": "Let's Go",
     "importBackup": "Import Backup"
   },
   "scan": {
     "title": "Scan Receipt",
+    "hint": "Point your camera at a grocery receipt",
     "camera": "Take Photo",
     "gallery": "Choose from Gallery",
-    "processing": "Scanning receipt..."
+    "processing": "Scanning receipt...",
+    "scanning": "Scanning..."
   },
   "review": {
     "title": "Review Items",
@@ -29,10 +33,12 @@
     "search": "Search items..."
   },
   "history": {
-    "title": "History"
+    "title": "History",
+    "empty": "No history yet"
   },
   "profile": {
     "title": "Profile",
+    "dataSection": "Data",
     "export": "Export Data",
     "import": "Import Data",
     "history": "View History",
@@ -43,8 +49,22 @@
     "title": "Settings",
     "aiProvider": "AI Provider",
     "apiKey": "API Key",
+    "apiKeyPlaceholder": "Enter API key",
     "autoDelete": "Auto-Delete After",
-    "language": "Language"
+    "language": "Language",
+    "providers": {
+      "openai": "OpenAI",
+      "gemini": "Google Gemini",
+      "anthropic": "Anthropic Claude"
+    },
+    "autoDeleteOptions": {
+      "days": "{{n}} days",
+      "never": "Never"
+    },
+    "languages": {
+      "en": "English",
+      "it": "Italiano"
+    }
   },
   "actions": {
     "consume": "Consumed",
@@ -62,6 +82,7 @@
     "importSuccess": "Data imported successfully"
   },
   "categories": {
+    "all": "All",
     "dairy": "Dairy",
     "meat": "Meat & Fish",
     "produce": "Fruits & Veggies",
@@ -75,6 +96,7 @@
     "settings": "Settings"
   },
   "days": {
+    "unit": "days",
     "expired": "Expired",
     "today": "Expires today",
     "tomorrow": "Expires tomorrow",

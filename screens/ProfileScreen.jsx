@@ -39,7 +39,7 @@ export default function ProfileScreen() {
         <Text style={styles.nameText}>{name}</Text>
 
         {/* Section: Data */}
-        <Text style={styles.sectionLabel}>Data</Text>
+        <Text style={styles.sectionLabel}>{t('profile.dataSection')}</Text>
 
         <View style={styles.buttonGroup}>
           {/* Export */}

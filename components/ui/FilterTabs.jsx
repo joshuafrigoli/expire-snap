@@ -22,16 +22,18 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
         onContentSizeChange={(w) => setContentW(w)}
       >
         {tabs.map((tab) => {
-          const isActive = tab === activeTab;
+          const value = typeof tab === 'object' ? tab.value : tab;
+          const label = typeof tab === 'object' ? tab.label : tab;
+          const isActive = value === activeTab;
           return (
             <Pressable
-              key={tab}
-              testID={`filter-tab-${tab}`}
-              onPress={() => onTabPress(tab)}
+              key={value}
+              testID={`filter-tab-${value}`}
+              onPress={() => onTabPress(value)}
               style={[styles.pill, isActive ? styles.pillActive : styles.pillInactive]}
             >
               <Text style={[styles.label, isActive ? styles.labelActive : styles.labelInactive]}>
-                {tab}
+                {label}
               </Text>
             </Pressable>
           );

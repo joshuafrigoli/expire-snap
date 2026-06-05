@@ -23,7 +23,7 @@ export default function ReviewItem({ item, onChange, onDelete }) {
           }
         }}
       />
-      <Text>{"± " + item.confidence_days + " days"}</Text>
+      <Text>{t('review.confidenceDays', { n: item.confidence_days })}</Text>
       <Pressable
         testID={"review-item-delete-" + item.id}
         onPress={() => onDelete(item.id)}

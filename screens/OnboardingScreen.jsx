@@ -24,7 +24,7 @@ export default function OnboardingScreen() {
     <SafeAreaView testID="screen-onboarding" style={styles.safe}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.inner}>
         <Text style={styles.title}>ExpireSnap</Text>
-        <Text style={styles.subtitle}>Track food. Waste less.</Text>
+        <Text style={styles.subtitle}>{t('onboarding.subtitle')}</Text>
 
         <Input
           testID="onboarding-name-input"
@@ -33,7 +33,7 @@ export default function OnboardingScreen() {
           onChangeText={setName}
         />
 
-        <Text style={styles.emojiLabel}>Pick an avatar</Text>
+        <Text style={styles.emojiLabel}>{t('onboarding.pickAvatar')}</Text>
         <View style={styles.emojiRow}>
           {EMOJIS.map(e => (
             <Pressable key={e} onPress={() => setAvatarEmoji(e)} style={[styles.emojiBtn, avatarEmoji === e && styles.emojiBtnActive]}>
