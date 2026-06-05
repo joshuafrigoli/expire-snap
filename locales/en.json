@@ -50,7 +50,7 @@
     "aiProvider": "AI Provider",
     "apiKey": "API Key",
     "apiKeyPlaceholder": "Enter API key",
-    "autoDelete": "Auto-Delete After",
+    "autoDelete": "Auto-Delete Data After",
     "language": "Language",
     "providers": {
       "openai": "OpenAI",
