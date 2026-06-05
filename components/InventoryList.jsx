@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { FlatList, TextInput, View, Text, StyleSheet } from 'react-native';
+import { FlatList, View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
-import { FilterTabs } from '@/components/ui/FilterTabs';
+import { FilterTabs, Input } from '@/components/ui';
 import InventoryItem from '@/components/InventoryItem';
 
 const CATEGORIES = ['All', 'Dairy', 'Meat & Fish', 'Fruits & Veggies', 'Frozen', 'Pantry'];
@@ -24,13 +24,14 @@ function InventoryList() {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        testID="inventory-search"
-        value={searchText}
-        onChangeText={setSearchText}
-        style={styles.searchInput}
-        placeholder={t('fridge.search')}
-      />
+      <View style={styles.searchWrapper}>
+        <Input
+          testID="inventory-search"
+          value={searchText}
+          onChangeText={setSearchText}
+          placeholder={t('fridge.search')}
+        />
+      </View>
       <FilterTabs
         tabs={CATEGORIES}
         activeTab={activeCategory}
@@ -62,19 +63,7 @@ function InventoryList() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  searchInput: {
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    marginHorizontal: 16,
-    marginTop: 12,
-    marginBottom: 8,
-    fontSize: 15,
-    backgroundColor: '#fff',
-    color: '#001a3d',
-  },
+  searchWrapper: { marginHorizontal: 16, marginTop: 12, marginBottom: 8 },
   listContent: {
     paddingHorizontal: 16,
     paddingBottom: 100,
