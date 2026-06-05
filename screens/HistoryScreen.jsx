@@ -6,11 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useInventory } from '@/context/InventoryContext';
 import { Badge } from '@/components/ui';
+import { useTheme } from '@/theme';
 
 export default function HistoryScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { items } = useInventory();
+  const colors = useTheme();
+  const styles = makeStyles(colors);
 
   const historyItems = items.filter(
     (item) => item.status === 'consumed' || item.status === 'wasted'
@@ -25,7 +28,7 @@ export default function HistoryScreen() {
             onPress={() => navigation.goBack()}
             style={styles.backBtn}
           >
-            <Ionicons name="arrow-back" size={20} color="#001a3d" />
+            <Ionicons name="arrow-back" size={20} color={colors.textPrimary} />
           </Pressable>
           <Text style={styles.title}>{t('history.title')}</Text>
         </View>
@@ -57,87 +60,89 @@ export default function HistoryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#eff6ff',
-  },
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 8,
-  },
-  backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 9999,
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 3,
-  },
-  title: {
-    flex: 1,
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#005bc4',
-  },
-  listContent: {
-    padding: 8,
-    paddingTop: 0,
-    gap: 8,
-  },
-  emptyContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 48,
-  },
-  emptyText: {
-    fontSize: 15,
-    color: '#64748b',
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    margin: 8,
-    marginBottom: 0,
-    padding: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-  },
-  cardLeft: {
-    flex: 1,
-    gap: 2,
-    marginRight: 12,
-  },
-  itemName: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#001a3d',
-  },
-  itemDate: {
-    fontSize: 12,
-    color: '#64748b',
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: colors.bg,
+    },
+    container: {
+      flex: 1,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 8,
+    },
+    backBtn: {
+      width: 40,
+      height: 40,
+      borderRadius: 9999,
+      borderWidth: 2,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 3,
+    },
+    title: {
+      flex: 1,
+      fontSize: 24,
+      fontWeight: '700',
+      color: colors.primary,
+    },
+    listContent: {
+      padding: 8,
+      paddingTop: 0,
+      gap: 8,
+    },
+    emptyContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: 48,
+    },
+    emptyText: {
+      fontSize: 15,
+      color: colors.textSecondary,
+    },
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      borderWidth: 2,
+      borderColor: colors.border,
+      margin: 8,
+      marginBottom: 0,
+      padding: 12,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+    },
+    cardLeft: {
+      flex: 1,
+      gap: 2,
+      marginRight: 12,
+    },
+    itemName: {
+      fontSize: 15,
+      fontWeight: '600',
+      color: colors.textPrimary,
+    },
+    itemDate: {
+      fontSize: 12,
+      color: colors.textSecondary,
+    },
+  });
+}

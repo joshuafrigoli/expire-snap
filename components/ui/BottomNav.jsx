@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { useTheme } from '@/theme';
 
 const TABS = ['Home', 'Scan', 'Fridge', 'Settings'];
 
-const PRIMARY = '#005bc4';
-const INACTIVE = '#64748b';
-
 function BottomNav({ activeTab, onTabPress }) {
+  const colors = useTheme();
+  const styles = makeStyles(colors);
+
   return (
     <View style={styles.container}>
       {TABS.map((tab) => {
@@ -28,30 +29,32 @@ function BottomNav({ activeTab, onTabPress }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    borderTopWidth: 1,
-    borderTopColor: '#e2e8f0',
-    paddingVertical: 8,
-  },
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 4,
-  },
-  label: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  active: {
-    color: PRIMARY,
-  },
-  inactive: {
-    color: INACTIVE,
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      backgroundColor: colors.surface,
+      borderTopWidth: 1,
+      borderTopColor: colors.inactive,
+      paddingVertical: 8,
+    },
+    tab: {
+      flex: 1,
+      alignItems: 'center',
+      paddingVertical: 4,
+    },
+    label: {
+      fontSize: 12,
+      fontWeight: '500',
+    },
+    active: {
+      color: colors.tabActive,
+    },
+    inactive: {
+      color: colors.tabInactive,
+    },
+  });
+}
 
 export { BottomNav };
 export default BottomNav;

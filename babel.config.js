@@ -20,6 +20,7 @@ module.exports = function (api) {
           '@/locales': './locales',
           '@/screens': './screens',
           '@/navigation': './navigation',
+          '@/theme': './theme',
         },
       }],
       'react-native-reanimated/plugin',

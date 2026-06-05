@@ -6,11 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import StatCard from '@/components/StatCard';
 import { ProfileButton } from '@/components/ui';
+import { useTheme } from '@/theme';
 
 export default function DashboardScreen() {
   const { t } = useTranslation();
   const { items } = useInventory();
   const navigation = useNavigation();
+  const colors = useTheme();
+  const styles = makeStyles(colors);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -50,25 +53,27 @@ export default function DashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#eff6ff' },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 0,
-  },
-  title: { fontSize: 24, fontWeight: '700', color: '#005bc4', flex: 1 },
-  content: { padding: 16, gap: 12 },
-  cards: { gap: 10 },
-  scanBtn: {
-    backgroundColor: '#005bc4', borderRadius: 9999, paddingVertical: 16,
-    alignItems: 'center', borderWidth: 2, borderColor: '#001a3d',
-    marginTop: 8,
-    shadowColor: '#001a3d', shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0,
-    elevation: 4,
-  },
-  scanBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    safe: { flex: 1, backgroundColor: colors.bg },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 0,
+    },
+    title: { fontSize: 24, fontWeight: '700', color: colors.primary, flex: 1 },
+    content: { padding: 16, gap: 12 },
+    cards: { gap: 10 },
+    scanBtn: {
+      backgroundColor: colors.primary, borderRadius: 9999, paddingVertical: 16,
+      alignItems: 'center', borderWidth: 2, borderColor: colors.border,
+      marginTop: 8,
+      shadowColor: colors.shadow, shadowOffset: { width: 4, height: 4 }, shadowOpacity: 1, shadowRadius: 0,
+      elevation: 4,
+    },
+    scanBtnText: { color: colors.primaryFg, fontSize: 16, fontWeight: '700' },
+  });
+}

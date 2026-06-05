@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '@/context/SettingsContext';
+import { useTheme } from '@/theme';
 
 export default function OnboardingScreen() {
   const navigation = useNavigation();
@@ -12,6 +13,8 @@ export default function OnboardingScreen() {
   const { updateSettings } = useSettings();
   const [name, setName] = useState('');
   const [avatarEmoji, setAvatarEmoji] = useState('🥦');
+  const colors = useTheme();
+  const styles = makeStyles(colors);
 
   async function handleSubmit() {
     await updateSettings({ profile: { name: name.trim(), avatarEmoji } });
@@ -56,21 +59,23 @@ export default function OnboardingScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#eff6ff' },
-  inner: { flex: 1, justifyContent: 'center', paddingHorizontal: 24, gap: 16 },
-  title: { fontSize: 32, fontWeight: '700', color: '#005bc4', textAlign: 'center' },
-  subtitle: { fontSize: 16, color: '#64748b', textAlign: 'center', marginBottom: 8 },
-  emojiLabel: { fontSize: 14, color: '#64748b', fontWeight: '600' },
-  emojiRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  emojiBtn: { padding: 8, borderRadius: 8, borderWidth: 2, borderColor: 'transparent' },
-  emojiBtnActive: { borderColor: '#005bc4', backgroundColor: '#bfdbfe' },
-  emoji: { fontSize: 24 },
-  btn: {
-    backgroundColor: '#005bc4', borderRadius: 9999, paddingVertical: 14,
-    alignItems: 'center', borderWidth: 2, borderColor: '#001a3d',
-    marginTop: 8,
-  },
-  btnDisabled: { backgroundColor: '#bfdbfe', borderColor: '#93c5fd' },
-  btnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    safe: { flex: 1, backgroundColor: colors.bg },
+    inner: { flex: 1, justifyContent: 'center', paddingHorizontal: 24, gap: 16 },
+    title: { fontSize: 32, fontWeight: '700', color: colors.primary, textAlign: 'center' },
+    subtitle: { fontSize: 16, color: colors.textSecondary, textAlign: 'center', marginBottom: 8 },
+    emojiLabel: { fontSize: 14, color: colors.textSecondary, fontWeight: '600' },
+    emojiRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+    emojiBtn: { padding: 8, borderRadius: 8, borderWidth: 2, borderColor: 'transparent' },
+    emojiBtnActive: { borderColor: colors.primary, backgroundColor: colors.surfaceAlt },
+    emoji: { fontSize: 24 },
+    btn: {
+      backgroundColor: colors.primary, borderRadius: 9999, paddingVertical: 14,
+      alignItems: 'center', borderWidth: 2, borderColor: colors.border,
+      marginTop: 8,
+    },
+    btnDisabled: { backgroundColor: colors.surfaceAlt, borderColor: colors.borderLight },
+    btnText: { color: colors.primaryFg, fontSize: 16, fontWeight: '700' },
+  });
+}

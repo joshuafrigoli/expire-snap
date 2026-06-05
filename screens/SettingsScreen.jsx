@@ -6,11 +6,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useSettings } from '@/context/SettingsContext';
 import { Select, Input, ProfileButton } from '@/components/ui';
+import { useTheme } from '@/theme';
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
   const { settings, updateSettings } = useSettings();
   const navigation = useNavigation();
+  const colors = useTheme();
+  const styles = makeStyles(colors);
 
   return (
     <SafeAreaView style={styles.root} testID="screen-settings">
@@ -31,7 +34,7 @@ export default function SettingsScreen() {
               onPress={() => navigation.navigate('ProviderInfo', { provider: settings.aiProvider })}
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
-              <Ionicons name="information-circle-outline" size={18} color="#64748b" />
+              <Ionicons name="information-circle-outline" size={18} color={colors.textSecondary} />
             </TouchableOpacity>
           </View>
           <Select
@@ -93,69 +96,71 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: '#eff6ff',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 0,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#005bc4',
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 16,
-    gap: 16,
-  },
-  section: {
-    gap: 4,
-  },
-  labelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  sectionLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#64748b',
-    textTransform: 'uppercase',
-    marginBottom: 4,
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-  },
-  apiKeyInput: {
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    borderRadius: 12,
-    padding: 12,
-    fontSize: 15,
-    backgroundColor: '#fff',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    root: {
+      flex: 1,
+      backgroundColor: colors.bg,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 0,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: '700',
+      color: colors.primary,
+      flex: 1,
+    },
+    scrollView: {
+      flex: 1,
+    },
+    scrollContent: {
+      padding: 16,
+      gap: 16,
+    },
+    section: {
+      gap: 4,
+    },
+    labelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+    },
+    sectionLabel: {
+      fontSize: 12,
+      fontWeight: '600',
+      color: colors.textSecondary,
+      textTransform: 'uppercase',
+      marginBottom: 4,
+    },
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      borderWidth: 2,
+      borderColor: colors.border,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+    },
+    apiKeyInput: {
+      borderWidth: 2,
+      borderColor: colors.border,
+      borderRadius: 12,
+      padding: 12,
+      fontSize: 15,
+      backgroundColor: colors.surface,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+    },
+  });
+}

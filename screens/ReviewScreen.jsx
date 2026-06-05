@@ -7,6 +7,7 @@ import { useInventory } from '@/context/InventoryContext';
 import ReviewItem from '@/components/ReviewItem';
 import { ProfileButton } from '@/components/ui';
 import { useSnackbar } from '@/context/SnackbarContext';
+import { useTheme } from '@/theme';
 
 export default function ReviewScreen() {
   const navigation = useNavigation();
@@ -16,6 +17,9 @@ export default function ReviewScreen() {
 
   const { showSnackbar } = useSnackbar();
   const [items, setItems] = useState(route.params.scanResult.items);
+
+  const colors = useTheme();
+  const styles = makeStyles(colors);
 
   function handleChange(id, changes) {
     setItems((prev) =>
@@ -101,62 +105,64 @@ export default function ReviewScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#eff6ff',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#eff6ff',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 4,
-  },
-  headerText: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#005bc4',
-    marginBottom: 2,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: '#64748b',
-  },
-  list: {
-    padding: 16,
-    gap: 12,
-  },
-  footer: {
-    paddingHorizontal: 16,
-    paddingBottom: 8,
-    paddingTop: 8,
-    backgroundColor: '#eff6ff',
-  },
-  confirmBtn: {
-    backgroundColor: '#005bc4',
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    borderRadius: 9999,
-    paddingVertical: 16,
-    alignItems: 'center',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-  },
-  confirmBtnText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: colors.bg,
+    },
+    container: {
+      flex: 1,
+      backgroundColor: colors.bg,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 4,
+    },
+    headerText: {
+      flex: 1,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: '700',
+      color: colors.primary,
+      marginBottom: 2,
+    },
+    subtitle: {
+      fontSize: 13,
+      color: colors.textSecondary,
+    },
+    list: {
+      padding: 16,
+      gap: 12,
+    },
+    footer: {
+      paddingHorizontal: 16,
+      paddingBottom: 8,
+      paddingTop: 8,
+      backgroundColor: colors.bg,
+    },
+    confirmBtn: {
+      backgroundColor: colors.primary,
+      borderWidth: 2,
+      borderColor: colors.border,
+      borderRadius: 9999,
+      paddingVertical: 16,
+      alignItems: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+    },
+    confirmBtnText: {
+      color: colors.primaryFg,
+      fontSize: 16,
+      fontWeight: '700',
+    },
+  });
+}

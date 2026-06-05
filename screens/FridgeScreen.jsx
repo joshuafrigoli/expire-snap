@@ -6,12 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import InventoryList from '@/components/InventoryList';
 import { FloatingActionButton, ProfileButton } from '@/components/ui';
+import { useTheme } from '@/theme';
 
 export default function FridgeScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { clearInventory } = useInventory();
   const [showConfirm, setShowConfirm] = useState(false);
+  const colors = useTheme();
+  const styles = makeStyles(colors);
 
   async function handleClear() {
     await clearInventory();
@@ -68,123 +71,125 @@ export default function FridgeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: '#eff6ff',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 0,
-  },
-  title: {
-    flex: 1,
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#005bc4',
-  },
-  clearBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 9999,
-    borderWidth: 2,
-    borderColor: '#dc2626',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 3,
-  },
-  clearBtnText: {
-    fontSize: 16,
-  },
-  list: {
-    flex: 1,
-  },
-  fab: {
-    position: 'absolute',
-    bottom: 24,
-    right: 24,
-  },
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0,26,61,0.5)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
-  },
-  dialog: {
-    backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    borderRadius: 16,
-    padding: 24,
-    width: '100%',
-    gap: 12,
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 6, height: 6 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 6,
-  },
-  dialogTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#001a3d',
-  },
-  dialogMessage: {
-    fontSize: 14,
-    color: '#64748b',
-    lineHeight: 20,
-  },
-  dialogButtons: {
-    flexDirection: 'row',
-    gap: 10,
-    marginTop: 4,
-  },
-  cancelBtn: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    borderRadius: 9999,
-    paddingVertical: 12,
-    alignItems: 'center',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 3,
-  },
-  cancelBtnText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#001a3d',
-  },
-  confirmBtn: {
-    flex: 1,
-    backgroundColor: '#dc2626',
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    borderRadius: 9999,
-    paddingVertical: 12,
-    alignItems: 'center',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 3,
-  },
-  confirmBtnText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#fff',
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    root: {
+      flex: 1,
+      backgroundColor: colors.bg,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 0,
+    },
+    title: {
+      flex: 1,
+      fontSize: 24,
+      fontWeight: '700',
+      color: colors.primary,
+    },
+    clearBtn: {
+      width: 40,
+      height: 40,
+      borderRadius: 9999,
+      borderWidth: 2,
+      borderColor: colors.danger,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 3,
+    },
+    clearBtnText: {
+      fontSize: 16,
+    },
+    list: {
+      flex: 1,
+    },
+    fab: {
+      position: 'absolute',
+      bottom: 24,
+      right: 24,
+    },
+    backdrop: {
+      flex: 1,
+      backgroundColor: colors.backdrop,
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 24,
+    },
+    dialog: {
+      backgroundColor: colors.surface,
+      borderWidth: 2,
+      borderColor: colors.border,
+      borderRadius: 16,
+      padding: 24,
+      width: '100%',
+      gap: 12,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 6, height: 6 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 6,
+    },
+    dialogTitle: {
+      fontSize: 18,
+      fontWeight: '700',
+      color: colors.textPrimary,
+    },
+    dialogMessage: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      lineHeight: 20,
+    },
+    dialogButtons: {
+      flexDirection: 'row',
+      gap: 10,
+      marginTop: 4,
+    },
+    cancelBtn: {
+      flex: 1,
+      backgroundColor: colors.surface,
+      borderWidth: 2,
+      borderColor: colors.border,
+      borderRadius: 9999,
+      paddingVertical: 12,
+      alignItems: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 3,
+    },
+    cancelBtnText: {
+      fontSize: 14,
+      fontWeight: '700',
+      color: colors.textPrimary,
+    },
+    confirmBtn: {
+      flex: 1,
+      backgroundColor: colors.danger,
+      borderWidth: 2,
+      borderColor: colors.border,
+      borderRadius: 9999,
+      paddingVertical: 12,
+      alignItems: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 3,
+    },
+    confirmBtnText: {
+      fontSize: 14,
+      fontWeight: '700',
+      color: colors.primaryFg,
+    },
+  });
+}

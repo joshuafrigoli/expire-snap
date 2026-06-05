@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTheme } from '@/theme';
 
 const SIZES = {
   sm: 32,
@@ -18,6 +19,8 @@ function getInitials(name) {
 }
 
 function Avatar({ emoji, name, size = 'md', testID }) {
+  const colors = useTheme();
+  const styles = makeStyles(colors);
   const dimension = SIZES[size] ?? SIZES.md;
   const borderRadius = dimension / 2;
   const fontSize = dimension * 0.4;
@@ -27,13 +30,13 @@ function Avatar({ emoji, name, size = 'md', testID }) {
       testID={testID}
       style={[
         styles.container,
-        { width: dimension, height: dimension, borderRadius, backgroundColor: '#bfdbfe' },
+        { width: dimension, height: dimension, borderRadius, backgroundColor: colors.avatarBg },
       ]}
     >
       {emoji ? (
         <Text style={{ fontSize }}>{emoji}</Text>
       ) : name ? (
-        <Text style={{ fontSize, fontWeight: '600', color: '#1e3a5f' }}>
+        <Text style={{ fontSize, fontWeight: '600', color: colors.avatarText }}>
           {getInitials(name)}
         </Text>
       ) : null}
@@ -41,13 +44,15 @@ function Avatar({ emoji, name, size = 'md', testID }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    container: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+    },
+  });
+}
 
 export { Avatar };
 export default Avatar;
