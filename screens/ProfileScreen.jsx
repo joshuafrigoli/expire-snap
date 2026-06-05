@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, Pressable, ScrollView, TextInput,
-  StyleSheet, KeyboardAvoidingView, Platform,
+  StyleSheet, KeyboardAvoidingView, Platform, Keyboard,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -43,6 +43,8 @@ export default function ProfileScreen() {
 
   async function handleSave() {
     if (!name.trim()) return;
+    Keyboard.dismiss();
+    setEditingName(false);
     await updateSettings({ profile: { name: name.trim(), avatarEmoji } });
     setSnackbarVariant('success');
     setSnackbarMsg('Saved!');
