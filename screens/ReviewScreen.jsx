@@ -49,10 +49,14 @@ export default function ReviewScreen() {
     }
 
     const now = new Date().toISOString();
-    for (const item of items) {
-      await addItem({ ...item, status: 'active', createdAt: now, updatedAt: now });
+    try {
+      for (const item of items) {
+        await addItem({ ...item, status: 'active', createdAt: now, updatedAt: now });
+      }
+      console.log('[Review] added', items.length, 'items to fridge');
+    } catch (err) {
+      console.error('[Review] addItem error:', err);
     }
-    console.log('[Review] added', items.length, 'items to fridge');
 
     navigation.navigate('BottomTabs', { screen: 'Fridge' });
   }
