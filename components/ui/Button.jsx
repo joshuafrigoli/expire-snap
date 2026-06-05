@@ -1,24 +1,7 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-
-const VARIANTS = {
-  primary: {
-    backgroundColor: '#005bc4',
-    textColor: '#ffffff',
-    borderColor: '#001a3d',
-  },
-  secondary: {
-    backgroundColor: '#ffffff',
-    textColor: '#005bc4',
-    borderColor: '#001a3d',
-  },
-  ghost: {
-    backgroundColor: 'transparent',
-    textColor: '#005bc4',
-    borderColor: 'transparent',
-  },
-};
+import { useTheme } from '@/theme';
 
 const SIZES = {
   sm: {
@@ -46,6 +29,10 @@ function Button({
   disabled = false,
   testID,
 }) {
+  const colors = useTheme();
+  const styles = makeStyles(colors);
+  const VARIANTS = makeVariants(colors);
+
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -100,21 +87,43 @@ function Button({
   );
 }
 
-const styles = StyleSheet.create({
-  base: {
-    borderRadius: 9999,
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  label: {
-    fontWeight: '600',
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-  disabledText: {},
-});
+function makeVariants(colors) {
+  return {
+    primary: {
+      backgroundColor: colors.primary,
+      textColor: colors.primaryFg,
+      borderColor: colors.border,
+    },
+    secondary: {
+      backgroundColor: colors.surface,
+      textColor: colors.primary,
+      borderColor: colors.border,
+    },
+    ghost: {
+      backgroundColor: 'transparent',
+      textColor: colors.primary,
+      borderColor: 'transparent',
+    },
+  };
+}
+
+function makeStyles(colors) {
+  return StyleSheet.create({
+    base: {
+      borderRadius: 9999,
+      borderWidth: 2,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    label: {
+      fontWeight: '600',
+    },
+    disabled: {
+      opacity: 0.5,
+    },
+    disabledText: {},
+  });
+}
 
 export { Button };
 export default Button;

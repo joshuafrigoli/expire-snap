@@ -1,14 +1,21 @@
 import React, { useEffect } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import Animated, { SlideInLeft, SlideOutLeft } from 'react-native-reanimated';
+import { useTheme } from '@/theme';
 
-const VARIANTS = {
-  info:    { bg: '#005bc4', text: '#ffffff', border: '#001a3d', icon: 'ℹ️  ' },
-  success: { bg: '#15803d', text: '#ffffff', border: '#001a3d', icon: '✅  ' },
-  error:   { bg: '#dc2626', text: '#ffffff', border: '#001a3d', icon: '⚠️  ' },
-};
+function makeVariants(colors) {
+  return {
+    info:    { bg: colors.snackbarInfo,    text: colors.snackbarText, border: colors.border, icon: 'ℹ️  ' },
+    success: { bg: colors.snackbarSuccess, text: colors.snackbarText, border: colors.border, icon: '✅  ' },
+    error:   { bg: colors.snackbarError,   text: colors.snackbarText, border: colors.border, icon: '⚠️  ' },
+  };
+}
 
 function Snackbar({ message, visible, variant = 'info', onDismiss, bottom = 16 }) {
+  const colors = useTheme();
+  const styles = makeStyles(colors);
+  const VARIANTS = makeVariants(colors);
+
   useEffect(() => {
     if (!visible) return;
     const timer = setTimeout(() => { onDismiss && onDismiss(); }, 3000);
@@ -33,30 +40,32 @@ function Snackbar({ message, visible, variant = 'info', onDismiss, bottom = 16 }
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    borderRadius: 12,
-    borderWidth: 2,
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  message: {
-    fontSize: 14,
-    fontWeight: '700',
-    textAlign: 'center',
-    flexShrink: 1,
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    container: {
+      position: 'absolute',
+      left: 16,
+      right: 16,
+      borderRadius: 12,
+      borderWidth: 2,
+      paddingVertical: 14,
+      paddingHorizontal: 20,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    message: {
+      fontSize: 14,
+      fontWeight: '700',
+      textAlign: 'center',
+      flexShrink: 1,
+    },
+  });
+}
 
 export { Snackbar };
 export default Snackbar;

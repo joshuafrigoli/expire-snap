@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTheme } from '@/theme';
 
 function FilterTabs({ tabs, activeTab, onTabPress }) {
+  const colors = useTheme();
+  const styles = makeStyles(colors);
+
   const [scrollX, setScrollX] = useState(0);
   const [viewW, setViewW] = useState(0);
   const [contentW, setContentW] = useState(0);
@@ -42,7 +46,7 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
 
       {showLeftFade && (
         <LinearGradient
-          colors={['#eff6ff', 'transparent']}
+          colors={[colors.bg, 'transparent']}
           start={{ x: 0, y: 0.5 }}
           end={{ x: 1, y: 0.5 }}
           style={styles.fadeLeft}
@@ -51,7 +55,7 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
       )}
       {showRightFade && (
         <LinearGradient
-          colors={['transparent', '#eff6ff']}
+          colors={['transparent', colors.bg]}
           start={{ x: 0, y: 0.5 }}
           end={{ x: 1, y: 0.5 }}
           style={styles.fadeRight}
@@ -62,42 +66,44 @@ function FilterTabs({ tabs, activeTab, onTabPress }) {
   );
 }
 
-const styles = StyleSheet.create({
-  wrapper: {
-    marginHorizontal: 16,
-    overflow: 'hidden',
-  },
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 4,
-  },
-  pill: {
-    borderRadius: 9999,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginRight: 8,
-  },
-  pillActive: { backgroundColor: '#005bc4' },
-  pillInactive: { backgroundColor: '#e2e8f0' },
-  label: { fontSize: 14 },
-  labelActive: { color: '#ffffff' },
-  labelInactive: { color: '#64748b' },
-  fadeLeft: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    width: 24,
-  },
-  fadeRight: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    bottom: 0,
-    width: 24,
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    wrapper: {
+      marginHorizontal: 16,
+      overflow: 'hidden',
+    },
+    container: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 4,
+    },
+    pill: {
+      borderRadius: 9999,
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      marginRight: 8,
+    },
+    pillActive: { backgroundColor: colors.primary },
+    pillInactive: { backgroundColor: colors.inactive },
+    label: { fontSize: 14 },
+    labelActive: { color: colors.primaryFg },
+    labelInactive: { color: colors.textSecondary },
+    fadeLeft: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: 24,
+    },
+    fadeRight: {
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      bottom: 0,
+      width: 24,
+    },
+  });
+}
 
 export { FilterTabs };
 export default FilterTabs;

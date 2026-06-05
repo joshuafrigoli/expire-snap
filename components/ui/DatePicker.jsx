@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { useTheme } from '@/theme';
 
 function DatePicker({ value, onChange, testID }) {
+  const colors = useTheme();
+  const styles = makeStyles(colors);
   const [show, setShow] = useState(false);
 
   const formatted = value
@@ -37,21 +40,23 @@ function DatePicker({ value, onChange, testID }) {
   );
 }
 
-const styles = StyleSheet.create({
-  trigger: {
-    backgroundColor: '#eff6ff',
-    borderWidth: 2,
-    borderColor: '#bfdbfe',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-  },
-  triggerText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#005bc4',
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    trigger: {
+      backgroundColor: colors.bg,
+      borderWidth: 2,
+      borderColor: colors.borderLight,
+      borderRadius: 8,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+    },
+    triggerText: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: colors.primary,
+    },
+  });
+}
 
 export { DatePicker };
 export default DatePicker;

@@ -1,13 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
-
-const colorMap = {
-  danger: '#dc2626',
-  warning: '#f59e0b',
-  safe: '#22c55e',
-};
+import { useTheme } from '@/theme';
 
 function ProgressBar({ value, max, color, testID, fillTestID }) {
+  const colors = useTheme();
+  const colorMap = makeColorMap(colors);
   const percent = Math.round((value / max) * 100);
 
   return (
@@ -16,7 +13,7 @@ function ProgressBar({ value, max, color, testID, fillTestID }) {
       color={color}
       style={[{
         height: 16,
-        backgroundColor: '#e2e8f0',
+        backgroundColor: colors.inactive,
         borderRadius: 8,
         overflow: 'hidden',
         width: '100%',
@@ -32,6 +29,14 @@ function ProgressBar({ value, max, color, testID, fillTestID }) {
       />
     </View>
   );
+}
+
+function makeColorMap(colors) {
+  return {
+    danger: colors.danger,
+    warning: colors.warningBar,
+    safe: colors.successBar,
+  };
 }
 
 export { ProgressBar };

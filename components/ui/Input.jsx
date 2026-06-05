@@ -1,7 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { TextInput, Animated, StyleSheet } from 'react-native';
+import { useTheme } from '@/theme';
 
 function Input({ placeholder, value, onChangeText, testID, variant = 'text', secureTextEntry }) {
+  const colors = useTheme();
+  const styles = makeStyles(colors);
   const isSecure = variant === 'password' ? true : !!secureTextEntry;
   const [focused, setFocused] = useState(false);
   const borderAnim = useRef(new Animated.Value(0)).current;
@@ -18,7 +21,7 @@ function Input({ placeholder, value, onChangeText, testID, variant = 'text', sec
 
   const borderColor = borderAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#001a3d', '#005bc4'],
+    outputRange: [colors.border, colors.primary],
   });
 
   return (
@@ -26,7 +29,7 @@ function Input({ placeholder, value, onChangeText, testID, variant = 'text', sec
       <TextInput
         testID={testID}
         placeholder={placeholder}
-        placeholderTextColor="#94a3b8"
+        placeholderTextColor={colors.textMuted}
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={isSecure}
@@ -38,23 +41,25 @@ function Input({ placeholder, value, onChangeText, testID, variant = 'text', sec
   );
 }
 
-const styles = StyleSheet.create({
-  wrapper: {
-    borderWidth: 2,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-  },
-  input: {
-    padding: 12,
-    fontSize: 15,
-    color: '#001a3d',
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    wrapper: {
+      borderWidth: 2,
+      borderRadius: 12,
+      backgroundColor: colors.surface,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+    },
+    input: {
+      padding: 12,
+      fontSize: 15,
+      color: colors.textPrimary,
+    },
+  });
+}
 
 export { Input };
 export default Input;

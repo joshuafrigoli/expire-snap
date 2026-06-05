@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '@/theme';
 
 const PROVIDER_CONTENT = {
   openrouter: {
@@ -86,6 +87,8 @@ export default function ProviderInfoScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { i18n } = useTranslation();
+  const colors = useTheme();
+  const styles = makeStyles(colors);
 
   const provider = route.params?.provider ?? 'openrouter';
   const lang = i18n.language?.startsWith('it') ? 'it' : 'en';
@@ -95,7 +98,7 @@ export default function ProviderInfoScreen() {
     <SafeAreaView style={styles.root} testID="screen-provider-info">
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#005bc4" />
+          <Ionicons name="arrow-back" size={24} color={colors.primary} />
         </TouchableOpacity>
         <Text style={styles.title}>{content.title}</Text>
       </View>
@@ -120,7 +123,7 @@ export default function ProviderInfoScreen() {
                   style={styles.linkBtn}
                   onPress={() => Linking.openURL(step.url)}
                 >
-                  <Ionicons name="open-outline" size={14} color="#005bc4" />
+                  <Ionicons name="open-outline" size={14} color={colors.primary} />
                   <Text style={styles.linkBtnText}>{step.urlLabel}</Text>
                 </TouchableOpacity>
               )}
@@ -130,7 +133,7 @@ export default function ProviderInfoScreen() {
 
         {content.tip && (
           <View style={styles.tip}>
-            <Ionicons name="bulb-outline" size={18} color="#92400e" />
+            <Ionicons name="bulb-outline" size={18} color={colors.tipText} />
             <Text style={styles.tipText}>{content.tip}</Text>
           </View>
         )}
@@ -139,125 +142,127 @@ export default function ProviderInfoScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: '#eff6ff',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 12,
-  },
-  backBtn: {
-    padding: 4,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#005bc4',
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 16,
-    gap: 16,
-  },
-  intro: {
-    fontSize: 15,
-    color: '#334155',
-    lineHeight: 22,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    padding: 14,
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-  },
-  step: {
-    flexDirection: 'row',
-    gap: 12,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    padding: 14,
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-  },
-  stepNumber: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#005bc4',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-    marginTop: 1,
-  },
-  stepNumberText: {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 13,
-  },
-  stepBody: {
-    flex: 1,
-    gap: 4,
-  },
-  stepHeading: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#001a3d',
-  },
-  stepText: {
-    fontSize: 14,
-    color: '#475569',
-    lineHeight: 20,
-  },
-  linkBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    marginTop: 6,
-    alignSelf: 'flex-start',
-    backgroundColor: '#eff6ff',
-    borderRadius: 8,
-    borderWidth: 1.5,
-    borderColor: '#005bc4',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  linkBtnText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#005bc4',
-  },
-  tip: {
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'flex-start',
-    backgroundColor: '#fef3c7',
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#92400e',
-    padding: 14,
-  },
-  tipText: {
-    flex: 1,
-    fontSize: 13,
-    color: '#92400e',
-    lineHeight: 19,
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    root: {
+      flex: 1,
+      backgroundColor: colors.bg,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 12,
+    },
+    backBtn: {
+      padding: 4,
+    },
+    title: {
+      fontSize: 20,
+      fontWeight: '700',
+      color: colors.primary,
+      flex: 1,
+    },
+    scrollView: {
+      flex: 1,
+    },
+    scrollContent: {
+      padding: 16,
+      gap: 16,
+    },
+    intro: {
+      fontSize: 15,
+      color: colors.textIntro,
+      lineHeight: 22,
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      borderWidth: 2,
+      borderColor: colors.border,
+      padding: 14,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+    },
+    step: {
+      flexDirection: 'row',
+      gap: 12,
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      borderWidth: 2,
+      borderColor: colors.border,
+      padding: 14,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+    },
+    stepNumber: {
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      backgroundColor: colors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0,
+      marginTop: 1,
+    },
+    stepNumberText: {
+      color: colors.primaryFg,
+      fontWeight: '700',
+      fontSize: 13,
+    },
+    stepBody: {
+      flex: 1,
+      gap: 4,
+    },
+    stepHeading: {
+      fontSize: 15,
+      fontWeight: '700',
+      color: colors.textPrimary,
+    },
+    stepText: {
+      fontSize: 14,
+      color: colors.textBody,
+      lineHeight: 20,
+    },
+    linkBtn: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 5,
+      marginTop: 6,
+      alignSelf: 'flex-start',
+      backgroundColor: colors.bg,
+      borderRadius: 8,
+      borderWidth: 1.5,
+      borderColor: colors.primary,
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+    },
+    linkBtnText: {
+      fontSize: 13,
+      fontWeight: '600',
+      color: colors.primary,
+    },
+    tip: {
+      flexDirection: 'row',
+      gap: 10,
+      alignItems: 'flex-start',
+      backgroundColor: colors.tipBg,
+      borderRadius: 12,
+      borderWidth: 2,
+      borderColor: colors.tipBorder,
+      padding: 14,
+    },
+    tipText: {
+      flex: 1,
+      fontSize: 13,
+      color: colors.tipText,
+      lineHeight: 19,
+    },
+  });
+}

@@ -23,8 +23,11 @@ import { scanReceipt } from '@/utils/scanReceipt';
 import { useSettings } from '@/context/SettingsContext';
 import { ProfileButton } from '@/components/ui';
 import { useSnackbar } from '@/context/SnackbarContext';
+import { useTheme } from '@/theme';
 
 function ScanOverlay({ t }) {
+  const colors = useTheme();
+  const styles = makeStyles(colors);
   const scale = useSharedValue(1);
   const lineY = useSharedValue(0);
 
@@ -68,6 +71,8 @@ export default function ScanScreen() {
   const [scanning, setScanning] = useState(false);
   const [processing, setProcessing] = useState(false);
   const scanningRef = useRef(false);
+  const colors = useTheme();
+  const styles = makeStyles(colors);
 
   const handleCamera = async () => {
     if (scanningRef.current) return;
@@ -187,139 +192,141 @@ export default function ScanScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#eff6ff',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#eff6ff',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 8,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#005bc4',
-    flex: 1,
-  },
-  hint: {
-    fontSize: 14,
-    color: '#64748b',
-    marginBottom: 4,
-    textAlign: 'center',
-  },
-  buttonArea: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-    gap: 12,
-  },
-  buttonPrimary: {
-    backgroundColor: '#005bc4',
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    borderRadius: 9999,
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    alignItems: 'center',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-    width: '100%',
-  },
-  buttonPrimaryText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  buttonSecondary: {
-    backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#005bc4',
-    borderRadius: 9999,
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    alignItems: 'center',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-    width: '100%',
-  },
-  buttonSecondaryText: {
-    color: '#005bc4',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  buttonDisabled: {
-    opacity: 0.4,
-  },
+function makeStyles(colors) {
+  return StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: colors.bg,
+    },
+    container: {
+      flex: 1,
+      backgroundColor: colors.bg,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 8,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: '700',
+      color: colors.primary,
+      flex: 1,
+    },
+    hint: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      marginBottom: 4,
+      textAlign: 'center',
+    },
+    buttonArea: {
+      flex: 1,
+      justifyContent: 'center',
+      paddingHorizontal: 16,
+      gap: 12,
+    },
+    buttonPrimary: {
+      backgroundColor: colors.primary,
+      borderWidth: 2,
+      borderColor: colors.border,
+      borderRadius: 9999,
+      paddingVertical: 16,
+      paddingHorizontal: 40,
+      alignItems: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+      width: '100%',
+    },
+    buttonPrimaryText: {
+      color: colors.primaryFg,
+      fontSize: 16,
+      fontWeight: '700',
+    },
+    buttonSecondary: {
+      backgroundColor: colors.surface,
+      borderWidth: 2,
+      borderColor: colors.primary,
+      borderRadius: 9999,
+      paddingVertical: 16,
+      paddingHorizontal: 40,
+      alignItems: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+      width: '100%',
+    },
+    buttonSecondaryText: {
+      color: colors.primary,
+      fontSize: 16,
+      fontWeight: '700',
+    },
+    buttonDisabled: {
+      opacity: 0.4,
+    },
 
-  // Scanning overlay
-  overlayBackdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,26,61,0.55)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  overlayCard: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    padding: 32,
-    alignItems: 'center',
-    gap: 12,
-    width: 260,
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-  },
-  receiptBox: {
-    width: 80,
-    height: 100,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#bfdbfe',
-    backgroundColor: '#eff6ff',
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 4,
-  },
-  receiptIcon: {
-    fontSize: 40,
-  },
-  scanLine: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 2,
-    backgroundColor: '#005bc4',
-    opacity: 0.8,
-  },
-  overlayTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#001a3d',
-  },
-  overlaySubtitle: {
-    fontSize: 12,
-    color: '#64748b',
-    textAlign: 'center',
-  },
-});
+    // Scanning overlay
+    overlayBackdrop: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: colors.backdrop,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    overlayCard: {
+      backgroundColor: colors.surface,
+      borderRadius: 16,
+      borderWidth: 2,
+      borderColor: colors.border,
+      padding: 32,
+      alignItems: 'center',
+      gap: 12,
+      width: 260,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+    },
+    receiptBox: {
+      width: 80,
+      height: 100,
+      borderRadius: 8,
+      borderWidth: 2,
+      borderColor: colors.borderLight,
+      backgroundColor: colors.bg,
+      overflow: 'hidden',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 4,
+    },
+    receiptIcon: {
+      fontSize: 40,
+    },
+    scanLine: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: 2,
+      backgroundColor: colors.primary,
+      opacity: 0.8,
+    },
+    overlayTitle: {
+      fontSize: 16,
+      fontWeight: '700',
+      color: colors.textPrimary,
+    },
+    overlaySubtitle: {
+      fontSize: 12,
+      color: colors.textSecondary,
+      textAlign: 'center',
+    },
+  });
+}

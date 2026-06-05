@@ -1,7 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet } from 'react-native';
+import { useTheme } from '@/theme';
 
 function Select({ label, value, options = [], onChange, testID }) {
+  const colors = useTheme();
+  const styles = makeStyles(colors);
   const [open, setOpen] = useState(false);
   const borderAnim = useRef(new Animated.Value(0)).current;
   const selectedOption = options.find((opt) => opt.value === value);
@@ -13,7 +16,7 @@ function Select({ label, value, options = [], onChange, testID }) {
 
   const borderColor = borderAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#001a3d', '#005bc4'],
+    outputRange: [colors.border, colors.primary],
   });
 
   function handleSelect(opt) {
@@ -64,77 +67,79 @@ function Select({ label, value, options = [], onChange, testID }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { marginVertical: 4 },
-  label: { fontSize: 14, marginBottom: 4, color: '#64748b', fontWeight: '600' },
-  trigger: {
-    borderWidth: 2,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-  },
-  triggerPressable: {
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  selectedText: { fontSize: 15, color: '#001a3d', fontWeight: '500' },
-  chevron: { fontSize: 16, color: '#005bc4', fontWeight: '700', paddingLeft: 8, transform: [{ scaleX: 1.6 }] },
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0,26,61,0.4)',
-    justifyContent: 'flex-end',
-  },
-  sheet: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    paddingBottom: 40,
-    maxHeight: '70%',
-    minHeight: 180,
-  },
-  handle: {
-    width: 40,
-    height: 4,
-    backgroundColor: '#cbd5e1',
-    borderRadius: 2,
-    alignSelf: 'center',
-    marginTop: 12,
-    marginBottom: 4,
-  },
-  sheetTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#64748b',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
-  },
-  option: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
-  },
-  optionActive: { backgroundColor: '#eff6ff' },
-  optionText: { fontSize: 15, color: '#001a3d' },
-  optionTextActive: { fontWeight: '700', color: '#005bc4' },
-  check: { fontSize: 16, color: '#005bc4', fontWeight: '700' },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    container: { marginVertical: 4 },
+    label: { fontSize: 14, marginBottom: 4, color: colors.textSecondary, fontWeight: '600' },
+    trigger: {
+      borderWidth: 2,
+      borderRadius: 12,
+      backgroundColor: colors.surface,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+    },
+    triggerPressable: {
+      paddingVertical: 12,
+      paddingHorizontal: 14,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    selectedText: { fontSize: 15, color: colors.textPrimary, fontWeight: '500' },
+    chevron: { fontSize: 16, color: colors.primary, fontWeight: '700', paddingLeft: 8, transform: [{ scaleX: 1.6 }] },
+    backdrop: {
+      flex: 1,
+      backgroundColor: colors.backdrop,
+      justifyContent: 'flex-end',
+    },
+    sheet: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: 24,
+      borderTopRightRadius: 24,
+      borderWidth: 2,
+      borderColor: colors.border,
+      paddingBottom: 40,
+      maxHeight: '70%',
+      minHeight: 180,
+    },
+    handle: {
+      width: 40,
+      height: 4,
+      backgroundColor: colors.handle,
+      borderRadius: 2,
+      alignSelf: 'center',
+      marginTop: 12,
+      marginBottom: 4,
+    },
+    sheetTitle: {
+      fontSize: 13,
+      fontWeight: '700',
+      color: colors.textSecondary,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.inactive,
+    },
+    option: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      paddingVertical: 14,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.divider,
+    },
+    optionActive: { backgroundColor: colors.bg },
+    optionText: { fontSize: 15, color: colors.textPrimary },
+    optionTextActive: { fontWeight: '700', color: colors.primary },
+    check: { fontSize: 16, color: colors.primary, fontWeight: '700' },
+  });
+}
 
 export { Select };
 export default Select;

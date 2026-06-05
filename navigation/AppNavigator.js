@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { SettingsProvider, useSettings } from '@/context/SettingsContext';
 import { InventoryProvider } from '@/context/InventoryContext';
+import { useTheme } from '@/theme';
 
 import DashboardScreen from '@/screens/DashboardScreen';
 import ScanScreen from '@/screens/ScanScreen';
@@ -27,6 +28,7 @@ const TAB_ICONS = { Home: 'home', Scan: 'scan', Fridge: 'nutrition', Settings: '
 
 function BottomTabsNavigator() {
   const { t } = useTranslation();
+  const colors = useTheme();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -34,9 +36,9 @@ function BottomTabsNavigator() {
         tabBarIcon: ({ color, size }) => (
           <Ionicons name={TAB_ICONS[route.name]} size={size} color={color} />
         ),
-        tabBarActiveTintColor: '#005bc4',
-        tabBarInactiveTintColor: '#64748b',
-        tabBarStyle: { borderTopWidth: 2, borderTopColor: '#001a3d' },
+        tabBarActiveTintColor: colors.tabActive,
+        tabBarInactiveTintColor: colors.tabInactive,
+        tabBarStyle: { borderTopWidth: 2, borderTopColor: colors.tabBorder },
       })}
     >
       <Tab.Screen name="Home" component={DashboardScreen} options={{ tabBarLabel: t('nav.home') }} />
