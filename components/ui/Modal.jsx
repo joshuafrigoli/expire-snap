@@ -1,23 +1,32 @@
-import React from 'react';
-import { Modal as RNModal, View, StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import React, { useRef, useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { usePortal } from '@/context/PortalContext';
 import { useTheme } from '@/theme';
+
+let _seq = 0;
 
 function Modal({ visible, children }) {
   const colors = useTheme();
-  const styles = makeStyles(colors);
+  const portal = usePortal();
+  const key = useRef(`modal-${_seq++}`).current;
 
-  if (!visible) return null;
-
-  return (
-    <RNModal transparent animationType="fade" visible={visible}>
-      <View style={styles.overlay}>
-        <View style={styles.container}>
+  useEffect(() => {
+    if (!visible) {
+      portal.unmount(key);
+      return;
+    }
+    const s = makeStyles(colors);
+    portal.mount(key, (
+      <View key={key} style={s.overlay}>
+        <View style={s.container}>
           {children}
         </View>
       </View>
-    </RNModal>
-  );
+    ));
+    return () => portal.unmount(key);
+  }, [visible, colors]);
+
+  return null;
 }
 
 function makeStyles(colors) {
