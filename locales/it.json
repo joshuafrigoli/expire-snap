@@ -58,6 +58,7 @@
     "aiProvider": "Provider AI",
     "apiKey": "Chiave API",
     "apiKeyPlaceholder": "Inserisci la chiave API",
+    "pasteApiKey": "Incolla dagli appunti",
     "autoDelete": "Elimina dati automaticamente dopo",
     "language": "Lingua",
     "theme": "Tema",

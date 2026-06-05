@@ -58,6 +58,7 @@
     "aiProvider": "AI Provider",
     "apiKey": "API Key",
     "apiKeyPlaceholder": "Enter API key",
+    "pasteApiKey": "Paste from clipboard",
     "autoDelete": "Auto-Delete Data After",
     "language": "Language",
     "theme": "Theme",
