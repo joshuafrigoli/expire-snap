@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useTranslation } from 'react-i18next';
 import Animated, {
   useSharedValue,
@@ -64,7 +63,6 @@ export default function ScanScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { settings } = useSettings();
-  const tabBarHeight = useBottomTabBarHeight();
   const [scanning, setScanning] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -188,7 +186,6 @@ export default function ScanScreen() {
           visible={!!snackbarMessage}
           onDismiss={() => setSnackbarMessage('')}
           variant="error"
-          bottomOffset={tabBarHeight}
         />
       </View>
     </SafeAreaView>

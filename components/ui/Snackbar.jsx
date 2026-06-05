@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Modal, View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import Animated, { SlideInLeft, SlideOutLeft } from 'react-native-reanimated';
 
 const VARIANTS = {
@@ -9,8 +10,9 @@ const VARIANTS = {
   error:   { bg: '#dc2626', text: '#ffffff', border: '#001a3d', icon: '⚠️  ' },
 };
 
-function Snackbar({ message, visible, variant = 'info', onDismiss, bottomOffset = 0 }) {
+function Snackbar({ message, visible, variant = 'info', onDismiss }) {
   const insets = useSafeAreaInsets();
+  const tabBarHeight = React.useContext(BottomTabBarHeightContext);
 
   useEffect(() => {
     if (!visible) return;
@@ -21,13 +23,11 @@ function Snackbar({ message, visible, variant = 'info', onDismiss, bottomOffset 
   if (!visible) return null;
 
   const v = VARIANTS[variant] || VARIANTS.info;
+  const bottomPad = (tabBarHeight ?? insets.bottom) + 16;
 
   return (
     <Modal transparent visible animationType="none" statusBarTranslucent>
-      <View
-        style={[styles.overlay, { paddingBottom: (bottomOffset || insets.bottom) + 16 }]}
-        pointerEvents="box-none"
-      >
+      <View style={[styles.overlay, { paddingBottom: bottomPad }]} pointerEvents="box-none">
         <Animated.View
           entering={SlideInLeft.duration(280)}
           exiting={SlideOutLeft.duration(250)}
