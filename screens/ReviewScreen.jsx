@@ -66,7 +66,7 @@ export default function ReviewScreen() {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>{t('review.title')}</Text>
-          <Text style={styles.subtitle}>{items.length} {t('days.unit').replace('days', 'items').replace('giorni', 'prodotti')}</Text>
+          <Text style={styles.subtitle}>{items.length} {items.length === 1 ? 'item' : 'items'}</Text>
         </View>
 
         <FlatList
@@ -115,28 +115,26 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 8,
-    borderBottomWidth: 2,
-    borderBottomColor: '#bfdbfe',
+    paddingBottom: 4,
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
     color: '#005bc4',
+    marginBottom: 2,
   },
   subtitle: {
     fontSize: 13,
     color: '#64748b',
-    marginTop: 2,
   },
   list: {
     padding: 16,
     gap: 12,
   },
   footer: {
-    padding: 16,
-    borderTopWidth: 2,
-    borderTopColor: '#bfdbfe',
+    paddingHorizontal: 16,
+    paddingBottom: 8,
+    paddingTop: 8,
     backgroundColor: '#eff6ff',
   },
   confirmBtn: {

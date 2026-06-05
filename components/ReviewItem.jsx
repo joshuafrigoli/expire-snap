@@ -9,7 +9,7 @@ export default function ReviewItem({ item, onChange, onDelete }) {
 
   return (
     <View style={styles.card}>
-      <View style={styles.row}>
+      <View style={styles.topRow}>
         <TextInput
           testID={"review-item-name-" + item.id}
           style={styles.nameInput}
@@ -26,17 +26,25 @@ export default function ReviewItem({ item, onChange, onDelete }) {
         </Pressable>
       </View>
 
-      <View style={styles.dateRow}>
-        <Text style={styles.dateLabel}>📅</Text>
-        <DatePicker
-          testID={"review-item-date-" + item.id}
-          value={dateValue}
-          onChange={(event, selectedDate) => {
-            if (selectedDate) {
-              onChange(item.id, { estimated_expiry_date: selectedDate.toISOString().split('T')[0] });
-            }
-          }}
-        />
+      <View style={styles.bottomRow}>
+        {item.category ? (
+          <View style={styles.categoryBadge}>
+            <Text style={styles.categoryText}>{item.category}</Text>
+          </View>
+        ) : null}
+
+        <View style={styles.dateRow}>
+          <Text style={styles.dateLabel}>📅</Text>
+          <DatePicker
+            testID={"review-item-date-" + item.id}
+            value={dateValue}
+            onChange={(event, selectedDate) => {
+              if (selectedDate) {
+                onChange(item.id, { estimated_expiry_date: selectedDate.toISOString().split('T')[0] });
+              }
+            }}
+          />
+        </View>
       </View>
 
       {item.confidence_days != null && (
@@ -55,14 +63,14 @@ const styles = StyleSheet.create({
     borderColor: '#001a3d',
     borderRadius: 12,
     padding: 12,
-    gap: 8,
+    gap: 10,
     shadowColor: '#001a3d',
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 0,
     elevation: 4,
   },
-  row: {
+  topRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
@@ -94,17 +102,37 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
   },
+  bottomRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  categoryBadge: {
+    backgroundColor: '#dbeafe',
+    borderWidth: 2,
+    borderColor: '#93c5fd',
+    borderRadius: 9999,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+  },
+  categoryText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#005bc4',
+    textTransform: 'uppercase',
+  },
   dateRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 6,
   },
   dateLabel: {
-    fontSize: 16,
+    fontSize: 14,
   },
   confidence: {
-    fontSize: 12,
-    color: '#64748b',
+    fontSize: 11,
+    color: '#94a3b8',
     fontStyle: 'italic',
   },
 });
