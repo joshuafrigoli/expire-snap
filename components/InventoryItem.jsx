@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Badge, ProgressBar } from '@/components/ui';
+import { CATEGORY_I18N_KEY } from '@/constants/categories';
 
 function computeDaysLeft(estimated_expiry_date) {
   const today = new Date();
@@ -34,7 +35,7 @@ export function InventoryItem({ id, name, category, estimated_expiry_date, onCon
       {/* Row 1: Name + Category Badge */}
       <View style={styles.row1}>
         <Text style={styles.name}>{name}</Text>
-        <Badge label={t(`categories.${category}`, { defaultValue: category })} variant={progressColor} />
+        <Badge label={t(CATEGORY_I18N_KEY[category] ?? `categories.${category}`, { defaultValue: category })} variant={progressColor} />
       </View>
 
       {/* Row 2: Progress bar */}

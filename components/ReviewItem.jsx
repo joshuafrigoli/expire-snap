@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TextInput, Text, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import DatePicker from '@/components/ui/DatePicker';
+import { CATEGORY_I18N_KEY } from '@/constants/categories';
 
 export default function ReviewItem({ item, onChange, onDelete }) {
   const { t } = useTranslation();
@@ -29,7 +30,7 @@ export default function ReviewItem({ item, onChange, onDelete }) {
       <View style={styles.bottomRow}>
         {item.category ? (
           <View style={styles.categoryBadge}>
-            <Text style={styles.categoryText}>{t(`categories.${item.category}`, { defaultValue: item.category })}</Text>
+            <Text style={styles.categoryText}>{t(CATEGORY_I18N_KEY[item.category] ?? `categories.${item.category}`, { defaultValue: item.category })}</Text>
           </View>
         ) : null}
 
