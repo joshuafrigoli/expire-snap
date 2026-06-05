@@ -70,7 +70,7 @@ export default function ProfileScreen() {
             >
               <Text style={styles.saveBtnText}>{t('actions.save')}</Text>
             </Pressable>
-          ) : <View style={styles.saveBtn} />}
+          ) : <View style={styles.saveBtnSpacer} />}
         </View>
 
         <ScrollView
@@ -223,12 +223,13 @@ const styles = StyleSheet.create({
   },
   backBtnText: { fontSize: 18, fontWeight: '700', color: '#001a3d' },
   pageTitle: { fontSize: 18, fontWeight: '700', color: '#005bc4' },
+  saveBtnSpacer: { width: 72 },
   saveBtn: {
-    width: 72,
+    paddingHorizontal: 16,
     height: 36,
     borderRadius: 9999,
     borderWidth: 2,
-    borderColor: '#005bc4',
+    borderColor: '#001a3d',
     backgroundColor: '#005bc4',
     alignItems: 'center',
     justifyContent: 'center',
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     shadowRadius: 0,
     elevation: 3,
   },
-  saveBtnText: { fontSize: 13, fontWeight: '700', color: '#fff' },
+  saveBtnText: { fontSize: 14, fontWeight: '700', color: '#fff' },
 
   scrollContent: { padding: 16, gap: 20 },
 
@@ -356,28 +357,30 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderWidth: 2,
     borderColor: '#001a3d',
-    borderRadius: 12,
-    padding: 14,
+    borderRadius: 9999,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     alignItems: 'center',
     shadowColor: '#001a3d',
-    shadowOffset: { width: 3, height: 3 },
+    shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 0,
-    elevation: 3,
+    elevation: 4,
   },
   outlineBtnText: { fontSize: 15, fontWeight: '700', color: '#005bc4' },
   primaryBtn: {
     backgroundColor: '#005bc4',
     borderWidth: 2,
     borderColor: '#001a3d',
-    borderRadius: 12,
-    padding: 14,
+    borderRadius: 9999,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     alignItems: 'center',
     shadowColor: '#001a3d',
-    shadowOffset: { width: 3, height: 3 },
+    shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 0,
-    elevation: 3,
+    elevation: 4,
   },
   primaryBtnText: { fontSize: 15, fontWeight: '700', color: '#fff' },
 });
