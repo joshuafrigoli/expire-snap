@@ -34,7 +34,7 @@ export function InventoryItem({ id, name, category, estimated_expiry_date, onCon
       {/* Row 1: Name + Category Badge */}
       <View style={styles.row1}>
         <Text style={styles.name}>{name}</Text>
-        <Badge label={category} variant={progressColor} />
+        <Badge label={t(`categories.${category}`, { defaultValue: category })} variant={progressColor} />
       </View>
 
       {/* Row 2: Progress bar */}

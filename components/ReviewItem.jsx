@@ -29,7 +29,7 @@ export default function ReviewItem({ item, onChange, onDelete }) {
       <View style={styles.bottomRow}>
         {item.category ? (
           <View style={styles.categoryBadge}>
-            <Text style={styles.categoryText}>{item.category}</Text>
+            <Text style={styles.categoryText}>{t(`categories.${item.category}`, { defaultValue: item.category })}</Text>
           </View>
         ) : null}
 
