@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Modal, View, Text, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { SlideInLeft, SlideOutLeft } from 'react-native-reanimated';
 
 const VARIANTS = {
@@ -9,6 +10,8 @@ const VARIANTS = {
 };
 
 function Snackbar({ message, visible, variant = 'info', onDismiss }) {
+  const insets = useSafeAreaInsets();
+
   useEffect(() => {
     if (!visible) return;
     const timer = setTimeout(() => { onDismiss && onDismiss(); }, 3000);
@@ -20,24 +23,32 @@ function Snackbar({ message, visible, variant = 'info', onDismiss }) {
   const v = VARIANTS[variant] || VARIANTS.info;
 
   return (
-    <Animated.View
-      entering={SlideInLeft.duration(280)}
-      exiting={SlideOutLeft.duration(250)}
-      style={[styles.container, { backgroundColor: v.bg, borderColor: v.border }]}
-    >
-      <Text testID="snackbar-message" style={[styles.message, { color: v.text }]}>
-        {v.icon + message}
-      </Text>
-    </Animated.View>
+    <Modal transparent visible animationType="none" statusBarTranslucent>
+      <View
+        style={[styles.overlay, { paddingBottom: insets.bottom + 16 }]}
+        pointerEvents="box-none"
+      >
+        <Animated.View
+          entering={SlideInLeft.duration(280)}
+          exiting={SlideOutLeft.duration(250)}
+          style={[styles.container, { backgroundColor: v.bg, borderColor: v.border }]}
+        >
+          <Text testID="snackbar-message" style={[styles.message, { color: v.text }]}>
+            {v.icon + message}
+          </Text>
+        </Animated.View>
+      </View>
+    </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+  },
   container: {
-    position: 'absolute',
-    bottom: 0,
-    left: 16,
-    right: 16,
     borderRadius: 12,
     borderWidth: 2,
     paddingVertical: 14,
