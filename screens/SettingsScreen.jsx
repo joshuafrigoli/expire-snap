@@ -28,7 +28,7 @@ export default function SettingsScreen() {
       >
         <View style={styles.section}>
           <View style={styles.labelRow}>
-            <Text style={styles.sectionLabel}>{t('settings.aiProvider')}</Text>
+            <Text style={[styles.sectionLabel, { marginBottom: 0 }]}>{t('settings.aiProvider')}</Text>
             <TouchableOpacity
               testID="settings-provider-info-btn"
               onPress={() => navigation.navigate('ProviderInfo', { provider: settings.aiProvider })}
