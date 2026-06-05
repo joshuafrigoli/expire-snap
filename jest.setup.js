@@ -15,13 +15,15 @@ jest.mock('react-native-safe-area-context', () => {
 
 jest.mock('@react-navigation/native', () => {
   const React = require('react');
+  const ref = { current: null, isReady: () => false, canGoBack: () => false, goBack: jest.fn() };
   return {
     NavigationContainer: ({ children }) => React.createElement(React.Fragment, null, children),
     useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn(), replace: jest.fn() }),
     useRoute: () => ({ params: {} }),
     useFocusEffect: () => {},
     useIsFocused: () => true,
-    createNavigationContainerRef: () => ({ current: null }),
+    createNavigationContainerRef: () => ref,
+    useNavigationContainerRef: () => ref,
   };
 });
 

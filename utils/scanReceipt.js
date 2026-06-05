@@ -156,9 +156,13 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
     text = data.content[0].text;
   }
 
+  console.log('[scanReceipt] raw text:', text);
+
+  const cleaned = text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+
   let parsed;
   try {
-    parsed = JSON.parse(text);
+    parsed = JSON.parse(cleaned);
   } catch {
     throw new Error('Invalid response from AI: could not parse JSON');
   }

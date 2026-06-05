@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
-import { NavigationContainer } from '@react-navigation/native';
+import { BackHandler } from 'react-native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -48,13 +49,26 @@ function BottomTabsNavigator() {
 function AppContent() {
   const { settings } = useSettings();
   const hasProfile = !!(settings?.profile?.name?.trim());
+  const navRef = useNavigationContainerRef();
 
   useEffect(() => {
     Notifications.requestPermissionsAsync();
   }, []);
 
+  useEffect(() => {
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (navRef.isReady() && navRef.canGoBack()) {
+        navRef.goBack();
+        return true;
+      }
+      BackHandler.exitApp();
+      return true;
+    });
+    return () => sub.remove();
+  }, [navRef]);
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navRef}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!hasProfile && <Stack.Screen name="Onboarding" component={OnboardingScreen} />}
         {hasProfile && <Stack.Screen name="BottomTabs" component={BottomTabsNavigator} />}
