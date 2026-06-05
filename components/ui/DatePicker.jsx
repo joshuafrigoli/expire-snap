@@ -1,24 +1,54 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import React, { useState } from 'react';
+import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 function DatePicker({ value, onChange, testID }) {
+  const [show, setShow] = useState(false);
+
+  const formatted = value
+    ? value.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })
+    : '—';
+
+  function handleChange(event, selectedDate) {
+    setShow(Platform.OS === 'ios');
+    onChange(event, selectedDate);
+  }
+
   return (
-    <View style={styles.container}>
-      <RNDateTimePicker
+    <View>
+      <Pressable
         testID={testID}
-        value={value}
-        onChange={onChange}
-        mode="date"
-      />
+        onPress={() => setShow(true)}
+        style={styles.trigger}
+      >
+        <Text style={styles.triggerText}>{formatted}</Text>
+      </Pressable>
+
+      {show && (
+        <RNDateTimePicker
+          testID={testID + '-picker'}
+          value={value ?? new Date()}
+          onChange={handleChange}
+          mode="date"
+        />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginVertical: 4,
+  trigger: {
+    backgroundColor: '#eff6ff',
+    borderWidth: 2,
+    borderColor: '#bfdbfe',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+  triggerText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#005bc4',
   },
 });
 
