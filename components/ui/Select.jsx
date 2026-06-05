@@ -1,12 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme';
 
 function Select({ label, value, options = [], onChange, testID }) {
   const colors = useTheme();
-  const insets = useSafeAreaInsets();
-  const styles = makeStyles(colors, insets.bottom);
+  const styles = makeStyles(colors);
   const [open, setOpen] = useState(false);
   const borderAnim = useRef(new Animated.Value(0)).current;
   const selectedOption = options.find((opt) => opt.value === value);
@@ -41,40 +39,35 @@ function Select({ label, value, options = [], onChange, testID }) {
         visible={open}
         transparent
         animationType="fade"
-        statusBarTranslucent
         onRequestClose={() => setOpen(false)}
       >
-        {/* This View sets an explicit background so the Dialog window's React root
-            view doesn't show its default white in the system nav bar area. */}
-        <View style={styles.modalRoot}>
-          <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
-            <View style={styles.sheet}>
-              <View style={styles.handle} />
-              {label ? <Text style={styles.sheetTitle}>{label}</Text> : null}
-              <FlatList
-                data={options}
-                keyExtractor={(o) => o.value}
-                renderItem={({ item }) => (
-                  <Pressable
-                    style={[styles.option, item.value === value && styles.optionActive]}
-                    onPress={() => handleSelect(item)}
-                  >
-                    <Text style={[styles.optionText, item.value === value && styles.optionTextActive]}>
-                      {item.label}
-                    </Text>
-                    {item.value === value && <Text style={styles.check}>✓</Text>}
-                  </Pressable>
-                )}
-              />
-            </View>
-          </Pressable>
-        </View>
+        <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
+          <View style={styles.sheet}>
+            <View style={styles.handle} />
+            {label ? <Text style={styles.sheetTitle}>{label}</Text> : null}
+            <FlatList
+              data={options}
+              keyExtractor={(o) => o.value}
+              renderItem={({ item }) => (
+                <Pressable
+                  style={[styles.option, item.value === value && styles.optionActive]}
+                  onPress={() => handleSelect(item)}
+                >
+                  <Text style={[styles.optionText, item.value === value && styles.optionTextActive]}>
+                    {item.label}
+                  </Text>
+                  {item.value === value && <Text style={styles.check}>✓</Text>}
+                </Pressable>
+              )}
+            />
+          </View>
+        </Pressable>
       </Modal>
     </View>
   );
 }
 
-function makeStyles(colors, bottomInset) {
+function makeStyles(colors) {
   return StyleSheet.create({
     container: { marginVertical: 4 },
     label: { fontSize: 14, marginBottom: 4, color: colors.textSecondary, fontWeight: '600' },
@@ -97,13 +90,6 @@ function makeStyles(colors, bottomInset) {
     },
     selectedText: { fontSize: 15, color: colors.textPrimary, fontWeight: '500' },
     chevron: { fontSize: 16, color: colors.primary, fontWeight: '700', paddingLeft: 8, transform: [{ scaleX: 1.6 }] },
-    modalRoot: {
-      flex: 1,
-      // Covers the Dialog window's React root view with surface color.
-      // In edge-to-edge mode this extends under the nav bar, preventing the
-      // default white root-view background from showing through the transparent nav bar.
-      backgroundColor: colors.surface,
-    },
     backdrop: {
       flex: 1,
       backgroundColor: colors.backdrop,
@@ -115,7 +101,7 @@ function makeStyles(colors, bottomInset) {
       borderTopRightRadius: 24,
       borderWidth: 2,
       borderColor: colors.border,
-      paddingBottom: Math.max(bottomInset, 24) + 16,
+      paddingBottom: 40,
       maxHeight: '70%',
       minHeight: 180,
     },
