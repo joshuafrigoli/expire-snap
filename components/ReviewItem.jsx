@@ -3,9 +3,12 @@ import { View, TextInput, Text, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import DatePicker from '@/components/ui/DatePicker';
 import { CATEGORY_I18N_KEY } from '@/constants/categories';
+import { useTheme } from '@/theme';
 
 export default function ReviewItem({ item, onChange, onDelete }) {
   const { t } = useTranslation();
+  const colors = useTheme();
+  const styles = makeStyles(colors);
   const dateValue = item.estimated_expiry_date ? new Date(item.estimated_expiry_date) : null;
 
   return (
@@ -16,7 +19,7 @@ export default function ReviewItem({ item, onChange, onDelete }) {
           style={styles.nameInput}
           value={item.name}
           onChangeText={(text) => onChange(item.id, { name: text })}
-          placeholderTextColor="#94a3b8"
+          placeholderTextColor={colors.textMuted}
         />
         <Pressable
           testID={"review-item-delete-" + item.id}
@@ -57,83 +60,85 @@ export default function ReviewItem({ item, onChange, onDelete }) {
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    borderRadius: 12,
-    padding: 12,
-    gap: 10,
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
-  },
-  topRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  nameInput: {
-    flex: 1,
-    backgroundColor: '#eff6ff',
-    borderWidth: 2,
-    borderColor: '#bfdbfe',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#001a3d',
-  },
-  deleteBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 9999,
-    borderWidth: 2,
-    borderColor: '#dc2626',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  deleteBtnText: {
-    color: '#dc2626',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  bottomRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 8,
-  },
-  categoryBadge: {
-    backgroundColor: '#dbeafe',
-    borderWidth: 2,
-    borderColor: '#93c5fd',
-    borderRadius: 9999,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-  },
-  categoryText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#005bc4',
-    textTransform: 'uppercase',
-  },
-  dateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  dateLabel: {
-    fontSize: 14,
-  },
-  confidence: {
-    fontSize: 11,
-    color: '#94a3b8',
-    fontStyle: 'italic',
-  },
-});
+function makeStyles(colors) {
+  return StyleSheet.create({
+    card: {
+      backgroundColor: colors.surface,
+      borderWidth: 2,
+      borderColor: colors.border,
+      borderRadius: 12,
+      padding: 12,
+      gap: 10,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+    },
+    topRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    nameInput: {
+      flex: 1,
+      backgroundColor: colors.bg,
+      borderWidth: 2,
+      borderColor: colors.borderLight,
+      borderRadius: 8,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+      fontSize: 15,
+      fontWeight: '600',
+      color: colors.textPrimary,
+    },
+    deleteBtn: {
+      width: 36,
+      height: 36,
+      borderRadius: 9999,
+      borderWidth: 2,
+      borderColor: colors.danger,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    deleteBtnText: {
+      color: colors.danger,
+      fontSize: 14,
+      fontWeight: '700',
+    },
+    bottomRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 8,
+    },
+    categoryBadge: {
+      backgroundColor: colors.surfaceAlt2,
+      borderWidth: 2,
+      borderColor: colors.borderLight,
+      borderRadius: 9999,
+      paddingHorizontal: 10,
+      paddingVertical: 3,
+    },
+    categoryText: {
+      fontSize: 11,
+      fontWeight: '700',
+      color: colors.primary,
+      textTransform: 'uppercase',
+    },
+    dateRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+    },
+    dateLabel: {
+      fontSize: 14,
+    },
+    confidence: {
+      fontSize: 11,
+      color: colors.textMuted,
+      fontStyle: 'italic',
+    },
+  });
+}

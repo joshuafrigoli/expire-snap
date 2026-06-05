@@ -1,0 +1,5 @@
+1 fridge view items are white hardcoded dont follow theme
+2 select listbox makes phone bottom bar white
+3 give project as completed and find incoherences in PLAN.md, CLAUDE.md, README.md and fix them 
+4 remove all unneeded files from github
+5 update SAD file
