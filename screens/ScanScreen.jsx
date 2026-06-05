@@ -74,21 +74,28 @@ export default function ScanScreen() {
     scanningRef.current = true;
     setScanning(true);
     try {
+      console.log('[Scan] requesting camera permission...');
       const { granted } = await requestCameraPermissionsAsync();
+      console.log('[Scan] camera permission:', granted);
       if (!granted) { setSnackbarMessage(t('errors.permissionDenied')); return; }
       const result = await launchCameraAsync({ mediaTypes: 'Images', quality: 1 });
-      if (result.canceled || !result.assets?.[0]) return;
+      if (result.canceled || !result.assets?.[0]) { console.log('[Scan] camera cancelled'); return; }
       setProcessing(true);
       const asset = result.assets[0];
+      console.log('[Scan] image picked — mime:', asset.mimeType, 'size:', asset.fileSize, 'bytes');
       validateImage({ mimeType: asset.mimeType, fileSize: asset.fileSize });
       const { base64 } = await compressImage(asset.uri);
+      console.log('[Scan] compressed — base64 length:', base64?.length);
+      console.log('[Scan] calling AI provider:', settings.aiProvider, '— key length:', settings.apiKey?.length);
       const scanResult = await scanReceipt(base64, settings.aiProvider, settings.apiKey);
+      console.log('[Scan] AI response — items:', scanResult.items.length, JSON.stringify(scanResult.items, null, 2));
       if (!scanResult.items.length) {
         setSnackbarMessage(t('errors.noItemsFound'));
         return;
       }
       navigation.navigate('Review', { scanResult });
     } catch (err) {
+      console.error('[Scan] error:', err.name, err.message);
       if (err.name === 'RateLimitError') {
         setSnackbarMessage(err.message);
       } else {
@@ -107,21 +114,28 @@ export default function ScanScreen() {
     scanningRef.current = true;
     setScanning(true);
     try {
+      console.log('[Scan] requesting media library permission...');
       const { granted } = await requestMediaLibraryPermissionsAsync();
+      console.log('[Scan] media library permission:', granted);
       if (!granted) { setSnackbarMessage(t('errors.permissionDenied')); return; }
       const result = await launchImageLibraryAsync({ mediaTypes: 'Images', quality: 1 });
-      if (result.canceled || !result.assets?.[0]) return;
+      if (result.canceled || !result.assets?.[0]) { console.log('[Scan] gallery cancelled'); return; }
       setProcessing(true);
       const asset = result.assets[0];
+      console.log('[Scan] image picked — mime:', asset.mimeType, 'size:', asset.fileSize, 'bytes');
       validateImage({ mimeType: asset.mimeType, fileSize: asset.fileSize });
       const { base64 } = await compressImage(asset.uri);
+      console.log('[Scan] compressed — base64 length:', base64?.length);
+      console.log('[Scan] calling AI provider:', settings.aiProvider, '— key length:', settings.apiKey?.length);
       const scanResult = await scanReceipt(base64, settings.aiProvider, settings.apiKey);
+      console.log('[Scan] AI response — items:', scanResult.items.length, JSON.stringify(scanResult.items, null, 2));
       if (!scanResult.items.length) {
         setSnackbarMessage(t('errors.noItemsFound'));
         return;
       }
       navigation.navigate('Review', { scanResult });
     } catch (err) {
+      console.error('[Scan] error:', err.name, err.message);
       if (err.name === 'RateLimitError') {
         setSnackbarMessage(err.message);
       } else {
