@@ -108,7 +108,7 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
         'X-Title': 'ExpireSnap',
       },
       body: JSON.stringify({
-        model: 'qwen/qwen2.5-vl-7b-instruct:free',
+        model: 'google/gemini-2.5-flash:free',
         messages: [
           {
             role: 'user',
