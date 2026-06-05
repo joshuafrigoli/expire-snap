@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
-import { Card, Select, DatePicker, FloatingActionButton, FilterTabs, Spinner, Modal, SkeletonBlock } from '@/components/ui';
+import { Card, Select, DatePicker, FloatingActionButton, FilterTabs, Spinner, SkeletonBlock } from '@/components/ui';
 
 describe('Card', () => {
   it('renders children without crash', () => {
@@ -65,17 +65,6 @@ describe('Spinner', () => {
   it('renders without crash', () => {
     const { getByTestId } = render(<Spinner testID="spinner" />);
     expect(getByTestId('spinner')).toBeTruthy();
-  });
-});
-
-describe('Modal', () => {
-  it('renders children when visible', () => {
-    const { getByText } = render(<Modal visible><Text>Loading</Text></Modal>);
-    expect(getByText('Loading')).toBeTruthy();
-  });
-  it('does not render children when not visible', () => {
-    const { queryByText } = render(<Modal visible={false}><Text>Hidden</Text></Modal>);
-    expect(queryByText('Hidden')).toBeNull();
   });
 });
 

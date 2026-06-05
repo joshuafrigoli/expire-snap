@@ -7,7 +7,6 @@ export { default as DatePicker } from './DatePicker';
 export { default as FilterTabs } from './FilterTabs';
 export { default as FloatingActionButton } from './FloatingActionButton';
 export { default as Input } from './Input';
-export { default as Modal } from './Modal';
 export { default as ProfileButton } from './ProfileButton';
 export { default as ProgressBar } from './ProgressBar';
 export { default as Select } from './Select';
