@@ -18,62 +18,66 @@ const PROVIDER_CONTENT = {
     en: {
       title: 'How to set up OpenRouter',
       intro:
-        'OpenRouter gives you access to many AI models with one account. You only pay for what you use — scanning a receipt costs less than $0.01.',
+        'OpenRouter gives you access to 24+ free AI models — no credit card needed. For premium models, you only pay for what you use (a receipt scan costs less than $0.01).',
       steps: [
         {
           heading: 'Create a free account',
-          body: 'Go to openrouter.ai and sign up. No credit card required to start.',
+          body: 'Go to openrouter.ai and sign up. No credit card required.',
           url: 'https://openrouter.ai',
           urlLabel: 'Open openrouter.ai',
         },
         {
-          heading: 'Add a small credit',
-          body: 'Once logged in, click "Credits" and add a few dollars. $5 will last months of normal use.',
-        },
-        {
-          heading: 'Create an API key',
-          body: 'Click "Keys" in the left menu, then "Create Key". Give it any name — e.g. "ExpireSnap".',
+          heading: 'Go to Settings → Keys',
+          body: 'After logging in, open openrouter.ai/settings/keys and click "Create key". Give it any name — e.g. "ExpireSnap".',
+          url: 'https://openrouter.ai/settings/keys',
+          urlLabel: 'Open API Keys page',
         },
         {
           heading: 'Copy your key',
-          body: 'Your key starts with "sk-or-v1-…". Copy the whole thing.',
+          body: 'Your key starts with "sk-or-v1-…". Copy the whole thing — it\'s only shown once.',
         },
         {
           heading: 'Paste it in Settings',
           body: 'Go back to Settings and paste the key in the "API Key" field.',
         },
+        {
+          heading: 'Optional: add credits for premium models',
+          body: 'Free models work great for most receipts. If you want faster or more accurate models, add a few dollars under Credits. $5 lasts months.',
+        },
       ],
-      tip: 'Recommended model: google/gemini-flash-1.5 (fast and cheap). You can set this in openrouter.ai under your account preferences, or the app will pick a good default.',
+      tip: 'Free models are available right away — no credits needed. The app automatically picks a capable free model for receipt scanning.',
     },
     it: {
       title: 'Come configurare OpenRouter',
       intro:
-        'OpenRouter ti dà accesso a molti modelli AI con un solo account. Paghi solo ciò che usi — scansionare uno scontrino costa meno di $0,01.',
+        'OpenRouter ti dà accesso a 24+ modelli AI gratuiti — nessuna carta di credito richiesta. Per i modelli premium paghi solo ciò che usi (scansionare uno scontrino costa meno di $0,01).',
       steps: [
         {
           heading: 'Crea un account gratuito',
-          body: 'Vai su openrouter.ai e registrati. Non serve la carta di credito per iniziare.',
+          body: 'Vai su openrouter.ai e registrati. Nessuna carta di credito richiesta.',
           url: 'https://openrouter.ai',
           urlLabel: 'Apri openrouter.ai',
         },
         {
-          heading: 'Aggiungi un piccolo credito',
-          body: 'Una volta connesso, clicca su "Credits" e aggiungi qualche dollaro. $5 durano mesi.',
-        },
-        {
-          heading: 'Crea una chiave API',
-          body: 'Clicca su "Keys" nel menu a sinistra, poi "Create Key". Dagli un nome qualsiasi — es. "ExpireSnap".',
+          heading: 'Vai su Settings → Keys',
+          body: 'Una volta connesso, apri openrouter.ai/settings/keys e clicca "Create key". Dagli un nome qualsiasi — es. "ExpireSnap".',
+          url: 'https://openrouter.ai/settings/keys',
+          urlLabel: 'Apri pagina chiavi API',
         },
         {
           heading: 'Copia la chiave',
-          body: 'La chiave inizia con "sk-or-v1-…". Copiala per intero.',
+          body: 'La chiave inizia con "sk-or-v1-…". Copiala per intero — viene mostrata una sola volta.',
         },
         {
           heading: 'Incollala nelle Impostazioni',
           body: 'Torna nelle Impostazioni e incolla la chiave nel campo "Chiave API".',
         },
+        {
+          heading: 'Opzionale: aggiungi crediti per modelli premium',
+          body: 'I modelli gratuiti funzionano bene per la maggior parte degli scontrini. Per modelli più veloci o precisi, aggiungi qualche dollaro sotto Credits. $5 durano mesi.',
+        },
       ],
-      tip: 'Modello consigliato: google/gemini-flash-1.5 (veloce ed economico).',
+      tip: 'I modelli gratuiti sono disponibili subito — nessun credito necessario. L\'app sceglie automaticamente un buon modello gratuito per la scansione.',
     },
   },
 };
