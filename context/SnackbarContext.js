@@ -31,7 +31,7 @@ export function SnackbarProvider({ children }) {
 
   return (
     <SnackbarContext.Provider value={{ showSnackbar }}>
-      <View style={styles.root}>
+      <View style={styles.root} pointerEvents="box-none">
         {children}
         <GlobalSnackbar snack={snack} onDismiss={hideSnackbar} />
       </View>

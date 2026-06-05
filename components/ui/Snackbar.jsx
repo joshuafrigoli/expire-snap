@@ -23,6 +23,7 @@ function Snackbar({ message, visible, variant = 'info', onDismiss, bottom = 16 }
     <Animated.View
       entering={SlideInLeft.duration(280)}
       exiting={SlideOutLeft.duration(250)}
+      pointerEvents="none"
       style={[styles.container, { backgroundColor: v.bg, borderColor: v.border, bottom }]}
     >
       <Text testID="snackbar-message" style={[styles.message, { color: v.text }]}>
