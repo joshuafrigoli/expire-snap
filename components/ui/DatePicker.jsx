@@ -30,6 +30,7 @@ function DatePicker({ value, onChange, testID }) {
           value={value ?? new Date()}
           onChange={handleChange}
           mode="date"
+          minimumDate={new Date()}
         />
       )}
     </View>

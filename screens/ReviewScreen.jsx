@@ -82,13 +82,6 @@ export default function ReviewScreen() {
           )}
         />
 
-        <Snackbar
-          message={snackbar}
-          visible={!!snackbar}
-          onDismiss={() => setSnackbar('')}
-          variant="error"
-        />
-
         <View style={styles.footer}>
           <Pressable
             testID="review-confirm-btn"
@@ -98,6 +91,13 @@ export default function ReviewScreen() {
             <Text style={styles.confirmBtnText}>{'✅  ' + t('review.confirm')}</Text>
           </Pressable>
         </View>
+
+        <Snackbar
+          message={snackbar}
+          visible={!!snackbar}
+          onDismiss={() => setSnackbar('')}
+          variant="error"
+        />
       </View>
     </SafeAreaView>
   );
