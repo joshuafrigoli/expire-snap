@@ -47,7 +47,7 @@ ExpireSnap lets you photograph a grocery receipt with your phone's camera. The i
 
 | Layer | Library / Tool |
 |---|---|
-| Framework | React Native + Expo SDK 56 |
+| Framework | React Native + Expo SDK 54 |
 | Styling | NativeWind v4 (Tailwind for React Native) |
 | Hard shadows | react-native-shadow-2 |
 | Animations | react-native-reanimated v4 |
@@ -212,9 +212,9 @@ expire-snap/
 │   │   ├── FloatingActionButton.jsx
 │   │   ├── FilterTabs.jsx        # Animated horizontal category tabs
 │   │   ├── Spinner.jsx           # Branded ActivityIndicator
-│   │   ├── Modal.jsx             # Animated modal with backdrop
 │   │   ├── SkeletonBlock.jsx     # Loading placeholder with shimmer
 │   │   ├── Avatar.jsx            # Emoji or initials avatar; sm/md/lg
+│   │   ├── ProfileButton.jsx     # Avatar button for TopAppBar navigation
 │   │   └── Snackbar.jsx          # Animated bottom toast; auto-dismiss
 │   │
 │   ├── InventoryItem.jsx         # Fridge list row with freshness bar and quick actions
@@ -231,14 +231,23 @@ expire-snap/
 │   ├── HistoryScreen.jsx         # Consumed / wasted archive
 │   ├── ProfileScreen.jsx         # User info, stats, export/import
 │   ├── OnboardingScreen.jsx      # First-launch name + avatar setup
-│   └── SettingsScreen.jsx        # AI provider, API key, auto-delete, language
+│   ├── SettingsScreen.jsx        # AI provider, API key, auto-delete, language
+│   └── ProviderInfoScreen.jsx    # Info/help page for AI provider selection
+│
+├── constants/
+│   └── categories.js             # Category key → i18n key mapping
+│
+├── theme/
+│   └── index.js                  # Theme helpers and light/dark color tokens
 │
 ├── navigation/
 │   └── AppNavigator.js           # NavigationContainer + BottomTabNavigator + StackNavigator
 │
 ├── context/
 │   ├── InventoryContext.js       # CRUD for inventory items; AsyncStorage sync; auto-delete
-│   └── SettingsContext.js        # User preferences; AsyncStorage sync
+│   ├── SettingsContext.js        # User preferences; AsyncStorage sync
+│   ├── PortalContext.js          # Portal layer for modals/overlays
+│   └── SnackbarContext.js        # Global snackbar state and trigger
 │
 ├── utils/
 │   ├── scanReceipt.js            # Provider-agnostic AI scan service (Phase 5)

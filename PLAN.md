@@ -6,7 +6,7 @@ A React Native + Expo mobile application that allows users to photograph a groce
 
 ## 1. Architecture & Tech Stack
 
-- **Framework:** React Native + Expo (SDK 51+); `npx create-expo-app` scaffold.
+- **Framework:** React Native + Expo (SDK 54); `npx create-expo-app` scaffold.
 - **Styling:** NativeWind v4 (Tailwind for React Native) with CSS custom properties mapped via `tailwind.config.js`. Design system: **Bubbly Neo-Brutalism** — hard 2D shadows, pill shapes, thick 2px borders, extreme roundedness. Font: **Poppins** exclusively (via `expo-font`, weights 500-700). Reference mockups: `to-be/<page>/code.html` (visual reference only — HTML structure does not transfer) + `to-be/<page>/DESIGN.md` (tokens & rules). Palette: original spec is Emerald Green — **override primary to Blue** (see Section 1a).
 - **Hard Shadows:** `react-native-shadow-2` library — provides CSS-like offset box-shadow on both iOS and Android. Native `elevation`/`shadowOffset` alone cannot replicate hard 2D shadows.
 - **State Management:** React Context API (inventory items, scan state, filters).
