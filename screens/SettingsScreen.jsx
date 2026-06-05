@@ -1,13 +1,16 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { useSettings } from '@/context/SettingsContext';
 import { Select, Input, ProfileButton } from '@/components/ui';
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
   const { settings, updateSettings } = useSettings();
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.root} testID="screen-settings">
@@ -21,7 +24,16 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>{t('settings.aiProvider')}</Text>
+          <View style={styles.labelRow}>
+            <Text style={styles.sectionLabel}>{t('settings.aiProvider')}</Text>
+            <TouchableOpacity
+              testID="settings-provider-info-btn"
+              onPress={() => navigation.navigate('ProviderInfo', { provider: settings.aiProvider })}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Ionicons name="information-circle-outline" size={18} color="#64748b" />
+            </TouchableOpacity>
+          </View>
           <Select
             testID="settings-ai-provider"
             value={settings.aiProvider}
@@ -109,6 +121,11 @@ const styles = StyleSheet.create({
   },
   section: {
     gap: 4,
+  },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   sectionLabel: {
     fontSize: 12,

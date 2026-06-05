@@ -26,7 +26,7 @@ function Snackbar({ message, visible, variant = 'info', onDismiss }) {
   const bottomPad = (tabBarHeight ?? insets.bottom) + 16;
 
   return (
-    <Modal transparent visible animationType="none" statusBarTranslucent>
+    <Modal transparent visible animationType="none">
       <View style={StyleSheet.absoluteFillObject} pointerEvents="box-none">
         <Animated.View
           entering={SlideInLeft.duration(280)}

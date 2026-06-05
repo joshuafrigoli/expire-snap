@@ -18,6 +18,7 @@ import ProfileScreen from '@/screens/ProfileScreen';
 import HistoryScreen from '@/screens/HistoryScreen';
 import OnboardingScreen from '@/screens/OnboardingScreen';
 import ReviewScreen from '@/screens/ReviewScreen';
+import ProviderInfoScreen from '@/screens/ProviderInfoScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -75,6 +76,7 @@ function AppContent() {
         {hasProfile && <Stack.Screen name="Profile" component={ProfileScreen} />}
         {hasProfile && <Stack.Screen name="History" component={HistoryScreen} />}
         {hasProfile && <Stack.Screen name="Review" component={ReviewScreen} />}
+        {hasProfile && <Stack.Screen name="ProviderInfo" component={ProviderInfoScreen} />}
       </Stack.Navigator>
     </NavigationContainer>
   );
