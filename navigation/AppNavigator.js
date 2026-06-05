@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Ionicons } from '@expo/vector-icons';
-import i18n from '@/utils/i18n';
+import { useTranslation } from 'react-i18next';
 import { SettingsProvider, useSettings } from '@/context/SettingsContext';
 import { InventoryProvider } from '@/context/InventoryContext';
 
@@ -24,6 +24,7 @@ const Tab = createBottomTabNavigator();
 const TAB_ICONS = { Home: 'home', Scan: 'scan', Fridge: 'nutrition', Settings: 'settings' };
 
 function BottomTabsNavigator() {
+  const { t } = useTranslation();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -36,10 +37,10 @@ function BottomTabsNavigator() {
         tabBarStyle: { borderTopWidth: 2, borderTopColor: '#001a3d' },
       })}
     >
-      <Tab.Screen name="Home" component={DashboardScreen} options={{ tabBarLabel: i18n.t('nav.home') }} />
-      <Tab.Screen name="Scan" component={ScanScreen} options={{ tabBarLabel: i18n.t('nav.scan') }} />
-      <Tab.Screen name="Fridge" component={FridgeScreen} options={{ tabBarLabel: i18n.t('nav.fridge') }} />
-      <Tab.Screen name="Settings" component={SettingsScreen} options={{ tabBarLabel: i18n.t('nav.settings') }} />
+      <Tab.Screen name="Home" component={DashboardScreen} options={{ tabBarLabel: t('nav.home') }} />
+      <Tab.Screen name="Scan" component={ScanScreen} options={{ tabBarLabel: t('nav.scan') }} />
+      <Tab.Screen name="Fridge" component={FridgeScreen} options={{ tabBarLabel: t('nav.fridge') }} />
+      <Tab.Screen name="Settings" component={SettingsScreen} options={{ tabBarLabel: t('nav.settings') }} />
     </Tab.Navigator>
   );
 }
