@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Text, View, Modal, Pressable, StyleSheet } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Text, View, Pressable, StyleSheet, BackHandler } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import InventoryList from '@/components/InventoryList';
 import { FloatingActionButton, ProfileButton } from '@/components/ui';
+import { usePortal } from '@/context/PortalContext';
 import { useTheme } from '@/theme';
 
 export default function FridgeScreen() {
@@ -15,11 +16,56 @@ export default function FridgeScreen() {
   const [showConfirm, setShowConfirm] = useState(false);
   const colors = useTheme();
   const styles = makeStyles(colors);
+  const portal = usePortal();
+  const portalKey = 'fridge-confirm';
 
-  async function handleClear() {
+  const handleClear = useCallback(async () => {
     await clearInventory();
     setShowConfirm(false);
-  }
+  }, [clearInventory]);
+
+  useEffect(() => {
+    if (!showConfirm) return;
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      setShowConfirm(false);
+      return true;
+    });
+    return () => sub.remove();
+  }, [showConfirm]);
+
+  useEffect(() => {
+    if (!showConfirm) {
+      portal.unmount(portalKey);
+      return;
+    }
+    const s = makeStyles(colors);
+    portal.mount(
+      portalKey,
+      <View key={portalKey} style={s.backdrop}>
+        <View style={s.dialog}>
+          <Text style={s.dialogTitle}>{t('fridge.clearConfirmTitle')}</Text>
+          <Text style={s.dialogMessage}>{t('fridge.clearConfirmMessage')}</Text>
+          <View style={s.dialogButtons}>
+            <Pressable
+              testID="fridge-clear-cancel"
+              onPress={() => setShowConfirm(false)}
+              style={s.cancelBtn}
+            >
+              <Text style={s.cancelBtnText}>{t('fridge.clearCancel')}</Text>
+            </Pressable>
+            <Pressable
+              testID="fridge-clear-confirm"
+              onPress={handleClear}
+              style={s.confirmBtn}
+            >
+              <Text style={s.confirmBtnText}>{t('fridge.clearConfirm')}</Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>,
+    );
+    return () => portal.unmount(portalKey);
+  }, [showConfirm, colors, t, handleClear]);
 
   return (
     <SafeAreaView testID="screen-fridge" style={styles.root}>
@@ -38,35 +84,7 @@ export default function FridgeScreen() {
       <InventoryList style={styles.list} />
       <FloatingActionButton testID="fridge-fab" onPress={() => navigation.navigate('Scan')} style={styles.fab} />
 
-      <Modal
-        visible={showConfirm}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowConfirm(false)}
-      >
-        <View style={styles.backdrop}>
-          <View style={styles.dialog}>
-            <Text style={styles.dialogTitle}>{t('fridge.clearConfirmTitle')}</Text>
-            <Text style={styles.dialogMessage}>{t('fridge.clearConfirmMessage')}</Text>
-            <View style={styles.dialogButtons}>
-              <Pressable
-                testID="fridge-clear-cancel"
-                onPress={() => setShowConfirm(false)}
-                style={styles.cancelBtn}
-              >
-                <Text style={styles.cancelBtnText}>{t('fridge.clearCancel')}</Text>
-              </Pressable>
-              <Pressable
-                testID="fridge-clear-confirm"
-                onPress={handleClear}
-                style={styles.confirmBtn}
-              >
-                <Text style={styles.confirmBtnText}>{t('fridge.clearConfirm')}</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
+
     </SafeAreaView>
   );
 }
