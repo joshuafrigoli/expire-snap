@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet, Platform } from 'react-native';
+import { View, Text, Pressable, Modal, FlatList, Animated, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as NavigationBar from 'expo-navigation-bar';
 import { useTheme } from '@/theme';
 
 function Select({ label, value, options = [], onChange, testID }) {
@@ -21,11 +20,6 @@ function Select({ label, value, options = [], onChange, testID }) {
     inputRange: [0, 1],
     outputRange: [colors.border, colors.primary],
   });
-
-  async function handleShow() {
-    if (Platform.OS !== 'android') return;
-    try { await NavigationBar.setBackgroundColorAsync(colors.surface); } catch (_) {}
-  }
 
   function handleSelect(opt) {
     onChange && onChange(opt.value);
@@ -49,36 +43,31 @@ function Select({ label, value, options = [], onChange, testID }) {
         animationType="fade"
         statusBarTranslucent
         onRequestClose={() => setOpen(false)}
-        onShow={handleShow}
       >
-        {/* Full-screen backdrop — tap anywhere outside sheet closes dropdown */}
-        <Pressable style={styles.backdrop} onPress={() => setOpen(false)} />
-
-        {/* Sheet container pinned to absolute bottom of window.
-            In Android edge-to-edge, bottom:0 reaches the true screen bottom
-            (behind nav bar), so navBarFill covers the 3-button area. */}
-        <View style={styles.sheetContainer} pointerEvents="box-none">
-          <View style={styles.sheet}>
-            <View style={styles.handle} />
-            {label ? <Text style={styles.sheetTitle}>{label}</Text> : null}
-            <FlatList
-              data={options}
-              keyExtractor={(o) => o.value}
-              renderItem={({ item }) => (
-                <Pressable
-                  style={[styles.option, item.value === value && styles.optionActive]}
-                  onPress={() => handleSelect(item)}
-                >
-                  <Text style={[styles.optionText, item.value === value && styles.optionTextActive]}>
-                    {item.label}
-                  </Text>
-                  {item.value === value && <Text style={styles.check}>✓</Text>}
-                </Pressable>
-              )}
-            />
-          </View>
-          {/* Solid fill that covers the system navigation bar area */}
-          <View style={styles.navBarFill} />
+        {/* This View sets an explicit background so the Dialog window's React root
+            view doesn't show its default white in the system nav bar area. */}
+        <View style={styles.modalRoot}>
+          <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
+            <View style={styles.sheet}>
+              <View style={styles.handle} />
+              {label ? <Text style={styles.sheetTitle}>{label}</Text> : null}
+              <FlatList
+                data={options}
+                keyExtractor={(o) => o.value}
+                renderItem={({ item }) => (
+                  <Pressable
+                    style={[styles.option, item.value === value && styles.optionActive]}
+                    onPress={() => handleSelect(item)}
+                  >
+                    <Text style={[styles.optionText, item.value === value && styles.optionTextActive]}>
+                      {item.label}
+                    </Text>
+                    {item.value === value && <Text style={styles.check}>✓</Text>}
+                  </Pressable>
+                )}
+              />
+            </View>
+          </Pressable>
         </View>
       </Modal>
     </View>
@@ -108,15 +97,17 @@ function makeStyles(colors, bottomInset) {
     },
     selectedText: { fontSize: 15, color: colors.textPrimary, fontWeight: '500' },
     chevron: { fontSize: 16, color: colors.primary, fontWeight: '700', paddingLeft: 8, transform: [{ scaleX: 1.6 }] },
-    backdrop: {
-      ...StyleSheet.absoluteFillObject,
-      backgroundColor: colors.backdrop,
+    modalRoot: {
+      flex: 1,
+      // Covers the Dialog window's React root view with surface color.
+      // In edge-to-edge mode this extends under the nav bar, preventing the
+      // default white root-view background from showing through the transparent nav bar.
+      backgroundColor: colors.surface,
     },
-    sheetContainer: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
+    backdrop: {
+      flex: 1,
+      backgroundColor: colors.backdrop,
+      justifyContent: 'flex-end',
     },
     sheet: {
       backgroundColor: colors.surface,
@@ -124,15 +115,9 @@ function makeStyles(colors, bottomInset) {
       borderTopRightRadius: 24,
       borderWidth: 2,
       borderColor: colors.border,
-      paddingBottom: 12,
+      paddingBottom: Math.max(bottomInset, 24) + 16,
       maxHeight: '70%',
       minHeight: 180,
-    },
-    navBarFill: {
-      backgroundColor: colors.surface,
-      // bottomInset = nav bar height when edge-to-edge insets are applied.
-      // 80 fallback safely covers any Android 3-button or gesture nav bar.
-      height: bottomInset > 0 ? bottomInset : 80,
     },
     handle: {
       width: 40,
