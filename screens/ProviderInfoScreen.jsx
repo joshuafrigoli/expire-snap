@@ -4,7 +4,7 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -97,9 +97,9 @@ export default function ProviderInfoScreen() {
   return (
     <SafeAreaView style={styles.root} testID="screen-provider-info">
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color={colors.primary} />
-        </TouchableOpacity>
+        <Pressable style={styles.backBtn} onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={20} color={colors.textPrimary} />
+        </Pressable>
         <Text style={styles.title}>{content.title}</Text>
       </View>
 
@@ -119,13 +119,13 @@ export default function ProviderInfoScreen() {
               <Text style={styles.stepHeading}>{step.heading}</Text>
               <Text style={styles.stepText}>{step.body}</Text>
               {step.url && (
-                <TouchableOpacity
+                <Pressable
                   style={styles.linkBtn}
                   onPress={() => Linking.openURL(step.url)}
                 >
                   <Ionicons name="open-outline" size={14} color={colors.primary} />
                   <Text style={styles.linkBtnText}>{step.urlLabel}</Text>
-                </TouchableOpacity>
+                </Pressable>
               )}
             </View>
           </View>
@@ -154,13 +154,25 @@ function makeStyles(colors) {
       gap: 10,
       paddingHorizontal: 16,
       paddingTop: 16,
-      paddingBottom: 12,
+      paddingBottom: 8,
     },
     backBtn: {
-      padding: 4,
+      width: 40,
+      height: 40,
+      borderRadius: 9999,
+      borderWidth: 2,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 3,
     },
     title: {
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: '700',
       color: colors.primary,
       flex: 1,
