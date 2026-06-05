@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     shadowRadius: 0,
     elevation: 3,
   },
-  backBtnText: { fontSize: 18, fontWeight: '700', color: '#001a3d' },
+  backBtnText: { fontSize: 18, fontWeight: '700', color: '#001a3d', includeFontPadding: false, textAlignVertical: 'center', lineHeight: 22 },
   pageTitle: { fontSize: 18, fontWeight: '700', color: '#005bc4' },
   saveBtnSpacer: { width: 72 },
   saveBtn: {
