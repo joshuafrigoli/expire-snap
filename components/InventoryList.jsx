@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   searchWrapper: { marginHorizontal: 16, marginTop: 12, marginBottom: 8 },
   listContent: {
     paddingHorizontal: 16,
+    paddingTop: 12,
     paddingBottom: 100,
   },
   empty: {
