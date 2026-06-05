@@ -7,8 +7,8 @@ describe('Snackbar', () => {
   afterEach(() => jest.useRealTimers());
 
   it('renders message when visible', () => {
-    const { getByText } = render(<Snackbar message="Item saved" visible variant="success" />);
-    expect(getByText('Item saved')).toBeTruthy();
+    const { getByTestId } = render(<Snackbar message="Item saved" visible variant="success" />);
+    expect(getByTestId('snackbar-message').props.children).toMatch('Item saved');
   });
 
   it('calls onDismiss after 3 seconds', () => {
