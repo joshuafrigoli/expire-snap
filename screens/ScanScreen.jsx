@@ -3,7 +3,12 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
+import {
+  launchCameraAsync,
+  launchImageLibraryAsync,
+  requestCameraPermissionsAsync,
+  requestMediaLibraryPermissionsAsync,
+} from 'expo-image-picker';
 import { validateImage } from '@/utils/validateImage';
 import { compressImage } from '@/utils/compressImage';
 import { scanReceipt } from '@/utils/scanReceipt';
@@ -23,6 +28,8 @@ export default function ScanScreen() {
     scanningRef.current = true;
     setScanning(true);
     try {
+      const { granted } = await requestCameraPermissionsAsync();
+      if (!granted) { setSnackbarMessage(t('errors.permissionDenied')); return; }
       const result = await launchCameraAsync({ mediaTypes: 'Images', quality: 1 });
       if (result.canceled || !result.assets?.[0]) return;
       const asset = result.assets[0];
@@ -51,6 +58,8 @@ export default function ScanScreen() {
     scanningRef.current = true;
     setScanning(true);
     try {
+      const { granted } = await requestMediaLibraryPermissionsAsync();
+      if (!granted) { setSnackbarMessage(t('errors.permissionDenied')); return; }
       const result = await launchImageLibraryAsync({ mediaTypes: 'Images', quality: 1 });
       if (result.canceled || !result.assets?.[0]) return;
       const asset = result.assets[0];

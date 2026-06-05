@@ -80,7 +80,8 @@
     "scanFailed": "Scan failed — please try again",
     "importFailed": "Import failed — invalid file format",
     "importSuccess": "Data imported successfully",
-    "noItemsFound": "No items found — try scanning a grocery receipt"
+    "noItemsFound": "No items found — try scanning a grocery receipt",
+    "permissionDenied": "Permission denied — enable access in device Settings"
   },
   "categories": {
     "all": "All",
