@@ -138,10 +138,10 @@ export default function ScanScreen() {
 
         <View style={styles.header}>
           <Text style={styles.title}>{t('scan.title')}</Text>
-          <Text style={styles.subtitle}>{t('scan.hint')}</Text>
         </View>
 
         <View style={styles.buttonArea}>
+          <Text style={styles.hint}>{t('scan.hint')}</Text>
           <Pressable
             testID="scan-camera-btn"
             onPress={handleCamera}
@@ -196,9 +196,10 @@ const styles = StyleSheet.create({
     color: '#005bc4',
     marginBottom: 4,
   },
-  subtitle: {
+  hint: {
     fontSize: 14,
     color: '#64748b',
+    marginBottom: 4,
   },
   buttonArea: {
     flex: 1,
