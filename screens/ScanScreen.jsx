@@ -78,7 +78,7 @@ export default function ScanScreen() {
       const { granted } = await requestCameraPermissionsAsync();
       console.log('[Scan] camera permission:', granted);
       if (!granted) { setSnackbarMessage(t('errors.permissionDenied')); return; }
-      const result = await launchCameraAsync({ mediaTypes: 'Images', quality: 1 });
+      const result = await launchCameraAsync({ mediaTypes: ['images'], quality: 1 });
       if (result.canceled || !result.assets?.[0]) { console.log('[Scan] camera cancelled'); return; }
       setProcessing(true);
       const asset = result.assets[0];
@@ -118,7 +118,7 @@ export default function ScanScreen() {
       const { granted } = await requestMediaLibraryPermissionsAsync();
       console.log('[Scan] media library permission:', granted);
       if (!granted) { setSnackbarMessage(t('errors.permissionDenied')); return; }
-      const result = await launchImageLibraryAsync({ mediaTypes: 'Images', quality: 1 });
+      const result = await launchImageLibraryAsync({ mediaTypes: ['images'], quality: 1 });
       if (result.canceled || !result.assets?.[0]) { console.log('[Scan] gallery cancelled'); return; }
       setProcessing(true);
       const asset = result.assets[0];
