@@ -112,6 +112,8 @@ export async function scanReceipt(imageBase64, provider, apiKey) {
   }
 
   if (!response.ok) {
+    const errBody = await response.text().catch(() => '');
+    console.error('[scanReceipt] HTTP', response.status, errBody);
     if (response.status === 429) {
       throw new RateLimitError();
     }
