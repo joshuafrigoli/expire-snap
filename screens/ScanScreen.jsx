@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#64748b',
     marginBottom: 4,
+    textAlign: 'center',
   },
   buttonArea: {
     flex: 1,
