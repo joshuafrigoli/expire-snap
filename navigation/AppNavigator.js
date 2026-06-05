@@ -3,6 +3,7 @@ import * as Notifications from 'expo-notifications';
 import { BackHandler, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as NavigationBar from 'expo-navigation-bar';
+import * as SystemUI from 'expo-system-ui';
 import { NavigationContainer, DefaultTheme, useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -63,9 +64,10 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
+    SystemUI.setBackgroundColorAsync(colors.surface);
     if (Platform.OS !== 'android') return;
     NavigationBar.setButtonStyleAsync(isDark ? 'light' : 'dark');
-  }, [isDark]);
+  }, [colors.surface, isDark]);
 
   useEffect(() => {
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
