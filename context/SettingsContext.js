@@ -19,6 +19,7 @@ const DEFAULT_SETTINGS = {
   apiKey: '',
   autoDeleteDays: 30,
   language: detectLanguage(),
+  languageLockedByUser: false,
   profile: { name: '', avatarEmoji: '' },
 };
 
@@ -31,16 +32,22 @@ export function SettingsProvider({ children }) {
     AsyncStorage.getItem(STORAGE_KEY).then((raw) => {
       if (raw) {
         const parsed = JSON.parse(raw);
-        setSettings((prev) => ({ ...prev, ...parsed }));
-        if (parsed.language) i18n.changeLanguage(parsed.language);
+        // If user never explicitly chose a language, always follow device locale.
+        // This handles upgrades where 'en' was stored as the old hardcoded default.
+        const lang = parsed.languageLockedByUser ? parsed.language : detectLanguage();
+        setSettings((prev) => ({ ...prev, ...parsed, language: lang }));
+        i18n.changeLanguage(lang);
       }
     });
   }, []);
 
   async function updateSettings(partial) {
     const next = { ...settings, ...partial };
+    if ('language' in partial) {
+      next.languageLockedByUser = true;
+      i18n.changeLanguage(partial.language);
+    }
     setSettings(next);
-    if (partial.language) i18n.changeLanguage(partial.language);
     // TODO: migrate apiKey storage to expo-secure-store for encryption at rest
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   }
