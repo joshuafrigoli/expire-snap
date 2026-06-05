@@ -223,7 +223,15 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   backBtnText: { fontSize: 18, fontWeight: '700', color: '#001a3d', includeFontPadding: false, textAlignVertical: 'center', lineHeight: 22 },
-  pageTitle: { fontSize: 18, fontWeight: '700', color: '#005bc4' },
+  pageTitle: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#005bc4',
+  },
   saveBtnSpacer: { width: 72 },
   saveBtn: {
     paddingHorizontal: 16,
