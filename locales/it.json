@@ -79,7 +79,8 @@
     "invalidImage": "Seleziona un file immagine valido",
     "scanFailed": "Scansione fallita — riprova",
     "importFailed": "Importazione fallita — formato file non valido",
-    "importSuccess": "Dati importati con successo"
+    "importSuccess": "Dati importati con successo",
+    "noItemsFound": "Nessun prodotto trovato — prova a scansionare uno scontrino"
   },
   "categories": {
     "all": "Tutti",

@@ -79,7 +79,8 @@
     "invalidImage": "Please select a valid image file",
     "scanFailed": "Scan failed — please try again",
     "importFailed": "Import failed — invalid file format",
-    "importSuccess": "Data imported successfully"
+    "importSuccess": "Data imported successfully",
+    "noItemsFound": "No items found — try scanning a grocery receipt"
   },
   "categories": {
     "all": "All",

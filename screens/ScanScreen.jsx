@@ -29,10 +29,16 @@ export default function ScanScreen() {
       validateImage({ mimeType: asset.mimeType, fileSize: asset.fileSize });
       const { base64 } = await compressImage(asset.uri);
       const scanResult = await scanReceipt(base64, settings.aiProvider, settings.apiKey);
+      if (!scanResult.items.length) {
+        setSnackbarMessage(t('errors.noItemsFound'));
+        return;
+      }
       navigation.navigate('Review', { scanResult });
     } catch (err) {
       if (err.name === 'RateLimitError') {
         setSnackbarMessage(err.message);
+      } else {
+        setSnackbarMessage(t('errors.scanFailed'));
       }
     } finally {
       scanningRef.current = false;
@@ -51,10 +57,16 @@ export default function ScanScreen() {
       validateImage({ mimeType: asset.mimeType, fileSize: asset.fileSize });
       const { base64 } = await compressImage(asset.uri);
       const scanResult = await scanReceipt(base64, settings.aiProvider, settings.apiKey);
+      if (!scanResult.items.length) {
+        setSnackbarMessage(t('errors.noItemsFound'));
+        return;
+      }
       navigation.navigate('Review', { scanResult });
     } catch (err) {
       if (err.name === 'RateLimitError') {
         setSnackbarMessage(err.message);
+      } else {
+        setSnackbarMessage(t('errors.scanFailed'));
       }
     } finally {
       scanningRef.current = false;
