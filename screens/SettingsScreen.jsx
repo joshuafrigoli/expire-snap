@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '@/context/SettingsContext';
-import { Select } from '@/components/ui';
+import { Select, Input } from '@/components/ui';
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
@@ -34,14 +34,12 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>API Key</Text>
-          <TextInput
+          <Input
             testID="settings-api-key"
             value={settings.apiKey || ''}
             onChangeText={(v) => updateSettings({ apiKey: v })}
-            secureTextEntry={true}
+            variant="password"
             placeholder="Enter API key"
-            placeholderTextColor="#94a3b8"
-            style={styles.apiKeyInput}
           />
         </View>
 
