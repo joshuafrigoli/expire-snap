@@ -63,7 +63,9 @@ export default function ProfileScreen() {
           >
             <Ionicons name="arrow-back" size={20} color={colors.textPrimary} />
           </Pressable>
-          <Text style={styles.pageTitle}>{t('profile.title')}</Text>
+          <View style={styles.pageTitleContainer} pointerEvents="none">
+            <Text style={styles.pageTitle}>{t('profile.title')}</Text>
+          </View>
           {isDirty ? (
             <Pressable
               testID="profile-save-btn"
@@ -224,11 +226,13 @@ function makeStyles(colors) {
       elevation: 3,
     },
     backBtnText: { fontSize: 18, fontWeight: '700', color: colors.textPrimary, includeFontPadding: false, textAlignVertical: 'center', lineHeight: 22 },
-    pageTitle: {
+    pageTitleContainer: {
       position: 'absolute',
       left: 0,
       right: 0,
-      textAlign: 'center',
+      alignItems: 'center',
+    },
+    pageTitle: {
       fontSize: 24,
       fontWeight: '700',
       color: colors.primary,
