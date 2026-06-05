@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import ReviewItem from '@/components/ReviewItem';
-import { Snackbar } from '@/components/ui';
+import { Snackbar, ProfileButton } from '@/components/ui';
 
 export default function ReviewScreen() {
   const navigation = useNavigation();
@@ -65,8 +65,11 @@ export default function ReviewScreen() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>{t('review.title')}</Text>
-          <Text style={styles.subtitle}>{t('review.itemCount', { n: items.length })}</Text>
+          <ProfileButton testID="review-profile-btn" />
+          <View style={styles.headerText}>
+            <Text style={styles.title}>{t('review.title')}</Text>
+            <Text style={styles.subtitle}>{t('review.itemCount', { n: items.length })}</Text>
+          </View>
         </View>
 
         <FlatList
@@ -113,9 +116,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#eff6ff',
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 4,
+  },
+  headerText: {
+    flex: 1,
   },
   title: {
     fontSize: 24,

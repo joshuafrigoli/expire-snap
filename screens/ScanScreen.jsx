@@ -21,7 +21,7 @@ import { validateImage } from '@/utils/validateImage';
 import { compressImage } from '@/utils/compressImage';
 import { scanReceipt } from '@/utils/scanReceipt';
 import { useSettings } from '@/context/SettingsContext';
-import { Snackbar } from '@/components/ui';
+import { Snackbar, ProfileButton } from '@/components/ui';
 
 function ScanOverlay({ t }) {
   const scale = useSharedValue(1);
@@ -153,6 +153,7 @@ export default function ScanScreen() {
       <View testID="screen-scan" style={styles.container}>
 
         <View style={styles.header}>
+          <ProfileButton testID="scan-profile-btn" />
           <Text style={styles.title}>{t('scan.title')}</Text>
         </View>
 
@@ -202,6 +203,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#eff6ff',
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 8,
@@ -210,7 +214,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: '#005bc4',
-    marginBottom: 4,
+    flex: 1,
   },
   hint: {
     fontSize: 14,

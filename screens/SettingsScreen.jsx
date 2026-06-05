@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useSettings } from '@/context/SettingsContext';
-import { Select, Input } from '@/components/ui';
+import { Select, Input, ProfileButton } from '@/components/ui';
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
@@ -11,13 +11,15 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.root} testID="screen-settings">
+      <View style={styles.header}>
+        <ProfileButton testID="settings-profile-btn" />
+        <Text style={styles.title}>{t('settings.title')}</Text>
+      </View>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>{t('settings.title')}</Text>
-
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>{t('settings.aiProvider')}</Text>
           <Select
@@ -84,18 +86,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#eff6ff',
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 0,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#005bc4',
+    flex: 1,
+  },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     padding: 16,
     gap: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#005bc4',
-    marginBottom: 8,
   },
   section: {
     gap: 4,

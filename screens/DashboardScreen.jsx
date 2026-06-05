@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import StatCard from '@/components/StatCard';
+import { ProfileButton } from '@/components/ui';
 
 export default function DashboardScreen() {
   const { t } = useTranslation();
@@ -31,8 +32,11 @@ export default function DashboardScreen() {
 
   return (
     <SafeAreaView testID="screen-home" style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <View style={styles.header}>
+        <ProfileButton testID="dashboard-profile-btn" />
         <Text style={styles.title}>{t('dashboard.title')}</Text>
+      </View>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.cards}>
           <StatCard label={t('dashboard.expired')} count={expired} variant="danger" testID="card-expired" countTestID="stat-expired" />
           <StatCard label={t('dashboard.expiring')} count={expiring} variant="warning" testID="card-expiring" countTestID="stat-expiring" />
@@ -48,8 +52,16 @@ export default function DashboardScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#eff6ff' },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 0,
+  },
+  title: { fontSize: 24, fontWeight: '700', color: '#005bc4', flex: 1 },
   content: { padding: 16, gap: 12 },
-  title: { fontSize: 24, fontWeight: '700', color: '#005bc4', marginBottom: 8 },
   cards: { gap: 10 },
   scanBtn: {
     backgroundColor: '#005bc4', borderRadius: 9999, paddingVertical: 16,

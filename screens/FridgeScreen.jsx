@@ -4,18 +4,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
-import { useSettings } from '@/context/SettingsContext';
 import InventoryList from '@/components/InventoryList';
-import { FloatingActionButton } from '@/components/ui';
+import { FloatingActionButton, ProfileButton } from '@/components/ui';
 
 export default function FridgeScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { clearInventory } = useInventory();
-  const { settings } = useSettings();
   const [showConfirm, setShowConfirm] = useState(false);
-
-  const avatarLabel = settings?.profile?.avatarEmoji || (settings?.profile?.name?.[0]?.toUpperCase() ?? '?');
 
   async function handleClear() {
     await clearInventory();
@@ -25,13 +21,7 @@ export default function FridgeScreen() {
   return (
     <SafeAreaView testID="screen-fridge" style={styles.root}>
       <View style={styles.header}>
-        <Pressable
-          testID="fridge-profile-btn"
-          onPress={() => navigation.navigate('Profile')}
-          style={styles.avatarBtn}
-        >
-          <Text style={styles.avatarText}>{avatarLabel}</Text>
-        </Pressable>
+        <ProfileButton testID="fridge-profile-btn" />
         <Text style={styles.title}>{t('fridge.title')}</Text>
         <Pressable
           testID="fridge-clear-btn"
@@ -90,26 +80,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 0,
-  },
-  avatarBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 9999,
-    borderWidth: 2,
-    borderColor: '#001a3d',
-    backgroundColor: '#dbeafe',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#001a3d',
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 3,
-  },
-  avatarText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#005bc4',
   },
   title: {
     flex: 1,
