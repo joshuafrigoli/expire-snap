@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import * as Clipboard from 'expo-clipboard';
 import { useSettings } from '@/context/SettingsContext';
 import { Select, Input, ProfileButton } from '@/components/ui';
 import { useTheme } from '@/theme';
@@ -14,6 +15,11 @@ export default function SettingsScreen() {
   const navigation = useNavigation();
   const colors = useTheme();
   const styles = makeStyles(colors);
+
+  async function handlePasteApiKey() {
+    const text = await Clipboard.getStringAsync();
+    if (text) updateSettings({ apiKey: text });
+  }
 
   return (
     <SafeAreaView style={styles.root} testID="screen-settings">
@@ -58,6 +64,16 @@ export default function SettingsScreen() {
             onChangeText={(v) => updateSettings({ apiKey: v })}
             variant="password"
             placeholder={t('settings.apiKeyPlaceholder')}
+            right={
+              <TouchableOpacity
+                testID="settings-api-key-paste"
+                onPress={handlePasteApiKey}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                accessibilityLabel={t('settings.pasteApiKey')}
+              >
+                <Ionicons name="clipboard-outline" size={20} color={colors.textSecondary} />
+              </TouchableOpacity>
+            }
           />
         </View>
 

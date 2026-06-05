@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { TextInput, Animated, StyleSheet } from 'react-native';
+import { TextInput, Animated, StyleSheet, View } from 'react-native';
 import { useTheme } from '@/theme';
 
-function Input({ placeholder, value, onChangeText, testID, variant = 'text', secureTextEntry }) {
+function Input({ placeholder, value, onChangeText, testID, variant = 'text', secureTextEntry, right }) {
   const colors = useTheme();
   const styles = makeStyles(colors);
   const isSecure = variant === 'password' ? true : !!secureTextEntry;
@@ -35,8 +35,9 @@ function Input({ placeholder, value, onChangeText, testID, variant = 'text', sec
         secureTextEntry={isSecure}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        style={styles.input}
+        style={[styles.input, right && styles.inputWithRight]}
       />
+      {right && <View style={styles.rightSlot}>{right}</View>}
     </Animated.View>
   );
 }
@@ -52,11 +53,23 @@ function makeStyles(colors) {
       shadowOpacity: 1,
       shadowRadius: 0,
       elevation: 4,
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     input: {
+      flex: 1,
       padding: 12,
       fontSize: 15,
       color: colors.textPrimary,
+    },
+    inputWithRight: {
+      paddingRight: 4,
+    },
+    rightSlot: {
+      paddingRight: 10,
+      paddingLeft: 4,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 }

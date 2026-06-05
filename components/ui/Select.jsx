@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, Pressable, FlatList, Animated, StyleSheet, BackHandler } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePortal } from '@/context/PortalContext';
 import { useTheme } from '@/theme';
 
@@ -7,6 +8,7 @@ let _seq = 0;
 
 function Select({ label, value, options = [], onChange, testID }) {
   const colors = useTheme();
+  const insets = useSafeAreaInsets();
   const styles = makeStyles(colors);
   const [open, setOpen] = useState(false);
   const borderAnim = useRef(new Animated.Value(0)).current;
@@ -38,7 +40,7 @@ function Select({ label, value, options = [], onChange, testID }) {
     portal.mount(
       portalKey,
       <Pressable key={portalKey} style={s.backdrop} onPress={() => setOpen(false)}>
-        <View style={s.sheet}>
+        <View style={[s.sheet, { paddingBottom: insets.bottom + 16 }]}>
           <View style={s.handle} />
           {label ? <Text style={s.sheetTitle}>{label}</Text> : null}
           <FlatList
@@ -63,7 +65,7 @@ function Select({ label, value, options = [], onChange, testID }) {
       </Pressable>,
     );
     return () => portal.unmount(portalKey);
-  }, [open, colors, label, options, value, onChange]);
+  }, [open, colors, label, options, value, onChange, insets.bottom]);
 
   const borderColor = borderAnim.interpolate({
     inputRange: [0, 1],
@@ -120,7 +122,6 @@ function makeStyles(colors) {
       borderRightWidth: 2,
       borderBottomWidth: 0,
       borderColor: colors.border,
-      paddingBottom: 40,
       maxHeight: '70%',
       minHeight: 180,
     },
