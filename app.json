@@ -38,6 +38,12 @@
           "defaultChannel": "default"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "38f0c278-b92b-4d37-82ca-4855dc399a67"
+      }
+    },
+    "owner": "joshuafrigoli"
   }
 }
