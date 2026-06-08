@@ -45,31 +45,31 @@ ExpireSnap lets you photograph a grocery receipt with your phone's camera. The i
 
 ## Tech Stack
 
-| Layer | Library / Tool |
-|---|---|
-| Framework | React Native + Expo SDK 54 |
-| Styling | NativeWind v4 (Tailwind for React Native) |
-| Hard shadows | react-native-shadow-2 |
-| Animations | react-native-reanimated v4 |
-| Navigation | React Navigation v6 (bottom-tabs + stack) |
-| State | React Context API (InventoryContext, SettingsContext) |
-| Persistence | @react-native-async-storage/async-storage |
-| Camera / Gallery | expo-image-picker |
-| Image compression | expo-image-manipulator |
-| Push notifications | expo-notifications |
-| Data sharing | expo-sharing, expo-document-picker, expo-file-system |
-| i18n | react-i18next + i18next |
-| Font | Poppins via @expo-google-fonts/poppins |
-| Testing | jest-expo + @testing-library/react-native + @testing-library/jest-native |
+| Layer              | Library / Tool                                                           |
+| ------------------ | ------------------------------------------------------------------------ |
+| Framework          | React Native + Expo SDK 54                                               |
+| Styling            | NativeWind v4 (Tailwind for React Native)                                |
+| Hard shadows       | react-native-shadow-2                                                    |
+| Animations         | react-native-reanimated v4                                               |
+| Navigation         | React Navigation v6 (bottom-tabs + stack)                                |
+| State              | React Context API (InventoryContext, SettingsContext)                    |
+| Persistence        | @react-native-async-storage/async-storage                                |
+| Camera / Gallery   | expo-image-picker                                                        |
+| Image compression  | expo-image-manipulator                                                   |
+| Push notifications | expo-notifications                                                       |
+| Data sharing       | expo-sharing, expo-document-picker, expo-file-system                     |
+| i18n               | react-i18next + i18next                                                  |
+| Font               | Poppins via @expo-google-fonts/poppins                                   |
+| Testing            | jest-expo + @testing-library/react-native + @testing-library/jest-native |
 
 **AI providers (user-supplied API key, configured in-app):**
 
-| Provider | Model | Notes |
-|---|---|---|
-| OpenRouter | Auto (openrouter/auto) | Free tier available — no API key required for free models |
-| OpenAI | GPT-4o | |
-| Google Gemini | Gemini Flash | |
-| Anthropic | claude-sonnet-4-6 | |
+| Provider      | Model                  | Notes               |
+| ------------- | ---------------------- | ------------------- |
+| OpenRouter    | Auto (openrouter/auto) | Free tier available |
+| OpenAI        | GPT-4o                 |                     |
+| Google Gemini | Gemini Flash           |                     |
+| Anthropic     | claude-sonnet-4-6      |                     |
 
 ---
 
@@ -122,6 +122,7 @@ A QR code will appear in the terminal. Scan it with Expo Go (Android) or the Cam
 **Standard mode (same Wi-Fi network):**
 
 Scan the QR code shown by `npx expo start` with:
+
 - **Android** — Expo Go app
 - **iOS** — native Camera app (iOS 16+) or Expo Go app
 
@@ -153,12 +154,12 @@ Settings are stored locally in `@react-native-async-storage/async-storage` under
 
 **Where to obtain API keys:**
 
-| Provider | URL | Notes |
-|---|---|---|
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Free tier available; leave API key field empty to use free models |
-| OpenAI | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) | |
-| Google Gemini | [aistudio.google.com](https://aistudio.google.com) | |
-| Anthropic | [console.anthropic.com](https://console.anthropic.com) | |
+| Provider      | URL                                                                  | Notes                                                             |
+| ------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| OpenRouter    | [openrouter.ai/keys](https://openrouter.ai/keys)                     | Free tier available; leave API key field empty to use free models |
+| OpenAI        | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |                                                                   |
+| Google Gemini | [aistudio.google.com](https://aistudio.google.com)                   |                                                                   |
+| Anthropic     | [console.anthropic.com](https://console.anthropic.com)               |                                                                   |
 
 ---
 
@@ -310,10 +311,10 @@ Produces an `.ipa` suitable for TestFlight distribution.
 
 **Profile reference:**
 
-| Profile | Purpose | Output |
-|---|---|---|
-| `preview` | Internal testing; sideload directly | APK / unsigned IPA |
-| `production` | Store submission | AAB (Android) / signed IPA (iOS) |
+| Profile      | Purpose                             | Output                           |
+| ------------ | ----------------------------------- | -------------------------------- |
+| `preview`    | Internal testing; sideload directly | APK / unsigned IPA               |
+| `production` | Store submission                    | AAB (Android) / signed IPA (iOS) |
 
 > iOS builds require an **Apple Developer account** ($99/year). During `eas build -p ios`, EAS will prompt you to log in to Apple and select your provisioning profile and certificate.
 
@@ -329,6 +330,7 @@ eas submit -p android
 ```
 
 Then in [Google Play Console](https://play.google.com/console):
+
 1. Create a new app listing.
 2. Upload the `.aab` generated by EAS (or let `eas submit` upload automatically).
 3. Fill in the store listing (description, screenshots, content rating).
@@ -344,6 +346,7 @@ eas submit -p ios
 ```
 
 Then in [App Store Connect](https://appstoreconnect.apple.com):
+
 1. Create a new app record (bundle ID must match `app.json`).
 2. Fill in metadata (name, description, screenshots, category).
 3. Select the build uploaded by EAS Submit.
@@ -376,6 +379,7 @@ No account, no server, no additional setup is required beyond granting notificat
 3. A JSON file is shared via the system share sheet — save to Files, send via email, AirDrop, etc.
 
 The exported JSON contains:
+
 ```json
 {
   "inventory": [ ...item objects... ],
@@ -403,6 +407,7 @@ The camera requires a physical device. The iOS Simulator has no camera hardware.
 **Push notifications are not appearing**
 
 Check that the app has notification permission:
+
 - iOS: Settings > ExpireSnap > Notifications > Allow Notifications
 - Android: Settings > Apps > ExpireSnap > Notifications > turn on
 
