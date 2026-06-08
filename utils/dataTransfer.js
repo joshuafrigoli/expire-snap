@@ -15,7 +15,7 @@ export async function exportData() {
 
   const filePath = `${FileSystem.cacheDirectory}expiresnap-backup.json`;
   await FileSystem.writeAsStringAsync(filePath, payload, {
-    encoding: FileSystem.EncodingType.UTF8,
+    encoding: 'utf8',
   });
 
   await Sharing.shareAsync(filePath, {
