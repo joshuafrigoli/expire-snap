@@ -3,32 +3,15 @@ import { View, TextInput, Text, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import DatePicker from '@/components/ui/DatePicker';
 import { CATEGORY_I18N_KEY } from '@/constants/categories';
-
-const CATEGORIES = ['Dairy', 'Meat & Fish', 'Fruits & Veggies', 'Frozen', 'Pantry'];
 import { useTheme } from '@/theme';
 
-function computeDaysLeft(dateStr) {
-  if (!dateStr) return null;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const expiry = new Date(dateStr);
-  expiry.setHours(0, 0, 0, 0);
-  return Math.floor((expiry - today) / 86400000);
-}
+const CATEGORIES = ['Dairy', 'Meat & Fish', 'Fruits & Veggies', 'Frozen', 'Pantry'];
 
 export default function ReviewItem({ item, onChange, onDelete }) {
   const { t } = useTranslation();
   const colors = useTheme();
   const styles = makeStyles(colors);
   const dateValue = item.estimated_expiry_date ? new Date(item.estimated_expiry_date) : null;
-  const daysLeft = computeDaysLeft(item.estimated_expiry_date);
-  const progressColor = daysLeft === null ? 'safe' : daysLeft < 0 ? 'danger' : daysLeft <= 3 ? 'warning' : 'safe';
-  const COLOR_MAP = {
-    danger: { text: colors.danger },
-    warning: { text: colors.warningText },
-    safe: { text: colors.textMuted },
-  };
-  const countdownColors = COLOR_MAP[progressColor];
 
   function handleCategoryPress() {
     const idx = CATEGORIES.indexOf(item.category);
@@ -68,16 +51,6 @@ export default function ReviewItem({ item, onChange, onDelete }) {
         </Pressable>
 
         <View style={styles.dateRow}>
-          {daysLeft !== null && (
-            <View style={styles.countdownWrapper}>
-              <Text style={[styles.countdownNumber, { color: countdownColors.text }]}>
-                {daysLeft}
-              </Text>
-              <Text style={[styles.countdownLabel, { color: countdownColors.text }]}>
-                {t('days.unit')}
-              </Text>
-            </View>
-          )}
           <Text style={styles.dateLabel}>📅</Text>
           <DatePicker
             testID={"review-item-date-" + item.id}
@@ -174,20 +147,6 @@ function makeStyles(colors) {
     },
     dateLabel: {
       fontSize: 14,
-    },
-    countdownWrapper: {
-      flexDirection: 'row',
-      alignItems: 'baseline',
-      gap: 3,
-      marginRight: 6,
-    },
-    countdownNumber: {
-      fontSize: 20,
-      fontWeight: '700',
-    },
-    countdownLabel: {
-      fontSize: 13,
-      fontWeight: '500',
     },
     confidence: {
       fontSize: 11,
