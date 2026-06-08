@@ -13,7 +13,7 @@ export default function ReviewScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { t } = useTranslation();
-  const { addItem } = useInventory();
+  const { addItems } = useInventory();
 
   const { showSnackbar } = useSnackbar();
   const [items, setItems] = useState(route.params.scanResult.items);
@@ -55,12 +55,10 @@ export default function ReviewScreen() {
 
     const now = new Date().toISOString();
     try {
-      for (const item of items) {
-        await addItem({ ...item, status: 'active', createdAt: now, updatedAt: now });
-      }
+      await addItems(items.map((item) => ({ ...item, status: 'active', createdAt: now, updatedAt: now })));
       console.log('[Review] added', items.length, 'items to fridge');
     } catch (err) {
-      console.error('[Review] addItem error:', err);
+      console.error('[Review] addItems error:', err);
     }
 
     navigation.navigate('BottomTabs', { screen: 'Fridge' });

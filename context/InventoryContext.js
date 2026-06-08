@@ -44,6 +44,16 @@ export function InventoryProvider({ children }) {
     await persist([...items, { ...item, notificationId }]);
   }
 
+  async function addItems(newItems) {
+    const withNotifications = await Promise.all(
+      newItems.map(async (item) => {
+        const notificationId = await scheduleExpiryNotification(item);
+        return { ...item, notificationId };
+      })
+    );
+    await persist([...items, ...withNotifications]);
+  }
+
   async function deleteItem(id) {
     const item = items.find((i) => i.id === id);
     if (item && item.notificationId) {
@@ -103,7 +113,7 @@ export function InventoryProvider({ children }) {
   }
 
   return (
-    <InventoryContext.Provider value={{ items, addItem, deleteItem, updateItem, markConsumed, markWasted, clearInventory }}>
+    <InventoryContext.Provider value={{ items, addItem, addItems, deleteItem, updateItem, markConsumed, markWasted, clearInventory }}>
       {children}
     </InventoryContext.Provider>
   );
