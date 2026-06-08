@@ -22,14 +22,13 @@ export default function ReviewItem({ item, onChange, onDelete }) {
   const styles = makeStyles(colors);
   const dateValue = item.estimated_expiry_date ? new Date(item.estimated_expiry_date) : null;
   const daysLeft = computeDaysLeft(item.estimated_expiry_date);
-
-  function daysLeftLabel() {
-    if (daysLeft === null) return null;
-    if (daysLeft < 0) return t('days.expired');
-    if (daysLeft === 0) return t('days.today');
-    if (daysLeft === 1) return t('days.tomorrow');
-    return t('days.daysLeft', { n: daysLeft });
-  }
+  const progressColor = daysLeft === null ? 'safe' : daysLeft < 0 ? 'danger' : daysLeft <= 3 ? 'warning' : 'safe';
+  const COLOR_MAP = {
+    danger: { text: colors.danger },
+    warning: { text: colors.warningText },
+    safe: { text: colors.textMuted },
+  };
+  const countdownColors = COLOR_MAP[progressColor];
 
   function handleCategoryPress() {
     const idx = CATEGORIES.indexOf(item.category);
@@ -69,6 +68,16 @@ export default function ReviewItem({ item, onChange, onDelete }) {
         </Pressable>
 
         <View style={styles.dateRow}>
+          {daysLeft !== null && (
+            <View style={styles.countdownWrapper}>
+              <Text style={[styles.countdownNumber, { color: countdownColors.text }]}>
+                {daysLeft}
+              </Text>
+              <Text style={[styles.countdownLabel, { color: countdownColors.text }]}>
+                {t('days.unit')}
+              </Text>
+            </View>
+          )}
           <Text style={styles.dateLabel}>📅</Text>
           <DatePicker
             testID={"review-item-date-" + item.id}
@@ -79,11 +88,6 @@ export default function ReviewItem({ item, onChange, onDelete }) {
               }
             }}
           />
-          {daysLeft !== null && (
-            <Text style={[styles.daysLeft, daysLeft < 0 && styles.daysLeftDanger, daysLeft >= 0 && daysLeft <= 3 && styles.daysLeftWarning]}>
-              {daysLeftLabel()}
-            </Text>
-          )}
         </View>
       </View>
 
@@ -171,17 +175,19 @@ function makeStyles(colors) {
     dateLabel: {
       fontSize: 14,
     },
-    daysLeft: {
-      fontSize: 11,
+    countdownWrapper: {
+      flexDirection: 'row',
+      alignItems: 'baseline',
+      gap: 3,
+      marginRight: 6,
+    },
+    countdownNumber: {
+      fontSize: 20,
       fontWeight: '700',
-      color: colors.textMuted,
-      marginLeft: 4,
     },
-    daysLeftWarning: {
-      color: colors.warning,
-    },
-    daysLeftDanger: {
-      color: colors.danger,
+    countdownLabel: {
+      fontSize: 13,
+      fontWeight: '500',
     },
     confidence: {
       fontSize: 11,
