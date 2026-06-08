@@ -3,6 +3,8 @@ import { View, TextInput, Text, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import DatePicker from '@/components/ui/DatePicker';
 import { CATEGORY_I18N_KEY } from '@/constants/categories';
+
+const CATEGORIES = ['Dairy', 'Meat & Fish', 'Fruits & Veggies', 'Frozen', 'Pantry'];
 import { useTheme } from '@/theme';
 
 export default function ReviewItem({ item, onChange, onDelete }) {
@@ -10,6 +12,12 @@ export default function ReviewItem({ item, onChange, onDelete }) {
   const colors = useTheme();
   const styles = makeStyles(colors);
   const dateValue = item.estimated_expiry_date ? new Date(item.estimated_expiry_date) : null;
+
+  function handleCategoryPress() {
+    const idx = CATEGORIES.indexOf(item.category);
+    const next = CATEGORIES[(idx + 1) % CATEGORIES.length];
+    onChange(item.id, { category: next });
+  }
 
   return (
     <View style={styles.card}>
@@ -31,11 +39,16 @@ export default function ReviewItem({ item, onChange, onDelete }) {
       </View>
 
       <View style={styles.bottomRow}>
-        {item.category ? (
-          <View style={styles.categoryBadge}>
-            <Text style={styles.categoryText}>{t(CATEGORY_I18N_KEY[item.category] ?? `categories.${item.category}`, { defaultValue: item.category })}</Text>
-          </View>
-        ) : null}
+        <Pressable
+          testID={"review-item-category-" + item.id}
+          onPress={handleCategoryPress}
+          style={styles.categoryBadge}
+        >
+          <Text style={styles.categoryText}>
+            {t(CATEGORY_I18N_KEY[item.category] ?? `categories.${item.category}`, { defaultValue: item.category ?? 'Pantry' })}
+            {' ▾'}
+          </Text>
+        </Pressable>
 
         <View style={styles.dateRow}>
           <Text style={styles.dateLabel}>📅</Text>

@@ -41,7 +41,7 @@ export default function ReviewScreen() {
       {
         id: String(Date.now()),
         name: '',
-        category: 'Other',
+        category: 'Pantry',
         estimated_expiry_date: isoExpiry,
         confidence_days: 0,
       },
