@@ -152,7 +152,7 @@ export default function ProfileScreen() {
               style={styles.outlineBtn}
               onPress={async () => {
                 try { await exportData(); }
-                catch { showSnackbar(t('errors.importFailed'), 'error'); }
+                catch { showSnackbar(t('errors.exportFailed'), 'error'); }
               }}
             >
               <Text style={styles.outlineBtnText}>📤  {t('profile.export')}</Text>

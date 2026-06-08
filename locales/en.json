@@ -96,6 +96,7 @@
     "invalidImage": "Please select a valid image file",
     "scanFailed": "Scan failed — please try again",
     "importFailed": "Import failed — invalid file format",
+    "exportFailed": "Export failed — please try again",
     "importSuccess": "Data imported successfully",
     "noItemsFound": "No items found — try scanning a grocery receipt",
     "permissionDenied": "Permission denied — enable access in device Settings",
