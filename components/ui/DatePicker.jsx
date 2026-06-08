@@ -26,6 +26,7 @@ function DatePicker({ value, onChange, testID }) {
         style={styles.trigger}
       >
         <Text style={styles.triggerText}>{formatted}</Text>
+        <Text style={styles.triggerIcon}>📅</Text>
       </Pressable>
 
       {show && (
@@ -47,16 +48,28 @@ function DatePicker({ value, onChange, testID }) {
 function makeStyles(colors) {
   return StyleSheet.create({
     trigger: {
-      backgroundColor: colors.bg,
       borderWidth: 2,
-      borderColor: colors.borderLight,
-      borderRadius: 8,
-      paddingHorizontal: 10,
-      paddingVertical: 8,
+      borderColor: colors.border,
+      borderRadius: 12,
+      backgroundColor: colors.surface,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 4, height: 4 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 4,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: 12,
+      paddingHorizontal: 14,
     },
     triggerText: {
-      fontSize: 14,
-      fontWeight: '600',
+      fontSize: 15,
+      fontWeight: '500',
+      color: colors.textPrimary,
+    },
+    triggerIcon: {
+      fontSize: 16,
       color: colors.primary,
     },
   });
