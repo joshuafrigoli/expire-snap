@@ -26,7 +26,7 @@ A React Native + Expo mobile application that reduces food waste by scanning gro
 
 ## Overview
 
-ExpireSnap lets you photograph a grocery receipt with your phone's camera. The image is sent to an AI provider (your choice of OpenAI, Google Gemini, or Anthropic Claude), which extracts the food items and estimates how long each one stays fresh. The results land in your virtual fridge with a countdown to expiry, a freshness progress bar, and a local push notification scheduled for the day before each item expires.
+ExpireSnap lets you photograph a grocery receipt with your phone's camera. The image is sent to an AI provider (your choice of OpenRouter, OpenAI, Google Gemini, or Anthropic Claude), which extracts the food items and estimates how long each one stays fresh. The results land in your virtual fridge with a countdown to expiry, a freshness progress bar, and a local push notification scheduled for the day before each item expires.
 
 **Key features:**
 
@@ -64,11 +64,12 @@ ExpireSnap lets you photograph a grocery receipt with your phone's camera. The i
 
 **AI providers (user-supplied API key, configured in-app):**
 
-| Provider | Model |
-|---|---|
-| OpenAI | GPT-4o |
-| Google Gemini | Gemini Flash |
-| Anthropic | claude-sonnet-4-6 |
+| Provider | Model | Notes |
+|---|---|---|
+| OpenRouter | Auto (openrouter/auto) | Free tier available — no API key required for free models |
+| OpenAI | GPT-4o | |
+| Google Gemini | Gemini Flash | |
+| Anthropic | claude-sonnet-4-6 | |
 
 ---
 
@@ -88,7 +89,8 @@ Before you start, make sure you have the following installed and configured:
   ```
 - **Expo account** — create a free account at [expo.dev](https://expo.dev)
 - **Expo Go app** on a physical iOS or Android device — download from the App Store or Google Play
-- **API key** from at least one AI provider:
+- **API key** from at least one AI provider (OpenRouter has a free tier that requires no key):
+  - OpenRouter (free tier available): [openrouter.ai/keys](https://openrouter.ai/keys)
   - OpenAI: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
   - Google Gemini: [aistudio.google.com](https://aistudio.google.com)
   - Anthropic: [console.anthropic.com](https://console.anthropic.com)
@@ -141,7 +143,7 @@ All configuration is done inside the app — there are no `.env` files or hardco
 
 1. Open the app and complete onboarding.
 2. Tap **Settings** in the bottom navigation bar.
-3. Under **AI Provider**, select one of: OpenAI, Google Gemini, or Anthropic Claude.
+3. Under **AI Provider**, select one of: OpenRouter (free), OpenAI, Google Gemini, or Anthropic Claude.
 4. Enter your API key in the **API Key** field (masked input).
 5. Optionally configure:
    - **Auto-delete period** — how long consumed/wasted items are kept in history before automatic removal (7, 14, 30, or 60 days; or never).
@@ -151,11 +153,12 @@ Settings are stored locally in `@react-native-async-storage/async-storage` under
 
 **Where to obtain API keys:**
 
-| Provider | URL |
-|---|---|
-| OpenAI | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
-| Google Gemini | [aistudio.google.com](https://aistudio.google.com) |
-| Anthropic | [console.anthropic.com](https://console.anthropic.com) |
+| Provider | URL | Notes |
+|---|---|---|
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Free tier available; leave API key field empty to use free models |
+| OpenAI | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) | |
+| Google Gemini | [aistudio.google.com](https://aistudio.google.com) | |
+| Anthropic | [console.anthropic.com](https://console.anthropic.com) | |
 
 ---
 

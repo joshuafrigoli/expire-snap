@@ -15,7 +15,7 @@ function detectLanguage() {
 }
 
 const DEFAULT_SETTINGS = {
-  aiProvider: 'openai',
+  aiProvider: 'openrouter',
   apiKey: '',
   autoDeleteDays: 30,
   language: detectLanguage(),
