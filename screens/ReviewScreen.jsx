@@ -31,6 +31,23 @@ export default function ReviewScreen() {
     setItems((prev) => prev.filter((item) => item.id !== id));
   }
 
+  function handleAddItem() {
+    const today = new Date();
+    const defaultExpiry = new Date(today);
+    defaultExpiry.setDate(defaultExpiry.getDate() + 7);
+    const isoExpiry = defaultExpiry.toISOString().split('T')[0];
+    setItems((prev) => [
+      ...prev,
+      {
+        id: String(Date.now()),
+        name: '',
+        category: 'Other',
+        estimated_expiry_date: isoExpiry,
+        confidence_days: 0,
+      },
+    ]);
+  }
+
   async function handleConfirm() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -90,6 +107,13 @@ export default function ReviewScreen() {
 
         <View style={styles.footer}>
           <Pressable
+            testID="review-add-btn"
+            onPress={handleAddItem}
+            style={styles.addBtn}
+          >
+            <Text style={styles.addBtnText}>{t('review.addProduct')}</Text>
+          </Pressable>
+          <Pressable
             testID="review-confirm-btn"
             onPress={handleConfirm}
             style={styles.confirmBtn}
@@ -142,7 +166,21 @@ function makeStyles(colors) {
       paddingHorizontal: 16,
       paddingBottom: 8,
       paddingTop: 8,
+      gap: 8,
       backgroundColor: colors.bg,
+    },
+    addBtn: {
+      borderWidth: 2,
+      borderColor: colors.border,
+      borderRadius: 9999,
+      paddingVertical: 12,
+      alignItems: 'center',
+      backgroundColor: colors.bg,
+    },
+    addBtnText: {
+      color: colors.primary,
+      fontSize: 15,
+      fontWeight: '600',
     },
     confirmBtn: {
       backgroundColor: colors.primary,

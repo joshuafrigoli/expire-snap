@@ -13,8 +13,8 @@ jest.mock('@react-navigation/native', () => ({
       scanResult: {
         transaction_date: '2026-06-03',
         items: [
-          { id: 'a', name: 'Milk', category: 'Dairy', estimated_expiry_date: '2026-06-10', confidence_days: 1 },
-          { id: 'b', name: 'Meat', category: 'Meat & Fish', estimated_expiry_date: '2026-06-06', confidence_days: 1 },
+          { id: 'a', name: 'Milk', category: 'Dairy', estimated_expiry_date: '2027-01-10', confidence_days: 1 },
+          { id: 'b', name: 'Meat', category: 'Meat & Fish', estimated_expiry_date: '2027-01-06', confidence_days: 1 },
         ],
       },
     },
@@ -47,5 +47,13 @@ describe('ReviewScreen validation', () => {
     const { getByTestId } = render(<Wrapper><ReviewScreen /></Wrapper>);
     fireEvent.press(getByTestId('review-confirm-btn'));
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('BottomTabs', { screen: 'Fridge' }));
+  });
+
+  it('adds a blank item when add product button is pressed', () => {
+    const { getByTestId, getAllByTestId } = render(<Wrapper><ReviewScreen /></Wrapper>);
+    const before = getAllByTestId(/review-item-name/).length;
+    fireEvent.press(getByTestId('review-add-btn'));
+    const after = getAllByTestId(/review-item-name/).length;
+    expect(after).toBe(before + 1);
   });
 });

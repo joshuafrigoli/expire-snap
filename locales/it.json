@@ -28,6 +28,7 @@
     "title": "Revisiona Prodotti",
     "itemCount": "{{n}} prodotti",
     "confirm": "Conferma e Aggiungi al Frigo",
+    "addProduct": "+ Aggiungi Prodotto",
     "confidenceDays": "± {{n}} giorni"
   },
   "fridge": {
