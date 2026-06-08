@@ -18,7 +18,7 @@ export default function OnboardingScreen() {
 
   async function handleSubmit() {
     await updateSettings({ profile: { name: name.trim(), avatarEmoji } });
-    try { navigation.navigate('Home'); } catch {}
+    try { navigation.navigate('BottomTabs'); } catch {}
   }
 
   const EMOJIS = ['🥦', '🍕', '🍎', '🥩', '🧀', '🥛', '🐟', '🥚', '🥕', '🍌'];
