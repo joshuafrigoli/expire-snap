@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import { useTheme } from '@/theme';
+import { useTheme, useScheme } from '@/theme';
 
 function DatePicker({ value, onChange, testID }) {
   const colors = useTheme();
+  const scheme = useScheme();
   const styles = makeStyles(colors);
   const [show, setShow] = useState(false);
 
@@ -34,6 +35,9 @@ function DatePicker({ value, onChange, testID }) {
           onChange={handleChange}
           mode="date"
           minimumDate={new Date()}
+          accentColor={colors.primary}
+          textColor={colors.textPrimary}
+          themeVariant={scheme}
         />
       )}
     </View>

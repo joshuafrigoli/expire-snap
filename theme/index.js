@@ -88,6 +88,13 @@ export const darkColors = {
   snackbarText: '#ffffff',
 };
 
+export function useScheme() {
+  const systemScheme = useColorScheme();
+  const ctx = useContext(SettingsContext);
+  const themeSetting = ctx?.settings?.theme ?? 'system';
+  return themeSetting === 'system' ? (systemScheme ?? 'light') : themeSetting;
+}
+
 export function useTheme() {
   const systemScheme = useColorScheme();
   const ctx = useContext(SettingsContext);
