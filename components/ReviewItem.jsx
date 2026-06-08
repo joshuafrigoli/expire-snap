@@ -7,11 +7,29 @@ import { CATEGORY_I18N_KEY } from '@/constants/categories';
 const CATEGORIES = ['Dairy', 'Meat & Fish', 'Fruits & Veggies', 'Frozen', 'Pantry'];
 import { useTheme } from '@/theme';
 
+function computeDaysLeft(dateStr) {
+  if (!dateStr) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const expiry = new Date(dateStr);
+  expiry.setHours(0, 0, 0, 0);
+  return Math.floor((expiry - today) / 86400000);
+}
+
 export default function ReviewItem({ item, onChange, onDelete }) {
   const { t } = useTranslation();
   const colors = useTheme();
   const styles = makeStyles(colors);
   const dateValue = item.estimated_expiry_date ? new Date(item.estimated_expiry_date) : null;
+  const daysLeft = computeDaysLeft(item.estimated_expiry_date);
+
+  function daysLeftLabel() {
+    if (daysLeft === null) return null;
+    if (daysLeft < 0) return t('days.expired');
+    if (daysLeft === 0) return t('days.today');
+    if (daysLeft === 1) return t('days.tomorrow');
+    return t('days.daysLeft', { n: daysLeft });
+  }
 
   function handleCategoryPress() {
     const idx = CATEGORIES.indexOf(item.category);
@@ -61,6 +79,11 @@ export default function ReviewItem({ item, onChange, onDelete }) {
               }
             }}
           />
+          {daysLeft !== null && (
+            <Text style={[styles.daysLeft, daysLeft < 0 && styles.daysLeftDanger, daysLeft >= 0 && daysLeft <= 3 && styles.daysLeftWarning]}>
+              {daysLeftLabel()}
+            </Text>
+          )}
         </View>
       </View>
 
@@ -147,6 +170,18 @@ function makeStyles(colors) {
     },
     dateLabel: {
       fontSize: 14,
+    },
+    daysLeft: {
+      fontSize: 11,
+      fontWeight: '700',
+      color: colors.textMuted,
+      marginLeft: 4,
+    },
+    daysLeftWarning: {
+      color: colors.warning,
+    },
+    daysLeftDanger: {
+      color: colors.danger,
     },
     confidence: {
       fontSize: 11,
