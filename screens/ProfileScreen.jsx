@@ -41,7 +41,7 @@ export default function ProfileScreen() {
     name !== (settings.profile?.name || '') ||
     avatarEmoji !== (settings.profile?.avatarEmoji || '🥦');
 
-  const totalScanned = items.filter((i) => i.status === 'consumed' || i.status === 'wasted').length;
+  const totalScanned = items.length;
   const savedFromWaste = items.filter((i) => i.status === 'consumed').length;
 
   async function handleSave() {
