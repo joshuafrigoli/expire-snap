@@ -61,7 +61,6 @@ export default function ReviewItem({ item, onChange, onDelete }) {
         </Pressable>
 
         <View style={styles.dateRow}>
-          <Text style={styles.dateLabel}>📅</Text>
           <DatePicker
             testID={"review-item-date-" + item.id}
             value={dateValue}
@@ -160,9 +159,6 @@ function makeStyles(colors) {
       flexDirection: 'row',
       alignItems: 'center',
       gap: 6,
-    },
-    dateLabel: {
-      fontSize: 14,
     },
     confidence: {
       fontSize: 11,
