@@ -17,11 +17,11 @@ describe('ReviewItem', () => {
     expect(getByDisplayValue('Fresh Milk')).toBeTruthy();
   });
 
-  it('renders confidence_days as ± N days label', () => {
+  it('renders days-left label based on expiry date', () => {
     const { getByText } = render(
       <ReviewItem item={baseItem} onChange={() => {}} onDelete={() => {}} />
     );
-    expect(getByText('review.confidenceDays')).toBeTruthy();
+    expect(getByText(/days\.daysLeft|days\.today|days\.tomorrow|days\.expired/)).toBeTruthy();
   });
 
   it('calls onChange when name edited', () => {

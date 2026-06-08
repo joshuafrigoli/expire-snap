@@ -7,11 +7,21 @@ import { useTheme } from '@/theme';
 
 const CATEGORIES = ['Dairy', 'Meat & Fish', 'Fruits & Veggies', 'Frozen', 'Pantry'];
 
+function computeDaysLeft(dateStr) {
+  if (!dateStr) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const expiry = new Date(dateStr);
+  expiry.setHours(0, 0, 0, 0);
+  return Math.floor((expiry - today) / 86400000);
+}
+
 export default function ReviewItem({ item, onChange, onDelete }) {
   const { t } = useTranslation();
   const colors = useTheme();
   const styles = makeStyles(colors);
   const dateValue = item.estimated_expiry_date ? new Date(item.estimated_expiry_date) : null;
+  const daysLeft = computeDaysLeft(item.estimated_expiry_date);
 
   function handleCategoryPress() {
     const idx = CATEGORIES.indexOf(item.category);
@@ -64,9 +74,15 @@ export default function ReviewItem({ item, onChange, onDelete }) {
         </View>
       </View>
 
-      {item.confidence_days != null && (
+      {daysLeft !== null && (
         <Text style={styles.confidence}>
-          {t('review.confidenceDays', { n: item.confidence_days })}
+          {daysLeft < 0
+            ? t('days.expired')
+            : daysLeft === 0
+            ? t('days.today')
+            : daysLeft === 1
+            ? t('days.tomorrow')
+            : t('days.daysLeft', { n: daysLeft })}
         </Text>
       )}
     </View>
