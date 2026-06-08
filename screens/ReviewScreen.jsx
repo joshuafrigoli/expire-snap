@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
 import ReviewItem from '@/components/ReviewItem';
-import { ProfileButton } from '@/components/ui';
+import { Ionicons } from '@expo/vector-icons';
 import { useSnackbar } from '@/context/SnackbarContext';
 import { useTheme } from '@/theme';
 
@@ -85,7 +85,13 @@ export default function ReviewScreen() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <ProfileButton testID="review-profile-btn" />
+          <Pressable
+            testID="review-back-btn"
+            onPress={() => navigation.goBack()}
+            style={styles.backBtn}
+          >
+            <Ionicons name="arrow-back" size={20} color={colors.textPrimary} />
+          </Pressable>
           <View style={styles.headerText}>
             <Text style={styles.title}>{t('review.title')}</Text>
             <Text style={styles.subtitle}>{t('review.itemCount', { n: items.length })}</Text>
@@ -144,6 +150,21 @@ function makeStyles(colors) {
       paddingHorizontal: 16,
       paddingTop: 16,
       paddingBottom: 4,
+    },
+    backBtn: {
+      width: 40,
+      height: 40,
+      borderRadius: 9999,
+      borderWidth: 2,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 3,
     },
     headerText: {
       flex: 1,
