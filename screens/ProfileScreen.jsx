@@ -11,7 +11,7 @@ import { useSettings } from '@/context/SettingsContext';
 import { useInventory } from '@/context/InventoryContext';
 import { exportData, importData } from '@/utils/dataTransfer';
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { useSnackbar } from '@/context/SnackbarContext';
 import { useTheme } from '@/theme';
 

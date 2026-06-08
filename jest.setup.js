@@ -165,13 +165,15 @@ jest.mock('@react-native-community/datetimepicker', () => {
   return ({ testID, onChange, value, ...props }) =>
     React.createElement(View, { testID, onChange, ...props });
 });
-jest.mock('expo-file-system', () => ({
+jest.mock('expo-file-system/legacy', () => ({
   writeAsStringAsync: jest.fn().mockResolvedValue(undefined),
+  readAsStringAsync: jest.fn().mockResolvedValue('{}'),
   deleteAsync: jest.fn().mockResolvedValue(undefined),
   cacheDirectory: 'file://cache/',
   documentDirectory: 'file://documents/',
   EncodingType: { UTF8: 'utf8' },
 }));
+jest.mock('expo-file-system', () => ({}));
 jest.mock('react-native-screens', () => ({
   enableScreens: jest.fn(),
   Screen: 'RNSScreen',
