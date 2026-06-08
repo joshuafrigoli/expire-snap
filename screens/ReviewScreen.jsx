@@ -90,6 +90,13 @@ export default function ReviewScreen() {
             <Text style={styles.title}>{t('review.title')}</Text>
             <Text style={styles.subtitle}>{t('review.itemCount', { n: items.length })}</Text>
           </View>
+          <Pressable
+            testID="review-add-btn"
+            onPress={handleAddItem}
+            style={styles.addBtn}
+          >
+            <Text style={styles.addBtnText}>{'+'}</Text>
+          </Pressable>
         </View>
 
         <FlatList
@@ -106,13 +113,6 @@ export default function ReviewScreen() {
         />
 
         <View style={styles.footer}>
-          <Pressable
-            testID="review-add-btn"
-            onPress={handleAddItem}
-            style={styles.addBtn}
-          >
-            <Text style={styles.addBtnText}>{t('review.addProduct')}</Text>
-          </Pressable>
           <Pressable
             testID="review-confirm-btn"
             onPress={handleConfirm}
@@ -166,21 +166,28 @@ function makeStyles(colors) {
       paddingHorizontal: 16,
       paddingBottom: 8,
       paddingTop: 8,
-      gap: 8,
       backgroundColor: colors.bg,
     },
     addBtn: {
-      borderWidth: 2,
-      borderColor: colors.border,
+      width: 40,
+      height: 40,
       borderRadius: 9999,
-      paddingVertical: 12,
+      borderWidth: 2,
+      borderColor: colors.primary,
+      backgroundColor: colors.surface,
       alignItems: 'center',
-      backgroundColor: colors.bg,
+      justifyContent: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 3,
     },
     addBtnText: {
+      fontSize: 22,
+      fontWeight: '700',
       color: colors.primary,
-      fontSize: 15,
-      fontWeight: '600',
+      lineHeight: 26,
     },
     confirmBtn: {
       backgroundColor: colors.primary,
