@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 const PortalContext = createContext({ mount: () => {}, unmount: () => {} });
@@ -18,8 +18,10 @@ export function PortalProvider({ children }) {
     });
   }, []);
 
+  const value = useMemo(() => ({ mount, unmount }), [mount, unmount]);
+
   return (
-    <PortalContext.Provider value={{ mount, unmount }}>
+    <PortalContext.Provider value={value}>
       <View style={{ flex: 1 }}>
         {children}
         <View style={StyleSheet.absoluteFill} pointerEvents="box-none">

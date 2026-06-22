@@ -165,4 +165,43 @@ describe('InventoryContext', () => {
 
     expect(Notifications.scheduleNotificationAsync).not.toHaveBeenCalled();
   });
+
+  it('clearExpired marks expired active items as wasted and leaves fresh items active', async () => {
+    let ctx;
+    render(<Wrapper><TestConsumer onRender={c => { ctx = c; }} /></Wrapper>);
+    await waitFor(() => expect(ctx).toBeDefined());
+    await act(async () => { ctx.addItem(mockItem({ id: 'exp-1', estimated_expiry_date: '2020-01-01' })); });
+    await act(async () => { ctx.addItem(mockItem({ id: 'fresh-1', estimated_expiry_date: '2099-01-01' })); });
+    await waitFor(() => expect(ctx.items).toHaveLength(2));
+    await act(async () => { ctx.clearExpired(); });
+    await waitFor(() => {
+      expect(ctx.items.find(i => i.id === 'exp-1').status).toBe('wasted');
+      expect(ctx.items.find(i => i.id === 'fresh-1').status).toBe('active');
+    });
+  });
+
+  it('clearExpired cancels notifications for expired items', async () => {
+    let ctx;
+    render(<Wrapper><TestConsumer onRender={c => { ctx = c; }} /></Wrapper>);
+    await waitFor(() => expect(ctx).toBeDefined());
+    await act(async () => { ctx.addItem(mockItem({ id: 'exp-2', estimated_expiry_date: '2020-01-01' })); });
+    await waitFor(() => expect(ctx.items).toHaveLength(1));
+    jest.clearAllMocks();
+    await act(async () => { ctx.clearExpired(); });
+    await waitFor(() => {
+      expect(Notifications.cancelScheduledNotificationAsync).toHaveBeenCalledWith('notification-id-123');
+    });
+  });
+
+  it('clearExpired does not change status of consumed items', async () => {
+    let ctx;
+    render(<Wrapper><TestConsumer onRender={c => { ctx = c; }} /></Wrapper>);
+    await waitFor(() => expect(ctx).toBeDefined());
+    await act(async () => { ctx.addItem(mockItem({ id: 'cons-1', estimated_expiry_date: '2020-01-01' })); });
+    await waitFor(() => expect(ctx.items).toHaveLength(1));
+    await act(async () => { ctx.markConsumed('cons-1'); });
+    await waitFor(() => expect(ctx.items[0].status).toBe('consumed'));
+    await act(async () => { ctx.clearExpired(); });
+    await waitFor(() => expect(ctx.items[0].status).toBe('consumed'));
+  });
 });

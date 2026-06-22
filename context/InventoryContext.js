@@ -125,6 +125,26 @@ export function InventoryProvider({ children }) {
     await persist(items.filter((i) => i.status !== 'active'));
   }
 
+  async function clearExpired() {
+    const today = new Date().toISOString().split('T')[0];
+    const expired = items.filter(
+      (i) => i.status === 'active' && i.estimated_expiry_date < today
+    );
+    for (const item of expired) {
+      if (item.notificationId) await cancelExpiryNotification(item.notificationId);
+    }
+    const expiredIds = new Set(expired.map((i) => i.id));
+    const now = new Date().toISOString();
+    await persist(
+      items.map((i) => {
+        if (!expiredIds.has(i.id)) return i;
+        const prev = new Date(i.updatedAt).getTime();
+        const ts = Math.max(Date.now(), prev + 1);
+        return { ...i, status: 'wasted', updatedAt: new Date(ts).toISOString() };
+      })
+    );
+  }
+
   async function markWasted(id) {
     const item = items.find((i) => i.id === id);
     if (item && item.notificationId) {
@@ -141,7 +161,7 @@ export function InventoryProvider({ children }) {
   }
 
   return (
-    <InventoryContext.Provider value={{ items, addItem, addItems, deleteItem, updateItem, markConsumed, markWasted, clearInventory }}>
+    <InventoryContext.Provider value={{ items, addItem, addItems, deleteItem, updateItem, markConsumed, markWasted, clearInventory, clearExpired }}>
       {children}
     </InventoryContext.Provider>
   );

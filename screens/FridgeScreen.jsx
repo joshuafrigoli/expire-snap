@@ -12,29 +12,34 @@ import { useTheme } from '@/theme';
 export default function FridgeScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { clearInventory } = useInventory();
-  const [showConfirm, setShowConfirm] = useState(false);
+  const { clearInventory, clearExpired } = useInventory();
+  const [showCleanModal, setShowCleanModal] = useState(false);
   const colors = useTheme();
   const styles = makeStyles(colors);
   const portal = usePortal();
   const portalKey = 'fridge-confirm';
 
-  const handleClear = useCallback(async () => {
+  const handleClearAll = useCallback(async () => {
     await clearInventory();
-    setShowConfirm(false);
+    setShowCleanModal(false);
   }, [clearInventory]);
 
+  const handleClearExpired = useCallback(async () => {
+    await clearExpired();
+    setShowCleanModal(false);
+  }, [clearExpired]);
+
   useEffect(() => {
-    if (!showConfirm) return;
+    if (!showCleanModal) return;
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
-      setShowConfirm(false);
+      setShowCleanModal(false);
       return true;
     });
     return () => sub.remove();
-  }, [showConfirm]);
+  }, [showCleanModal]);
 
   useEffect(() => {
-    if (!showConfirm) {
+    if (!showCleanModal) {
       portal.unmount(portalKey);
       return;
     }
@@ -43,29 +48,35 @@ export default function FridgeScreen() {
       portalKey,
       <View key={portalKey} style={s.backdrop}>
         <View style={s.dialog}>
-          <Text style={s.dialogTitle}>{t('fridge.clearConfirmTitle')}</Text>
-          <Text style={s.dialogMessage}>{t('fridge.clearConfirmMessage')}</Text>
-          <View style={s.dialogButtons}>
-            <Pressable
-              testID="fridge-clear-cancel"
-              onPress={() => setShowConfirm(false)}
-              style={s.cancelBtn}
-            >
-              <Text style={s.cancelBtnText}>{t('fridge.clearCancel')}</Text>
-            </Pressable>
-            <Pressable
-              testID="fridge-clear-confirm"
-              onPress={handleClear}
-              style={s.confirmBtn}
-            >
-              <Text style={s.confirmBtnText}>{t('fridge.clearConfirm')}</Text>
-            </Pressable>
-          </View>
+          <Text style={s.dialogTitle}>{t('fridge.cleanModalTitle')}</Text>
+          <Pressable
+            testID="fridge-clear-expired-btn"
+            onPress={handleClearExpired}
+            style={s.expiredBtn}
+          >
+            <Text style={s.expiredBtnText}>{t('fridge.clearExpiredLabel')}</Text>
+            <Text style={s.optionDesc}>{t('fridge.clearExpiredDesc')}</Text>
+          </Pressable>
+          <Pressable
+            testID="fridge-clear-all-btn"
+            onPress={handleClearAll}
+            style={s.confirmBtn}
+          >
+            <Text style={s.confirmBtnText}>{t('fridge.clearAllLabel')}</Text>
+            <Text style={s.optionDescDanger}>{t('fridge.clearAllDesc')}</Text>
+          </Pressable>
+          <Pressable
+            testID="fridge-clear-cancel"
+            onPress={() => setShowCleanModal(false)}
+            style={s.cancelBtn}
+          >
+            <Text style={s.cancelBtnText}>{t('fridge.clearCancel')}</Text>
+          </Pressable>
         </View>
       </View>,
     );
     return () => portal.unmount(portalKey);
-  }, [showConfirm, colors, t, handleClear]);
+  }, [showCleanModal, colors, t, handleClearExpired, handleClearAll]);
 
   return (
     <SafeAreaView testID="screen-fridge" style={styles.root}>
@@ -74,7 +85,7 @@ export default function FridgeScreen() {
         <Text style={styles.title}>{t('fridge.title')}</Text>
         <Pressable
           testID="fridge-clear-btn"
-          onPress={() => setShowConfirm(true)}
+          onPress={() => setShowCleanModal(true)}
           style={styles.clearBtn}
         >
           <Text style={styles.clearBtnText}>🗑️</Text>
@@ -161,18 +172,7 @@ function makeStyles(colors) {
       fontWeight: '700',
       color: colors.textPrimary,
     },
-    dialogMessage: {
-      fontSize: 14,
-      color: colors.textSecondary,
-      lineHeight: 20,
-    },
-    dialogButtons: {
-      flexDirection: 'row',
-      gap: 10,
-      marginTop: 4,
-    },
     cancelBtn: {
-      flex: 1,
       backgroundColor: colors.surface,
       borderWidth: 2,
       borderColor: colors.border,
@@ -190,14 +190,31 @@ function makeStyles(colors) {
       fontWeight: '700',
       color: colors.textPrimary,
     },
+    expiredBtn: {
+      backgroundColor: colors.warning,
+      borderWidth: 2,
+      borderColor: colors.border,
+      borderRadius: 12,
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 3,
+    },
+    expiredBtnText: {
+      fontSize: 14,
+      fontWeight: '700',
+      color: colors.textPrimary,
+    },
     confirmBtn: {
-      flex: 1,
       backgroundColor: colors.danger,
       borderWidth: 2,
       borderColor: colors.border,
-      borderRadius: 9999,
-      paddingVertical: 12,
-      alignItems: 'center',
+      borderRadius: 12,
+      paddingVertical: 14,
+      paddingHorizontal: 16,
       shadowColor: colors.shadow,
       shadowOffset: { width: 3, height: 3 },
       shadowOpacity: 1,
@@ -208,6 +225,18 @@ function makeStyles(colors) {
       fontSize: 14,
       fontWeight: '700',
       color: colors.primaryFg,
+    },
+    optionDesc: {
+      fontSize: 12,
+      color: colors.textPrimary,
+      marginTop: 2,
+      opacity: 0.75,
+    },
+    optionDescDanger: {
+      fontSize: 12,
+      color: colors.primaryFg,
+      marginTop: 2,
+      opacity: 0.75,
     },
   });
 }
