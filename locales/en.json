@@ -40,6 +40,11 @@
     "clearExpiredDesc": "Expired items moved to history as wasted.",
     "clearAllLabel": "Clear everything",
     "clearAllDesc": "Removes all items. Cannot be undone.",
+    "confirmExpiredTitle": "Remove expired items?",
+    "confirmExpiredMessage": "Expired items will be moved to history as wasted.",
+    "confirmAllTitle": "Clear everything?",
+    "confirmAllMessage": "All items will be permanently removed. This cannot be undone.",
+    "confirmProceed": "Confirm",
     "clearCancel": "Cancel",
     "editDateTitle": "Edit Expiry Date"
   },

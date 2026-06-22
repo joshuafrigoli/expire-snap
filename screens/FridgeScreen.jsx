@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Pressable, StyleSheet, BackHandler } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -9,49 +9,46 @@ import { FloatingActionButton, ProfileButton } from '@/components/ui';
 import { usePortal } from '@/context/PortalContext';
 import { useTheme } from '@/theme';
 
+// cleanStep: null | 'choose' | 'confirm-expired' | 'confirm-all'
 export default function FridgeScreen() {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { clearInventory, clearExpired } = useInventory();
-  const [showCleanModal, setShowCleanModal] = useState(false);
+  const [cleanStep, setCleanStep] = useState(null);
   const colors = useTheme();
   const styles = makeStyles(colors);
   const portal = usePortal();
   const portalKey = 'fridge-confirm';
 
-  const handleClearAll = useCallback(async () => {
-    await clearInventory();
-    setShowCleanModal(false);
-  }, [clearInventory]);
-
-  const handleClearExpired = useCallback(async () => {
-    await clearExpired();
-    setShowCleanModal(false);
-  }, [clearExpired]);
-
   useEffect(() => {
-    if (!showCleanModal) return;
+    if (!cleanStep) return;
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
-      setShowCleanModal(false);
+      setCleanStep(cleanStep === 'choose' ? null : 'choose');
       return true;
     });
     return () => sub.remove();
-  }, [showCleanModal]);
+  }, [cleanStep]);
 
   useEffect(() => {
-    if (!showCleanModal) {
+    if (!cleanStep) {
       portal.unmount(portalKey);
       return;
     }
     const s = makeStyles(colors);
-    portal.mount(
-      portalKey,
+
+    const confirmAction = async () => {
+      if (cleanStep === 'confirm-expired') await clearExpired();
+      else if (cleanStep === 'confirm-all') await clearInventory();
+      setCleanStep(null);
+    };
+
+    const node = cleanStep === 'choose' ? (
       <View key={portalKey} style={s.backdrop}>
         <View style={s.dialog}>
           <Text style={s.dialogTitle}>{t('fridge.cleanModalTitle')}</Text>
           <Pressable
             testID="fridge-clear-expired-btn"
-            onPress={handleClearExpired}
+            onPress={() => setCleanStep('confirm-expired')}
             style={s.expiredBtn}
           >
             <Text style={s.expiredBtnText}>{t('fridge.clearExpiredLabel')}</Text>
@@ -59,24 +56,53 @@ export default function FridgeScreen() {
           </Pressable>
           <Pressable
             testID="fridge-clear-all-btn"
-            onPress={handleClearAll}
-            style={s.confirmBtn}
+            onPress={() => setCleanStep('confirm-all')}
+            style={s.dangerBtn}
           >
-            <Text style={s.confirmBtnText}>{t('fridge.clearAllLabel')}</Text>
+            <Text style={s.dangerBtnText}>{t('fridge.clearAllLabel')}</Text>
             <Text style={s.optionDescDanger}>{t('fridge.clearAllDesc')}</Text>
           </Pressable>
           <Pressable
             testID="fridge-clear-cancel"
-            onPress={() => setShowCleanModal(false)}
+            onPress={() => setCleanStep(null)}
             style={s.cancelBtn}
           >
             <Text style={s.cancelBtnText}>{t('fridge.clearCancel')}</Text>
           </Pressable>
         </View>
-      </View>,
+      </View>
+    ) : (
+      <View key={portalKey} style={s.backdrop}>
+        <View style={s.dialog}>
+          <Text style={s.dialogTitle}>
+            {t(cleanStep === 'confirm-expired' ? 'fridge.confirmExpiredTitle' : 'fridge.confirmAllTitle')}
+          </Text>
+          <Text style={s.dialogMessage}>
+            {t(cleanStep === 'confirm-expired' ? 'fridge.confirmExpiredMessage' : 'fridge.confirmAllMessage')}
+          </Text>
+          <Pressable
+            testID="fridge-confirm-proceed"
+            onPress={confirmAction}
+            style={cleanStep === 'confirm-expired' ? s.expiredBtn : s.dangerBtn}
+          >
+            <Text style={cleanStep === 'confirm-expired' ? s.expiredBtnText : s.dangerBtnText}>
+              {t('fridge.confirmProceed')}
+            </Text>
+          </Pressable>
+          <Pressable
+            testID="fridge-clear-cancel"
+            onPress={() => setCleanStep('choose')}
+            style={s.cancelBtn}
+          >
+            <Text style={s.cancelBtnText}>{t('fridge.clearCancel')}</Text>
+          </Pressable>
+        </View>
+      </View>
     );
+
+    portal.mount(portalKey, node);
     return () => portal.unmount(portalKey);
-  }, [showCleanModal, colors, t, handleClearExpired, handleClearAll]);
+  }, [cleanStep, colors, t, clearExpired, clearInventory]);
 
   return (
     <SafeAreaView testID="screen-fridge" style={styles.root}>
@@ -85,7 +111,7 @@ export default function FridgeScreen() {
         <Text style={styles.title}>{t('fridge.title')}</Text>
         <Pressable
           testID="fridge-clear-btn"
-          onPress={() => setShowCleanModal(true)}
+          onPress={() => setCleanStep('choose')}
           style={styles.clearBtn}
         >
           <Text style={styles.clearBtnText}>🗑️</Text>
@@ -94,7 +120,6 @@ export default function FridgeScreen() {
 
       <InventoryList style={styles.list} />
       <FloatingActionButton testID="fridge-fab" onPress={() => navigation.navigate('Scan')} style={styles.fab} />
-
 
     </SafeAreaView>
   );
@@ -172,6 +197,11 @@ function makeStyles(colors) {
       fontWeight: '700',
       color: colors.textPrimary,
     },
+    dialogMessage: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      lineHeight: 20,
+    },
     cancelBtn: {
       backgroundColor: colors.surface,
       borderWidth: 2,
@@ -208,7 +238,7 @@ function makeStyles(colors) {
       fontWeight: '700',
       color: colors.textPrimary,
     },
-    confirmBtn: {
+    dangerBtn: {
       backgroundColor: colors.danger,
       borderWidth: 2,
       borderColor: colors.border,
@@ -221,7 +251,7 @@ function makeStyles(colors) {
       shadowRadius: 0,
       elevation: 3,
     },
-    confirmBtnText: {
+    dangerBtnText: {
       fontSize: 14,
       fontWeight: '700',
       color: colors.primaryFg,
