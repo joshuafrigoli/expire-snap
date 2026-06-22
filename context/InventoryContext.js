@@ -53,12 +53,10 @@ export function InventoryProvider({ children }) {
           return { ...item, notificationId };
         })
       );
-      setItems((prev) => {
-        const map = Object.fromEntries(rescheduled.map((r) => [r.id, r]));
-        const next = prev.map((i) => map[i.id] ?? i);
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-        return next;
-      });
+      const idMap = Object.fromEntries(rescheduled.map((r) => [r.id, r]));
+      const next = itemsRef.current.map((i) => idMap[i.id] ?? i);
+      setItems(next);
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     }
     i18n.on('languageChanged', onLanguageChanged);
     return () => i18n.off('languageChanged', onLanguageChanged);

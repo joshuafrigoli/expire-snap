@@ -30,7 +30,9 @@ const TestConsumer = ({ onRender }) => {
 
 describe('InventoryContext', () => {
   beforeEach(() => AsyncStorage.clear());
-  afterEach(() => i18n.changeLanguage('en'));
+  afterEach(async () => {
+    await act(async () => { await i18n.changeLanguage('en'); });
+  });
 
   it('starts with empty inventory', async () => {
     let ctx;
@@ -141,9 +143,6 @@ describe('InventoryContext', () => {
 
     expect(Notifications.cancelScheduledNotificationAsync).toHaveBeenCalledWith('notification-id-123');
     expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledTimes(1);
-
-    // cleanup
-    await i18n.changeLanguage('en');
   });
 
   it('does not reschedule consumed/wasted items when language changes', async () => {
@@ -165,7 +164,5 @@ describe('InventoryContext', () => {
     });
 
     expect(Notifications.scheduleNotificationAsync).not.toHaveBeenCalled();
-
-    await i18n.changeLanguage('en');
   });
 });
