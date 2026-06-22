@@ -98,7 +98,7 @@ function AppContent() {
 
   return (
     <NavigationContainer ref={navRef} theme={navTheme}>
-      <StatusBar style={isDark ? 'light' : 'dark'} />
+      <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.surface} />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!hasProfile && <Stack.Screen name="Onboarding" component={OnboardingScreen} />}
         {hasProfile && <Stack.Screen name="BottomTabs" component={BottomTabsNavigator} />}
