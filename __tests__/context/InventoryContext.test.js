@@ -3,6 +3,8 @@ import { render, act, waitFor } from '@testing-library/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { InventoryProvider, useInventory } from '@/context/InventoryContext';
 import { SettingsProvider } from '@/context/SettingsContext';
+import * as Notifications from 'expo-notifications';
+import i18n from '@/utils/i18n';
 
 const mockItem = (overrides = {}) => ({
   id: 'uuid-001',
@@ -28,6 +30,7 @@ const TestConsumer = ({ onRender }) => {
 
 describe('InventoryContext', () => {
   beforeEach(() => AsyncStorage.clear());
+  afterEach(() => i18n.changeLanguage('en'));
 
   it('starts with empty inventory', async () => {
     let ctx;
@@ -117,5 +120,52 @@ describe('InventoryContext', () => {
     await waitFor(() => {
       expect(ctx.items.map(i => i.id)).toContain('old-consumed');
     });
+  });
+
+  it('reschedules all active notifications when language changes', async () => {
+    let ctx;
+    render(<Wrapper><TestConsumer onRender={c => { ctx = c; }} /></Wrapper>);
+    await waitFor(() => expect(ctx).toBeDefined());
+
+    await act(async () => {
+      await ctx.addItem(mockItem({ id: 'item-reschedule', name: 'Cheese' }));
+    });
+    await waitFor(() => expect(ctx.items).toHaveLength(1));
+    // addItem called scheduleNotificationAsync once; item now has notificationId 'notification-id-123'
+
+    jest.clearAllMocks();
+
+    await act(async () => {
+      await i18n.changeLanguage('it');
+    });
+
+    expect(Notifications.cancelScheduledNotificationAsync).toHaveBeenCalledWith('notification-id-123');
+    expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledTimes(1);
+
+    // cleanup
+    await i18n.changeLanguage('en');
+  });
+
+  it('does not reschedule consumed/wasted items when language changes', async () => {
+    let ctx;
+    render(<Wrapper><TestConsumer onRender={c => { ctx = c; }} /></Wrapper>);
+    await waitFor(() => expect(ctx).toBeDefined());
+
+    await act(async () => {
+      await ctx.addItem(mockItem({ id: 'item-consumed', name: 'OldMilk' }));
+    });
+    await waitFor(() => expect(ctx.items).toHaveLength(1));
+    await act(async () => { await ctx.markConsumed('item-consumed'); });
+    await waitFor(() => expect(ctx.items[0].status).toBe('consumed'));
+
+    jest.clearAllMocks();
+
+    await act(async () => {
+      await i18n.changeLanguage('it');
+    });
+
+    expect(Notifications.scheduleNotificationAsync).not.toHaveBeenCalled();
+
+    await i18n.changeLanguage('en');
   });
 });

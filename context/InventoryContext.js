@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { scheduleExpiryNotification, cancelExpiryNotification } from '@/utils/notifications';
+import i18n from '@/utils/i18n';
 
 const STORAGE_KEY = 'expiresnap_inventory';
 
@@ -8,6 +9,7 @@ const InventoryContext = createContext(null);
 
 export function InventoryProvider({ children }) {
   const [items, setItems] = useState([]);
+  const itemsRef = useRef(items);
 
   useEffect(() => {
     async function load() {
@@ -32,6 +34,34 @@ export function InventoryProvider({ children }) {
       setItems(loaded);
     }
     load();
+  }, []);
+
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
+
+  useEffect(() => {
+    async function onLanguageChanged() {
+      const active = itemsRef.current.filter(
+        (i) => i.status === 'active' && i.notificationId
+      );
+      if (!active.length) return;
+      const rescheduled = await Promise.all(
+        active.map(async (item) => {
+          await cancelExpiryNotification(item.notificationId);
+          const notificationId = await scheduleExpiryNotification(item);
+          return { ...item, notificationId };
+        })
+      );
+      setItems((prev) => {
+        const map = Object.fromEntries(rescheduled.map((r) => [r.id, r]));
+        const next = prev.map((i) => map[i.id] ?? i);
+        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+        return next;
+      });
+    }
+    i18n.on('languageChanged', onLanguageChanged);
+    return () => i18n.off('languageChanged', onLanguageChanged);
   }, []);
 
   async function persist(next) {
