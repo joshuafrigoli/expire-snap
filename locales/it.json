@@ -123,5 +123,9 @@
     "today": "Scade oggi",
     "tomorrow": "Scade domani",
     "daysLeft": "{{n}} giorni rimanenti"
+  },
+  "notifications": {
+    "expiringTitle": "{{name}} in scadenza",
+    "expiringBody": "{{name}} scade domani"
   }
 }

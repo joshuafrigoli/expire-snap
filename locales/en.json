@@ -123,5 +123,9 @@
     "today": "Expires today",
     "tomorrow": "Expires tomorrow",
     "daysLeft": "{{n}} days left"
+  },
+  "notifications": {
+    "expiringTitle": "{{name}} expiring soon",
+    "expiringBody": "{{name}} expires tomorrow"
   }
 }
