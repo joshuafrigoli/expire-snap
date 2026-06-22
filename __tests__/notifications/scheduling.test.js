@@ -4,7 +4,7 @@ import i18n from '@/utils/i18n';
 
 describe('Notification scheduling', () => {
   beforeEach(() => jest.clearAllMocks());
-  afterEach(() => i18n.changeLanguage('en'));
+  afterEach(async () => { await i18n.changeLanguage('en'); });
 
   it('schedules notification 1 day before expiry date', async () => {
     const expiryDate = '2026-06-10';
