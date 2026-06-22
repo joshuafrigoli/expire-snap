@@ -39,7 +39,8 @@
     "clearConfirmTitle": "Svuotare il frigo?",
     "clearConfirmMessage": "Rimuoverà tutti i prodotti attivi. Non è possibile annullare.",
     "clearConfirm": "Svuota",
-    "clearCancel": "Annulla"
+    "clearCancel": "Annulla",
+    "editDateTitle": "Modifica Data di Scadenza"
   },
   "history": {
     "title": "Cronologia",

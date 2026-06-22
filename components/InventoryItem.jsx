@@ -19,7 +19,7 @@ function getProgressColor(daysLeft) {
   return 'safe';
 }
 
-export function InventoryItem({ id, name, category, estimated_expiry_date, onConsume, onWaste }) {
+export function InventoryItem({ id, name, category, estimated_expiry_date, onConsume, onWaste, onEdit }) {
   const { t } = useTranslation();
   const colors = useTheme();
   const styles = makeStyles(colors);
@@ -38,6 +38,13 @@ export function InventoryItem({ id, name, category, estimated_expiry_date, onCon
       <View style={styles.row1}>
         <Text style={styles.name}>{name}</Text>
         <Badge label={t(CATEGORY_I18N_KEY[category] ?? `categories.${category}`, { defaultValue: category })} variant={progressColor} />
+        <Pressable
+          testID={"item-edit-date-btn-" + id}
+          onPress={() => onEdit && onEdit(id)}
+          style={({ pressed }) => [styles.editBtn, pressed && styles.btnPressed]}
+        >
+          <Text style={styles.editBtnIcon}>✏️</Text>
+        </Pressable>
       </View>
 
       <ProgressBar
@@ -166,6 +173,25 @@ function makeStyles(colors) {
       opacity: 0.75,
       shadowOffset: { width: 1, height: 1 },
       elevation: 1,
+    },
+    editBtn: {
+      width: 30,
+      height: 30,
+      borderRadius: 9999,
+      borderWidth: 2,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 2, height: 2 },
+      shadowOpacity: 1,
+      shadowRadius: 0,
+      elevation: 2,
+      marginLeft: 6,
+    },
+    editBtnIcon: {
+      fontSize: 13,
     },
   });
 }

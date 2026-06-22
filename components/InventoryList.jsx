@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { FlatList, View, Text, Pressable, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useInventory } from '@/context/InventoryContext';
-import { FilterTabs, Input } from '@/components/ui';
+import { FilterTabs, Input, DatePicker } from '@/components/ui';
 import InventoryItem from '@/components/InventoryItem';
+import { usePortal } from '@/context/PortalContext';
+import { useTheme } from '@/theme';
 
 const CATEGORY_KEYS = [
   { value: 'All', key: 'categories.all' },

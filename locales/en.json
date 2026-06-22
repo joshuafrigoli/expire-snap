@@ -39,7 +39,8 @@
     "clearConfirmTitle": "Empty Fridge?",
     "clearConfirmMessage": "This will remove all active items. This cannot be undone.",
     "clearConfirm": "Empty",
-    "clearCancel": "Cancel"
+    "clearCancel": "Cancel",
+    "editDateTitle": "Edit Expiry Date"
   },
   "history": {
     "title": "History",
