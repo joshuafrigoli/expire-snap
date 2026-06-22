@@ -39,11 +39,11 @@
     "clearExpiredLabel": "Rimuovi scaduti",
     "clearExpiredDesc": "I prodotti scaduti vengono spostati nella cronologia come sprecati.",
     "clearAllLabel": "Svuota tutto",
-    "clearAllDesc": "Rimuove tutti i prodotti. Non è possibile annullare.",
+    "clearAllDesc": "Tutti i dati verranno persi definitivamente.",
     "confirmExpiredTitle": "Rimuovere i prodotti scaduti?",
     "confirmExpiredMessage": "I prodotti scaduti verranno spostati nella cronologia come sprecati.",
     "confirmAllTitle": "Svuotare tutto?",
-    "confirmAllMessage": "Tutti i prodotti verranno rimossi definitivamente. Non è possibile annullare.",
+    "confirmAllMessage": "Tutti i prodotti verranno eliminati. I dati non potranno essere recuperati.",
     "confirmProceed": "Conferma",
     "clearCancel": "Annulla",
     "editDateTitle": "Modifica Data di Scadenza"
