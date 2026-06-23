@@ -64,11 +64,11 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
-    SystemUI.setBackgroundColorAsync(colors.surface);
+    SystemUI.setBackgroundColorAsync(colors.bg);
     if (Platform.OS !== 'android') return;
-    NavigationBar.setBackgroundColorAsync(colors.surface);
+    NavigationBar.setBackgroundColorAsync(colors.bg);
     NavigationBar.setButtonStyleAsync(isDark ? 'light' : 'dark');
-  }, [colors.surface, isDark]);
+  }, [colors.bg, isDark]);
 
   useEffect(() => {
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -98,7 +98,7 @@ function AppContent() {
 
   return (
     <NavigationContainer ref={navRef} theme={navTheme}>
-      <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.surface} />
+      <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.bg} />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!hasProfile && <Stack.Screen name="Onboarding" component={OnboardingScreen} />}
         {hasProfile && <Stack.Screen name="BottomTabs" component={BottomTabsNavigator} />}
